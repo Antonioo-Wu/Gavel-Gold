@@ -1,0 +1,340 @@
+openapi: 3.0.0
+info:
+  title: API Sistema de Subastas
+  version: 2.0.0
+  description: API para gestión de subastas online con registro en dos etapas y validación de usuarios.
+
+servers:
+  - url: http://localhost:3000/api
+
+# =========================
+# SEGURIDAD
+# =========================
+security:
+  - BearerAuth: []
+
+paths:
+  # =========================
+  # REGISTRO Y AUTENTICACIÓN
+  # =========================
+  /usuarios/registro-inicial:
+    post:
+      tags: [Autenticación]
+      summary: Registro inicial del usuario
+      security: [] # Abierto al público
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioRegistroInicial'
+      responses:
+        "201":
+          description: Usuario registrado en estado pendiente
+        "400":
+          $ref: '#/components/responses/ErrorValidacion'
+
+  /usuarios/{id}/verificar:
+    post:
+      tags: [Administración]
+      summary: Verificar usuario y asignar categoría
+      parameters:
+        - $ref: '#/components/parameters/idUsuario'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [categoria]
+              properties:
+                categoria:
+                  $ref: '#/components/schemas/CategoriaUsuario'
+      responses:
+        "200":
+          description: Usuario verificado correctamente
+        "404":
+          $ref: '#/components/responses/NoEncontrado'
+
+  /usuarios/activar:
+    post:
+      tags: [Autenticación]
+      summary: Activar cuenta mediante token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token, password]
+              properties:
+                token:
+                  type: string
+                password:
+                  type: string
+                  format: password
+      responses:
+        "200":
+          description: Usuario activado correctamente
+        "400":
+          description: Token inválido o expirado
+
+  /auth/login:
+    post:
+      tags: [Autenticación]
+      summary: Login de usuario
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Login exitoso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  usuario:
+                    $ref: '#/components/schemas/Usuario'
+        "401":
+          description: Credenciales inválidas
+
+  # =========================
+  # USUARIOS Y MEDIOS DE PAGO
+  # =========================
+  /usuarios/{id}:
+    get:
+      tags: [Usuarios]
+      summary: Obtener datos de usuario
+      parameters:
+        - $ref: '#/components/parameters/idUsuario'
+      responses:
+        "200":
+          description: Datos del usuario
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+
+  /usuarios/{id}/subastas-activas:
+    get:
+      tags: [Usuarios]
+      summary: Listar subastas en las que el usuario está participando actualmente
+      parameters:
+        - $ref: '#/components/parameters/idUsuario'
+      responses:
+        "200":
+          description: Lista de subastas con participación activa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subasta'
+
+  /usuarios/{id}/medios-pago:
+    get:
+      tags: [Usuarios]
+      summary: Listar medios de pago del usuario
+      parameters:
+        - $ref: '#/components/parameters/idUsuario'
+      responses:
+        "200":
+          description: Lista de medios de pago
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MedioPago'
+    post:
+      tags: [Usuarios]
+      summary: Agregar nuevo medio de pago
+      parameters:
+        - $ref: '#/components/parameters/idUsuario'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MedioPago'
+      responses:
+        "201":
+          description: Medio agregado
+
+  # =========================
+  # SUBASTAS
+  # =========================
+  /subastas:
+    get:
+      tags: [Subastas]
+      summary: Listar subastas disponibles
+      responses:
+        "200":
+          description: Lista de subastas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subasta'
+
+  /subastas/{id}/participar:
+    post:
+      tags: [Subastas]
+      summary: Validar acceso a la subasta
+      parameters:
+        - $ref: '#/components/parameters/idSubasta'
+      responses:
+        "200":
+          description: El usuario cumple los requisitos
+        "403":
+          description: No cumple categoría o no tiene medios de pago validados
+
+  /subastas/{id}/pujar:
+    post:
+      tags: [Pujas]
+      summary: Realizar una oferta (tiene que cumplir los requisitos)
+      parameters:
+        - $ref: '#/components/parameters/idSubasta'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [monto, medioPagoId]
+              properties:
+                monto:
+                  type: number
+                medioPagoId:
+                  type: integer
+      responses:
+        "200":
+          description: Puja aceptada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Puja'
+        "409":
+          description: Conflicto (la puja ya es obsoleta)
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    idUsuario:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+    idSubasta:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+
+  responses:
+    ErrorValidacion:
+      description: Error en los datos enviados
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NoEncontrado:
+      description: El recurso no existe
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        codigo:
+          type: string
+        mensaje:
+          type: string
+
+    CategoriaUsuario:
+      type: string
+      enum: [comun, especial, plata, oro, platino]
+
+    UsuarioRegistroInicial:
+      type: object
+      required: [nombre, apellido, email, pais, domicilio, documentoFrente, documentoDorso]
+      properties:
+        nombre: { type: string, example: "Antonio" }
+        apellido: { type: string, example: "Wu" }
+        email: { type: string, format: email, example: "antonio@gmail.com" }
+        pais: { type: string, example: "Argentina" }
+        domicilio: { type: string, example: "Av asdasd 123" }
+        documentoFrente: { type: string, format: uri }
+        documentoDorso: { type: string, format: uri }
+
+    Usuario:
+      type: object
+      properties:
+        id: { type: integer }
+        nombre: { type: string }
+        apellido: { type: string }
+        email: { type: string }
+        categoria: { $ref: '#/components/schemas/CategoriaUsuario' }
+        estado:
+          type: string
+          enum: [pendiente, aprobado, activo, bloqueado]
+
+    MedioPago:
+      type: object
+      required: [tipo, detalle]
+      properties:
+        id: { type: integer }
+        tipo:
+          type: string
+          enum: [CUENTA_BANCARIA, TARJETA, CHEQUE]
+        detalle: { type: string}
+        montoGarantia: { type: number, minimum: 0 }
+        validado: { type: boolean, default: false }
+
+    Subasta:
+      type: object
+      properties:
+        id: { type: integer }
+        titulo: { type: string }
+        fechaInicio: { type: string, format: date-time }
+        categoriaRequerida: { $ref: '#/components/schemas/CategoriaUsuario' }
+        estado:
+          type: string
+          enum: [proximamente, abierta, cerrada]
+        moneda:
+          type: string
+          enum: [ARS, USD]
+
+    Puja:
+      type: object
+      properties:
+        id: { type: integer }
+        usuarioId: { type: integer }
+        monto: { type: number }
+        fecha: { type: string, format: date-time }
