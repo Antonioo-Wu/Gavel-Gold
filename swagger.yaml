@@ -105,6 +105,17 @@ paths:
                   usuario: { $ref: '#/components/schemas/Usuario' }
         "401":
           $ref: '#/components/responses/NoAutorizado'
+    
+  /auth/logout:
+    post:
+      tags: [Autenticación]
+      summary: Cerrar sesión del usuario
+      description: Invalida el token actual del usuario.
+      responses:
+        "204":
+          description: Sesión cerrada exitosamente (sin contenido)
+        "401":
+          $ref: '#/components/responses/NoAutorizado'
 
   # =========================
   # GESTIÓN DE USUARIOS
@@ -232,6 +243,39 @@ paths:
         "403":
           $ref: '#/components/responses/Prohibido'
 
+  /subastas/{id}/agregarArticulo:
+    post:
+      tags: [Subastas]
+      summary: Agregar un artículo a la subasta
+      description: Vincula un artículo aprobado a una subasta mediante su ID.
+      parameters:
+        - $ref: '#/components/parameters/idSubasta'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [articuloId, precioBase]
+              properties:
+                articuloId:
+                  type: integer
+                  description: ID del artículo que se desea subastar.
+                precioBase:
+                  type: number
+                  format: float
+                  example: 1500.50
+                  description: El precio inicial con el que arranca la puja para este artículo.
+      responses:
+        "201":
+          description: Artículo agregado exitosamente a la subasta.
+        "400":
+          $ref: '#/components/responses/ErrorValidacion'
+        "403":
+          $ref: '#/components/responses/Prohibido'
+        "404":
+          description: No se encontró la subasta o el artículo.
+
   /subastas/{id}/articulos:
     get:
       tags: [Subastas]
@@ -243,6 +287,7 @@ paths:
           description: Lista de artículos en subasta
         "404":
           $ref: '#/components/responses/NoEncontrado'
+      
 
   /subastas/{id}/participar:
     post:
@@ -388,15 +433,17 @@ components:
         id: { type: integer }
         titulo: { type: string }
         fechaInicio: { type: string, format: date-time }
+        fechaFin: { type: string, format: date-time } # <--- Agregado
         estado: { type: string, enum: [proximamente, abierta, cerrada] }
         moneda: { type: string, enum: [ARS, USD] }
 
     CrearSubasta:
       type: object
-      required: [titulo, fechaInicio, categoriaRequerida, moneda]
+      required: [titulo, fechaInicio, fechaFin, categoriaRequerida, moneda] # <--- fechaFin ahora es requerida
       properties:
         titulo: { type: string }
         fechaInicio: { type: string, format: date-time }
+        fechaFin: { type: string, format: date-time } # <--- Agregado
         categoriaRequerida: { $ref: '#/components/schemas/CategoriaUsuario' }
         moneda: { type: string, enum: [ARS, USD] }
 
