@@ -52,3 +52,6 @@ La documentación de la API se encuentra en [swagger.yaml](swagger.yaml). Entre 
 3. El usuario activa su cuenta y accede al sistema.
 4. Se agregan y validan medios de pago.
 5. El usuario participa en subastas habilitadas y realiza pujas dentro de las reglas permitidas.
+
+## Maquetado de la app y plano de despliegue
+El maquetado de la app y plano de despliegue de la misma se realizó y encuentra en [Figma](https://www.figma.com/design/hE5gqPQgfzyvRvSACKsC6m/App-de-Subastas?node-id=2402-3334&t=cZx4Tldvxzk2BkR3-1)
