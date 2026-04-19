@@ -62,6 +62,5 @@ El maquetado de la app y plano de despliegue de la misma se realizó y encuentra
 - Prototipo que muestra el flujo de la app entre sus distintos wireframes.
 
 $$ Primer Entrega - Desarrollo de Pantallas utilziando la Herramienta Android Studio
-El desarrollo frontend alojado en este repositorio corresponde a una serie de pantallas implementadas de forma complementaria. El objetivo principal de este código es poner en práctica el uso del entorno Android Studio, aplicando los conceptos de diseño de interfaces nativas (XML) y navegación móvil enseñados durante las clases teóricas y prácticas de la materia.
+El desarrollo frontend alojado en este repositorio corresponde a una serie de pantallas implementadas de forma complementaria. El objetivo principal de este código es poner en práctica el uso del entorno Android Studio, aplicando los conceptos de diseño de interfaces nativas (XML) y navegación móvil enseñados durante las clases teóricas y prácticas de la materia. [GavelandGold Pantallas](https://github.com/defrancisco/GavelandGold)
 
-Repositorio en GitHub: [GavelandGold Pantallas](https://github.com/defrancisco/GavelandGold)
