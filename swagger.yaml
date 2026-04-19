@@ -183,7 +183,33 @@ paths:
                 items: { $ref: '#/components/schemas/Subasta' }
         "404":
           $ref: '#/components/responses/NoEncontrado'
+  /usuarios/{id}/estadisticas:
+    get:
+      tags: [Usuarios]
+      summary: Obtener métricas de participación del usuario (Asistencias, victorias, etc)
+      parameters:
+        - $ref: '#/components/parameters/idUsuario'
+      responses:
+        "200":
+          description: Estadísticas detalladas de participación
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MetricasUsuario' }
 
+  /usuarios/{id}/historial-participacion:
+    get:
+      tags: [Usuarios]
+      summary: Historial de subastas y resultados del usuario
+      parameters:
+        - $ref: '#/components/parameters/idUsuario'
+      responses:
+        "200":
+          description: Listado de subastas asistidas y si ganó o no
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/HistorialParticipacion' }
   # =========================
   # ARTÍCULOS
   # =========================
@@ -475,3 +501,20 @@ components:
             id: { type: integer }
             nombre: { type: string }
         subastaId: { type: integer }
+    MetricasUsuario:
+      type: object
+      properties:
+        asistencias: { type: integer, description: "Subastas donde pujó" }
+        victorias: { type: integer, description: "Subastas donde ganó" }
+        importeOfertadoAcumulado: { type: number }
+        importePagadoAcumulado: { type: number }
+
+    HistorialParticipacion:
+      type: object
+      properties:
+        subastaId: { type: integer }
+        titulo: { type: string }
+        fechaCierre: { type: string, format: date-time }
+        miOfertaMax: { type: number }
+        ganador: { type: boolean }
+        estado: { type: string }
