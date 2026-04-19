@@ -8,6 +8,11 @@ Gavel-Gold es una solución integral para llevar el negocio de subastas presenci
 
 La propuesta se integra con una infraestructura local preexistente que conserva información histórica de rematadores, postores y ofertas, por lo que el diseño prioriza la interoperabilidad y la consistencia de los datos.
 
+### Integrantes
+- Antonio Wu
+- Ignacio Opatich
+- Delfina Francisco Frate
+
 ## Funcionalidades principales
 
 ### Para postores
