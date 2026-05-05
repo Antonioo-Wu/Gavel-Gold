@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import FormCard from '../components/FormCard';
-import CustomInput from '../components/CustomInput';
-import ActionButton from '../components/ActionButton';
+import FormCard from '../../components/FormCard';
+import CustomInput from '../../components/CustomInput';
+import ActionButton from '../../components/ActionButton';
 
 export default function GenerarPassword() {
   const navigate = useNavigate();

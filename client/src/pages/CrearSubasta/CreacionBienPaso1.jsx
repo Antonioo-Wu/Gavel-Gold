@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import FormCard from '../components/FormCard';
-import CustomInput from '../components/CustomInput';
-import ActionButton from '../components/ActionButton';
-import BottomNav from '../components/BottomNav';
+import FormCard from '../../components/FormCard';
+import CustomInput from '../../components/CustomInput';
+import ActionButton from '../../components/ActionButton';
+import BottomNav from '../../components/BottomNav';
 
 export default function CreacionBienPaso1() {
   const navigate = useNavigate();

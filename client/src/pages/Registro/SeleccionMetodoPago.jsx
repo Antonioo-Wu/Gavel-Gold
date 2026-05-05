@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import FormCard from '../components/FormCard';
-import ActionButton from '../components/ActionButton';
+import FormCard from '../../components/FormCard';
+import ActionButton from '../../components/ActionButton';
 
 export default function SeleccionMetodoPago() {
   const navigate = useNavigate();

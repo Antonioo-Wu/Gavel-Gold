@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import ActionButton from '../components/ActionButton';
+import ActionButton from '../../components/ActionButton';
 
 export default function TerminosEnvio() {
   const navigate = useNavigate();

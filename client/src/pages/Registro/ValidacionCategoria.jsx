@@ -1,5 +1,5 @@
 import React from 'react';
-import FeedbackScreen from '../components/FeedbackScreen';
+import FeedbackScreen from '../../components/FeedbackScreen';
 
 export default function ValidacionCategoria() {
   return (

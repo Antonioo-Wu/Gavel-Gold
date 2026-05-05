@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-
+// Principio
 import Splash from './pages/Login/Splash';
 import Login from './pages/Login/Login'; 
 
@@ -19,9 +19,9 @@ import RegistroExito from './pages/Registro/RegistroExito';
 
 // Método de Pago
 import SeleccionMetodoPago from './pages/Registro/SeleccionMetodoPago';
-import MetodoPagoTarjeta from './pages/Registro/M%C3%A9todosdePago/MetodoPagoTarjeta';
-import MetodoPagoCuentaBancaria from './pages/Registro/M%C3%A9todosdePago/MetodoPagoCuentaBancaria';
-import MetodoPagoCheque from './pages/Registro/M%C3%A9todosdePago/MetodoPagoCheque';
+import MetodoPagoTarjeta from './pages/Registro/MetodosdePago/MetodoPagoTarjeta';
+import MetodoPagoCuentaBancaria from './pages/Registro/MetodosdePago/MetodoPagoCuentaBancaria';
+import MetodoPagoCheque from './pages/Registro/MetodosdePago/MetodoPagoCheque';
 
 
 // Puja
@@ -30,8 +30,9 @@ import MetodoPagoCheque from './pages/Registro/M%C3%A9todosdePago/MetodoPagoCheq
 
 // Legales
 import TerminosCompra from './pages/Legales/TerminosCompra';
-import TerminosVenta from './pages/Legales/TerminosVenta';
-import PoliticaPrivacidad from './pages/Legales/PoliticaPrivacidad';
+import TerminosEnvio from './pages/Legales/TerminosEnvio';
+import TerminosyCondiciones from './pages/Legales/TerminosyCondiciones';
+import PoliticadePrivacidad from './pages/Legales/PoliticadePrivacidad';
 import SobreNosotros from './pages/Legales/SobreNosotros';
 
 // Crear Subasta
@@ -39,6 +40,10 @@ import CreacionBienPaso1 from './pages/CrearSubasta/CreacionBienPaso1';
 import CreacionBienPaso2 from './pages/CrearSubasta/CreacionBienPaso2';
 import CreacionBienExito from './pages/CrearSubasta/CreacionBienExito';
 
+
+// Subastas
+import ListadeSubastas from './pages/ListadeSubastas';
+import DetalleSubasta from './pages/DetalleSubasta';
 
 
 function App() {
@@ -58,13 +63,17 @@ function App() {
         <Route path="/generar-password" element={<GenerarPassword />} />
 
         <Route path="/terminos-compra" element={<TerminosCompra />} />
-        <Route path="/terminos-venta" element={<TerminosVenta />} />
-        <Route path="/politica-privacidad" element={<PoliticaPrivacidad />} />
+        <Route path="/terminos-envio" element={<TerminosEnvio />} />
+        <Route path="/politica-de-privacidad" element={<PoliticadePrivacidad />} />
         <Route path="/sobre-nosotros" element={<SobreNosotros />} />
+        <Route path='/terminos-y-condiciones' element={<TerminosyCondiciones />} />
 
         <Route path="/crear-subasta-paso1" element={<CreacionBienPaso1 />} />
         <Route path="/crear-subasta-paso2" element={<CreacionBienPaso2 />} />
         <Route path="/crear-subasta-exito" element={<CreacionBienExito />} /> 
+
+        <Route path="/subastas" element={<ListadeSubastas />} />
+        <Route path="/detalle-subasta" element={<DetalleSubasta />} />
       
       </Routes>
     </BrowserRouter>
