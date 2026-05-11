@@ -8,7 +8,7 @@ export default function Perfil() {
   return (
     <div style={{ 
       minHeight: '100vh', padding: '24px', paddingBottom: '100px',
-      backgroundImage: 'url(/fondo_dorado.jpg)', backgroundSize: 'cover' 
+      backgroundImage: 'url(/images/fondo_dorado.jpg)', backgroundSize: 'cover' 
     }}>
       <h1 style={{ color: 'white', marginTop: '32px', fontSize: '36px' }}>Mi Perfil</h1>
       
