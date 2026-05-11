@@ -43,7 +43,7 @@ import CreacionBienExito from './pages/CrearSubasta/CreacionBienExito';
 
 // Subastas
 import ListadeSubastas from './pages/ListadeSubastas';
-import DetalleSubasta from './pages/DetalleSubasta';
+import SubastaDetalles from './pages/SubastaDetalles';
 
 
 function App() {
@@ -73,7 +73,7 @@ function App() {
         <Route path="/crear-subasta-exito" element={<CreacionBienExito />} /> 
 
         <Route path="/subastas" element={<ListadeSubastas />} />
-        <Route path="/detalle-subasta" element={<DetalleSubasta />} />
+        <Route path="/subasta/:id" element={<SubastaDetalles />} />
       
       </Routes>
     </BrowserRouter>
