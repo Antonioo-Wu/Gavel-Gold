@@ -4,6 +4,7 @@ import FormCard from '../../components/FormCard';
 import CustomInput from '../../components/CustomInput';
 import ActionButton from '../../components/ActionButton';
 
+const appLogo = '/logos/logotipo.png';
 
 export default function Login() {
   const navigate = useNavigate(); 
@@ -21,6 +22,7 @@ export default function Login() {
       backgroundPosition: 'center'
     }}>
       
+      <img src={appLogo} alt="Gavel & Gold logo" style={{ width: '96px', marginBottom: '1rem' }} />
       <h1 style={{ color: 'white', marginBottom: '2rem', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
         Inicio de Sesión
       </h1>

@@ -14,10 +14,12 @@ export default function FeedbackScreen({ text, navigateTo }) {
         backgroundPosition: 'center', cursor: 'pointer'
       }}
     >
+
       <h1 style={{ 
         color: 'white', textAlign: 'center', fontSize: '32px', 
         textShadow: '2px 2px 4px rgba(0,0,0,0.6)', whiteSpace: 'pre-line' 
       }}>
+        <p>🎉</p>
         {text}
       </h1>
     </div>
