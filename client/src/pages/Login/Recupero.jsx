@@ -8,7 +8,7 @@ export default function Recupero() {
   const navigate = useNavigate();
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '24px', backgroundImage: 'url(/fondo_dorado.jpg)', backgroundSize: 'cover' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '24px', backgroundImage: 'url(/images/fondo_dorado.jpg)', backgroundSize: 'cover' }}>
       
       <h1 style={{ color: 'white', textAlign: 'center', marginBottom: '32px', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
         Recupere su<br/>contraseña

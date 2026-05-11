@@ -1,5 +1,9 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+const logo = '/logos/logo.png';
+
+
+
 
 export default function Splash() {
   const navigate = useNavigate();
@@ -20,7 +24,7 @@ export default function Splash() {
       alignItems: 'center',
       backgroundColor: 'white' // Fondo blanco de tu diseño
     }}>
-        // <img src="/logo_gavel.png" alt="Gavel & Gold" style={{ width: '250px' }} />
+        <img src={logo} alt="Gavel & Gold" style={{ width: '250px' }} />
     </div>
   );
 }

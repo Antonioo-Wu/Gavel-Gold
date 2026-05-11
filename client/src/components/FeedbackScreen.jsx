@@ -10,7 +10,7 @@ export default function FeedbackScreen({ text, navigateTo }) {
       style={{
         minHeight: '100vh', display: 'flex', flexDirection: 'column',
         justifyContent: 'center', alignItems: 'center', padding: '24px',
-        backgroundImage: 'url(/fondo_dorado.jpg)', backgroundSize: 'cover', 
+        backgroundImage: 'url(/images/fondo_dorado.jpg)', backgroundSize: 'cover', 
         backgroundPosition: 'center', cursor: 'pointer'
       }}
     >

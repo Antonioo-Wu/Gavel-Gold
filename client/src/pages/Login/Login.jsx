@@ -4,6 +4,7 @@ import FormCard from '../../components/FormCard';
 import CustomInput from '../../components/CustomInput';
 import ActionButton from '../../components/ActionButton';
 
+
 export default function Login() {
   const navigate = useNavigate(); 
 
@@ -15,7 +16,7 @@ export default function Login() {
       justifyContent: 'center',
       alignItems: 'center',
       padding: '2rem',
-      backgroundImage: 'url(/fondo_dorado.jpg)',
+      backgroundImage: 'url(/images/fondo_dorado.jpg)',
       backgroundSize: 'cover',
       backgroundPosition: 'center'
     }}>
