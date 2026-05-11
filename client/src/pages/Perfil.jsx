@@ -18,9 +18,9 @@ export default function Perfil() {
 
       <div style={{ backgroundColor: 'white', borderRadius: '16px', padding: '24px', marginBottom: '32px' }}>
         <h3 style={{ marginTop: 0 }}>Más información</h3>
-        <p>Términos y Condiciones</p>
-        <p>Política de Privacidad</p>
-        <p>Sobre nosotros</p>
+        <p onClick={() => navigate('/terminos-y-condiciones')} style={{ cursor: 'pointer' }}> Términos y Condiciones</p> 
+        <p onClick={() => navigate('/politica-de-privacidad')} style={{ cursor: 'pointer' }}>Política de Privacidad</p>
+        <p onClick={() => navigate('/sobre-nosotros')} style={{ cursor: 'pointer' }}>Sobre nosotros</p>
       </div>
 
       <button 
