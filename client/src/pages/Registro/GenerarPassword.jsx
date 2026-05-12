@@ -10,6 +10,7 @@ export default function GenerarPassword() {
   return (
     <div style={{ backgroundColor: '#1E1B16', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '24px' }}>
       
+      <h1 style={{ color: 'white', textAlign: 'center', marginBottom: '24px' }}>Creación de Cuenta</h1>
       <FormCard>
         <h2 style={{ color: '#333', textAlign: 'center', marginBottom: '24px' }}>Generar contraseña personal</h2>
         

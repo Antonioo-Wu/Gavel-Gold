@@ -18,6 +18,8 @@ export default function SeleccionMetodoPago() {
 
   return (
     <div style={{ backgroundColor: '#1E1B16', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px', justifyContent: 'center' }}>
+      <h1 style={{ color: 'white', textAlign: 'center', marginBottom: '24px' }}>Creación de Cuenta</h1>
+      
       <FormCard>
         <h2 style={{ textAlign: 'center', color: '#1A1A1A', marginBottom: '24px', marginTop: 0 }}>
           Añadir un método de pago
