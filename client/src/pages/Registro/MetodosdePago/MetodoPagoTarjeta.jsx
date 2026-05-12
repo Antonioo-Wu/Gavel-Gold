@@ -28,13 +28,19 @@ export default function MetodoPagoTarjeta() {
         <CustomInput label="Código de seguridad (CVI)" placeholder="Ingrese el código de seguridad" type="number" />
         <CustomInput label="País" placeholder="Ingrese el país de emisión" />
 
-        <div style={{ marginTop: '20px' }}>
-          <ActionButton 
-            text="Continuar" 
-            variant="solid" 
-            onClick={() => navigate('/seleccionar-pago')} 
-          />
-        </div>
+        <div style={{ display: 'flex', gap: '16px', marginTop: '24px' }}>
+                  <ActionButton 
+                    text="Volver" 
+                    variant="outline" 
+                    onClick={() => navigate('/seleccion-metodo-pago')} 
+                  />
+                  <ActionButton 
+                    text="Continuar" 
+                    variant="solid" 
+                    onClick={() => navigate('/registro-exito')} 
+                  />
+        
+          </div>
       </FormCard>
     </div>
   );

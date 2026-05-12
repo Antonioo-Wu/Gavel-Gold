@@ -26,7 +26,7 @@ export default function RegistroUsuario() {
         
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', margin: '24px 0' }}>
           <input type="checkbox" id="termsReg" style={{ marginTop: '4px' }} />
-          <label htmlFor="termsReg" style={{ fontSize: '12px', color: '#555' }}>
+          <label htmlFor="termsReg" style={{ fontSize: '12px', color: '#555' }} onClick={() => navigate('/terminos-compra')}>
             Acepto los Términos y Condiciones<br/>
             <span style={{ textDecoration: 'underline', cursor: 'pointer' }}>Ver Términos y Condiciones</span>
           </label>

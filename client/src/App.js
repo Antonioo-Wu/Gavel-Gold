@@ -25,8 +25,8 @@ import MetodoPagoCheque from './pages/Registro/MetodosdePago/MetodoPagoCheque';
 
 
 // Puja
-
-
+import MensajeExitoPuja from './pages/Puja/MensajeExitoPuja';
+import SeguimientoPuja from './pages/Puja/SeguimientoPuja';
 
 // Legales
 import TerminosCompra from './pages/Legales/TerminosCompra';
@@ -62,14 +62,14 @@ function App() {
         
         <Route path="/validacion-categoria" element={<ValidacionCategoria />} />
         <Route path="/generar-password" element={<GenerarPassword />} />
-        <Route path="/registro-exito" element={<RegistroExito />} />
+        
 
         <Route path="/seleccion-metodo-pago" element={<SeleccionMetodoPago />} />
         <Route path="/pago-tarjeta" element={<MetodoPagoTarjeta />} />
         <Route path="/pago-cuenta" element={<MetodoPagoCuentaBancaria />} />
         <Route path="/pago-cheque" element={<MetodoPagoCheque />} />
 
-
+        <Route path="/registro-exito" element={<RegistroExito />} />
 
         <Route path="/terminos-compra" element={<TerminosCompra />} />
         <Route path="/terminos-envio" element={<TerminosEnvio />} />
@@ -83,6 +83,9 @@ function App() {
 
         <Route path="/subastas" element={<ListadeSubastas />} />
         <Route path="/subasta/:id" element={<SubastaDetalles />} />
+
+        <Route path="/mensaje-exito-puja" element={<MensajeExitoPuja />} />
+        <Route path="/seguimiento-puja" element={<SeguimientoPuja />} />
       
       </Routes>
     </BrowserRouter>

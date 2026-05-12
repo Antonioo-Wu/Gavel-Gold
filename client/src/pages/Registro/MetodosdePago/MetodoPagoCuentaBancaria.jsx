@@ -20,12 +20,17 @@ export default function MetodoPagoCuentaBancaria() {
         <CustomInput label="Banco" placeholder="Ingrese el banco de la cuenta" />
         <CustomInput label="Número de cuenta" placeholder="Ingrese el número de cuenta" />
 
-        <div style={{ marginTop: '20px' }}>
-          <ActionButton 
-            text="Continuar" 
-            variant="solid" 
-            onClick={() => navigate('/seleccionar-pago')} 
-          />
+        <div style={{ display: 'flex', gap: '16px', marginTop: '24px' }}>
+                  <ActionButton 
+                    text="Volver" 
+                    variant="outline" 
+                    onClick={() => navigate('/seleccion-metodo-pago')} 
+                  />
+                  <ActionButton 
+                    text="Continuar" 
+                    variant="solid" 
+                    onClick={() => navigate('/registro-exito')} 
+                  />
         </div>
       </FormCard>
     </div>

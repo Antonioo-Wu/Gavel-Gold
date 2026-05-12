@@ -1,11 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNav from '../components/BottomNav';
-import '../styles/Perfil.css'
+import '../styles/Perfil.css';
 
-import { BiInfoCircle } from "react-icons/bi";
-import { BiLockAlt } from "react-icons/bi";
-import { FiUsers } from "react-icons/fi";
+// Íconos de Más Información
+import { BiInfoCircle, BiLockAlt } from "react-icons/bi";
+// Agregamos los íconos nuevos para la grilla
+import { FiUsers, FiUserPlus, FiCreditCard, FiTrendingUp } from "react-icons/fi";
 
 export default function Perfil() {
   const navigate = useNavigate();
@@ -18,7 +19,23 @@ export default function Perfil() {
         Categoría: Común
       </div>
 
-      {/* Sección Más Información refactorizada según el mockup */}
+      {/* NUEVA SECCIÓN: Grilla de tres botones */}
+      <div className="perfil-grid">
+        <div className="grid-item">
+          <FiUserPlus size={28} color="white" />
+          <span>Mis datos</span>
+        </div>
+        <div className="grid-item" onClick={() => navigate('/seleccion-metodo-pago')}>
+          <FiCreditCard size={28} color="white" />
+          <span>Métodos de<br/>pago</span>
+        </div>
+        <div className="grid-item">
+          <FiTrendingUp size={28} color="white" />
+          <span>Mis<br/>métricas</span>
+        </div>
+      </div>
+
+      {/* Sección Más Información */}
       <div className="info-card">
         <h3>Más información</h3>
         

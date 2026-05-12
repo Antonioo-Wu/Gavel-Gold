@@ -36,12 +36,19 @@ export default function MetodoPagoCheque() {
         <CustomInput label="Titular" placeholder="Ingrese el titular del cheque" />
         <CustomInput label="Comprobante (Formato PDF)" type="file" />
 
-        <div style={{ marginTop: '20px' }}>
+        
+        <div style={{ display: 'flex', gap: '16px', marginTop: '24px' }}>
+          <ActionButton 
+            text="Volver" 
+            variant="outline" 
+            onClick={() => navigate('/seleccion-metodo-pago')} 
+          />
           <ActionButton 
             text="Continuar" 
             variant="solid" 
-            onClick={() => navigate('/seleccionar-pago')} 
+            onClick={() => navigate('/registro-exito')} 
           />
+
         </div>
       </FormCard>
     </div>

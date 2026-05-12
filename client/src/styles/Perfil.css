@@ -1,66 +1,108 @@
 .perfil-container {
   min-height: 100vh;
   padding: 24px;
-  padding-bottom: 100px;
+  padding-bottom: 100px; /* Espacio para el BottomNav */
   background-image: url('../../public/images/fondo_dorado.jpg');
   background-size: cover;
   background-position: center;
-  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+
 
 .perfil-title {
   color: white;
   margin-top: 32px;
-  font-size: 36px;
-  font-weight: bold;
+  margin-bottom: 24px;
+  font-size: 32px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  align-self: flex-start;
 }
 
 .perfil-category {
-  background-color: #5A4A2A;
+  background-color: rgba(90, 74, 42, 0.9); /* Color marrón/dorado oscuro */
   color: white;
-  padding: 12px;
+  padding: 14px 24px;
   border-radius: 50px;
-  text-align: center;
-  margin-bottom: 32px;
-  font-weight: 500;
+  font-weight: bold;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 24px;
 }
 
+/* Grilla de los tres botones nuevos */
+.perfil-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 32px;
+}
+
+.grid-item {
+  background-color: rgba(0, 0, 0, 0.4); /* Fondo oscuro semitransparente */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  padding: 16px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.grid-item:hover {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.grid-item span {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* Tarjeta blanca de Más Información */
 .info-card {
   background-color: white;
   border-radius: 16px;
-  padding: 8px 24px;
+  padding: 24px;
+  width: 100%;
+  box-sizing: border-box;
   margin-bottom: 32px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
 }
 
 .info-card h3 {
-  margin-top: 16px;
-  margin-bottom: 8px;
-  font-size: 18px;
-  color: #333;
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #1A1A1A;
+  font-size: 16px;
 }
 
 .info-item {
   display: flex;
-  justify-content: flex-start;
   align-items: center;
-  gap: 12px;
-  padding: 16px 0;
+  gap: 16px;
+  margin-bottom: 16px;
   cursor: pointer;
-  border-bottom: 1px solid #eee;
-  color: #444;
-  font-size: 16px;
 }
 
 .info-item:last-child {
-  border-bottom: none;
+  margin-bottom: 0;
 }
 
-.info-item span.arrow {
-  color: #ccc;
+.info-item span {
+  color: #333;
+  font-size: 14px;
   font-weight: bold;
 }
 
+/* Botón transparente de Cerrar Sesión */
 .logout-button {
   width: 100%;
   padding: 16px;
@@ -71,7 +113,8 @@
   font-weight: bold;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.2s;
+  margin-top: auto; 
 }
 
 .logout-button:hover {
