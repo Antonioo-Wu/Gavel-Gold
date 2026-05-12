@@ -1,36 +1,44 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNav from '../components/BottomNav';
+import '../styles/Perfil.css'
+
+import { BiInfoCircle } from "react-icons/bi";
+import { BiLockAlt } from "react-icons/bi";
+import { FiUsers } from "react-icons/fi";
 
 export default function Perfil() {
   const navigate = useNavigate();
 
   return (
-    <div style={{ 
-      minHeight: '100vh', padding: '24px', paddingBottom: '100px',
-      backgroundImage: 'url(/images/fondo_dorado.jpg)', backgroundSize: 'cover' 
-    }}>
-      <h1 style={{ color: 'white', marginTop: '32px', fontSize: '36px' }}>Mi Perfil</h1>
+    <div className="perfil-container">
+      <h1 className="perfil-title">Mi Perfil</h1>
       
-      <div style={{ backgroundColor: '#5A4A2A', color: 'white', padding: '16px', borderRadius: '50px', textAlign: 'center', marginBottom: '32px' }}>
+      <div className="perfil-category">
         Categoría: Común
       </div>
 
-      <div style={{ backgroundColor: 'white', borderRadius: '16px', padding: '24px', marginBottom: '32px' }}>
-        <h3 style={{ marginTop: 0 }}>Más información</h3>
-        <p onClick={() => navigate('/terminos-y-condiciones')} style={{ cursor: 'pointer' }}> Términos y Condiciones</p> 
-        <p onClick={() => navigate('/politica-de-privacidad')} style={{ cursor: 'pointer' }}>Política de Privacidad</p>
-        <p onClick={() => navigate('/sobre-nosotros')} style={{ cursor: 'pointer' }}>Sobre nosotros</p>
+      {/* Sección Más Información refactorizada según el mockup */}
+      <div className="info-card">
+        <h3>Más información</h3>
+        
+        <div className="info-item" onClick={() => navigate('/terminos-y-condiciones')}>
+          <BiInfoCircle size={22} color='black'/>
+          <span>Términos y Condiciones</span>
+        </div>
+
+        <div className="info-item" onClick={() => navigate('/politica-de-privacidad')}>
+          <BiLockAlt size={22} color='black'/>
+          <span>Política de Privacidad</span>
+        </div>
+
+        <div className="info-item" onClick={() => navigate('/sobre-nosotros')}>
+          <FiUsers size={22} color='black'/>
+          <span>Sobre nosotros</span>
+        </div>
       </div>
 
-      <button 
-        onClick={() => navigate('/')}
-        style={{
-          width: '100%', padding: '16px', borderRadius: '50px',
-          backgroundColor: 'transparent', border: '2px solid white',
-          color: 'white', fontWeight: 'bold', fontSize: '16px'
-        }}
-      >
+      <button className="logout-button" onClick={() => navigate('/')}>
         Cerrar Sesión
       </button>
 
