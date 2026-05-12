@@ -25,7 +25,7 @@ export default function GenerarPassword() {
         <ActionButton 
           text="Confirmar" 
           variant="solid" 
-          onClick={() => navigate('/registro-exito')} 
+          onClick={() => navigate('/seleccion-metodo-pago')} 
         />
       </FormCard>
 

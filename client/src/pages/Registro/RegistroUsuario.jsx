@@ -32,7 +32,7 @@ export default function RegistroUsuario() {
           </label>
         </div>
 
-        <ActionButton text="Continuar" variant="solid" onClick={() => navigate('/validacion-registro')} />
+        <ActionButton text="Continuar" variant="solid" onClick={() => navigate('/mensaje-espera')} />
       </FormCard>
     </div>
   );

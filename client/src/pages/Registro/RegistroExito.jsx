@@ -1,11 +1,12 @@
 import React from 'react';
 import FeedbackScreen from '../../components/FeedbackScreen';
+import Perfil from '../Perfil';
 
 export default function RegistroExito() {
   return (
     <FeedbackScreen 
       text={"¡Has creado tu\ncuenta\nexitosamente!"} 
-      navigateTo="/login" 
+      navigateTo="/perfil" // Al tocar, te lleva al perfil
     />
   );
 }

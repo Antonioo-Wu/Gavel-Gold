@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import FormCard from '../../components/FormCard';
 import ActionButton from '../../components/ActionButton';
 
+// Después de recibir un mail, debería en rutar hacia acá lueho de pasar por validación de categoría y la contraseña
+
 export default function SeleccionMetodoPago() {
   const navigate = useNavigate();
 

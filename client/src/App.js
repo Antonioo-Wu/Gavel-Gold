@@ -12,7 +12,7 @@ import Perfil from './pages/Perfil';
 
 // Registro de usuario
 import Registro from './pages/Registro/RegistroUsuario';
-
+import MensajeEspera from './pages/Registro/MensajeEspera';
 import ValidacionCategoria from './pages/Registro/ValidacionCategoria';
 import GenerarPassword from './pages/Registro/GenerarPassword';
 import RegistroExito from './pages/Registro/RegistroExito';
@@ -58,9 +58,18 @@ function App() {
         
         <Route path="/perfil" element={<Perfil />} />
         <Route path="/registro" element={<Registro />} />
-        <Route path="/registro-exito" element={<RegistroExito />} />
+        <Route path="/mensaje-espera" element={<MensajeEspera />} />
+        
         <Route path="/validacion-categoria" element={<ValidacionCategoria />} />
         <Route path="/generar-password" element={<GenerarPassword />} />
+        <Route path="/registro-exito" element={<RegistroExito />} />
+
+        <Route path="/seleccion-metodo-pago" element={<SeleccionMetodoPago />} />
+        <Route path="/pago-tarjeta" element={<MetodoPagoTarjeta />} />
+        <Route path="/pago-cuenta" element={<MetodoPagoCuentaBancaria />} />
+        <Route path="/pago-cheque" element={<MetodoPagoCheque />} />
+
+
 
         <Route path="/terminos-compra" element={<TerminosCompra />} />
         <Route path="/terminos-envio" element={<TerminosEnvio />} />
