@@ -1,0 +1,237 @@
+import Usuario from "../model/Usuario.js";
+import MedioPago from "../model/MedioPago.js";
+import Puja from "../model/Puja.js";
+import Subasta from "../model/Subasta.js";
+import Articulo from "../model/Articulo.js";
+
+export const obtenerUsuario = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const usuario = await Usuario.findById(id).select("-password");
+    if (!usuario) {
+      return res.status(404).json({ 
+        codigo: "USUARIO_NO_ENCONTRADO", 
+        mensaje: "Usuario no existe" 
+      });
+    }
+
+    res.json(usuario);
+  } catch (error) {
+    res.status(500).json({ 
+      codigo: "ERROR_SERVIDOR", 
+      mensaje: error.message 
+    });
+  }
+};
+
+export const obtenerMediosPago = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const mediosPago = await MedioPago.find({ usuarioId: id });
+    res.json(mediosPago);
+  } catch (error) {
+    res.status(500).json({ 
+      codigo: "ERROR_SERVIDOR", 
+      mensaje: error.message 
+    });
+  }
+};
+
+export const agregarMedioPago = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { tipo, detalle } = req.body;
+
+    if (!tipo || !detalle) {
+      return res.status(400).json({ 
+        codigo: "CAMPOS_REQUERIDOS", 
+        mensaje: "Tipo y detalle requeridos" 
+      });
+    }
+
+    // Validar tipo
+    const tiposValidos = ["CUENTA_BANCARIA", "TARJETA", "CHEQUE"];
+    if (!tiposValidos.includes(tipo)) {
+      return res.status(400).json({ 
+        codigo: "TIPO_INVALIDO", 
+        mensaje: "Tipo de medio de pago inválido" 
+      });
+    }
+
+    // Verificar usuario existe
+    const usuario = await Usuario.findById(id);
+    if (!usuario) {
+      return res.status(404).json({ 
+        codigo: "USUARIO_NO_ENCONTRADO", 
+        mensaje: "Usuario no existe" 
+      });
+    }
+
+    const nuevoMedio = new MedioPago({
+      usuarioId: id,
+      tipo,
+      detalle,
+      validado: false,
+    });
+
+    await nuevoMedio.save();
+    res.status(201).json({ 
+      mensaje: "Medio de pago agregado",
+      medioPago: nuevoMedio 
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      codigo: "ERROR_SERVIDOR", 
+      mensaje: error.message 
+    });
+  }
+};
+
+export const obtenerSubastasActivas = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Subastas en estado abierta donde el usuario ha pujado
+    const pujas = await Puja.find({ usuarioId: id });
+    const subastaIds = [...new Set(pujas.map(p => p.subastaId))];
+
+    const subastas = await Subasta.find({ 
+      _id: { $in: subastaIds },
+      estado: "abierta"
+    });
+
+    res.json(subastas);
+  } catch (error) {
+    res.status(500).json({ 
+      codigo: "ERROR_SERVIDOR", 
+      mensaje: error.message 
+    });
+  }
+};
+
+export const obtenerEstadisticas = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Subastas donde participó
+    const pujas = await Puja.find({ usuarioId: id });
+    const asistencias = [...new Set(pujas.map(p => p.subastaId.toString()))].length;
+
+    // Calcular victorias y importes
+    let victorias = 0;
+    let importePagadoAcumulado = 0;
+
+    const importeOfertadoAcumulado = pujas.reduce((sum, p) => sum + p.monto, 0);
+
+    const subastaIds = [...new Set(pujas.map(p => p.subastaId.toString()))];
+    for (const sId of subastaIds) {
+      const mejorPuja = await Puja.findOne({ subastaId: sId }).sort({ monto: -1 });
+      if (mejorPuja && mejorPuja.usuarioId.toString() === id) {
+        victorias += 1;
+        importePagadoAcumulado += mejorPuja.monto;
+      }
+    }
+
+    res.json({
+      asistencias,
+      victorias,
+      importeOfertadoAcumulado,
+      importePagadoAcumulado,
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      codigo: "ERROR_SERVIDOR", 
+      mensaje: error.message 
+    });
+  }
+};
+
+export const obtenerHistorialParticipacion = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Obtener todas las subastas donde participó
+    const pujas = await Puja.find({ usuarioId: id }).populate("subastaId");
+    
+    // Agrupar por subasta y obtener datos
+    const historial = [];
+    const subastaIds = new Set();
+
+    for (const puja of pujas) {
+      if (!subastaIds.has(puja.subastaId._id.toString())) {
+        subastaIds.add(puja.subastaId._id.toString());
+        
+        const mejorPuja = await Puja.findOne({ subastaId: puja.subastaId._id })
+          .sort({ monto: -1 });
+
+        historial.push({
+          subastaId: puja.subastaId._id,
+          titulo: puja.subastaId.titulo,
+          fechaCierre: puja.subastaId.fechaFin,
+          miOfertaMax: mejorPuja.monto,
+          ganador: mejorPuja.usuarioId.toString() === id,
+          estado: puja.subastaId.estado,
+        });
+      }
+    }
+
+    res.json(historial);
+  } catch (error) {
+    res.status(500).json({ 
+      codigo: "ERROR_SERVIDOR", 
+      mensaje: error.message 
+    });
+  }
+};
+
+// ARTICULOS 
+
+export const obtenerArticulosUsuario = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const articulos = await Articulo.find({ propietarioId: id });
+    res.json(articulos);
+  } catch (error) {
+    res.status(500).json({ 
+      codigo: "ERROR_SERVIDOR", 
+      mensaje: error.message 
+    });
+  }
+};
+
+export const proponerArticulo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nombre, descripcion, fotos, declaracionPropiedad } = req.body;
+
+    if (!nombre || !fotos || fotos.length < 6 || !declaracionPropiedad) {
+      return res.status(400).json({ 
+        codigo: "CAMPOS_REQUERIDOS", 
+        mensaje: "Nombre, 6+ fotos y declaración requeridos" 
+      });
+    }
+
+    const nuevoArticulo = new Articulo({
+      nombre,
+      descripcion: descripcion || "Sin descripción",
+      fotos,
+      declaracionPropiedad,
+      propietarioId: id,
+      estado: "pendiente",
+    });
+
+    const articuloGuardado = await nuevoArticulo.save();
+    res.status(201).json({ 
+      mensaje: "Propuesta recibida",
+      articulo: articuloGuardado,
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      codigo: "ERROR_SERVIDOR", 
+      mensaje: error.message 
+    });
+  }
+};
