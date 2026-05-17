@@ -38,14 +38,22 @@ const articuloSchema = new mongoose.Schema(
       default: Date.now,
     },
 
-    imagenes: [
-      {
-        type: String, // a definir
-      },
-    ],
+    fotos: {
+      type: [String],
+      required: true,
+      minlength: 6,
+    },
 
-    duenio: {
-        // TODO
+    declaracionPropiedad: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+
+    propietarioId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Usuario",
+      required: true,
     },
 
     subasta: {

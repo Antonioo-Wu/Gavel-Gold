@@ -15,6 +15,18 @@ const subastaSchema = new mongoose.Schema({
 
     fechaInicio: {
         type: Date,
+        required: true,
+    },
+
+    fechaFin: {
+        type: Date,
+        required: true,
+    },
+
+    categoriaRequerida: {
+        type: String,
+        enum: ["comun", "especial", "plata", "oro", "platino"],
+        default: "comun",
     },
 
     estado: {
@@ -30,4 +42,14 @@ const subastaSchema = new mongoose.Schema({
         default: "ARS"
     },
 
-})
+    articulos: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Articulo",
+    }],
+
+}, {
+    timestamps: true,
+    versionKey: false,
+});
+
+export default mongoose.model("Subasta", subastaSchema);

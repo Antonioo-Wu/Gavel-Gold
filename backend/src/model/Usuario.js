@@ -25,10 +25,30 @@ const usuarioSchema = new mongoose.Schema({
         unique: true,
     },
 
+    password: {
+        type: String,
+    },
+
+    pais: {
+        type: String,
+    },
+
+    domicilio: {
+        type: String,
+    },
+
+    documentoFrente: {
+        type: String,
+    },
+
+    documentoDorso: {
+        type: String,
+    },
+
     categoria: {
       type: String,
-      enum: ["plata", "oro", "platino"],
-      default: "plata",
+      enum: ["comun", "especial", "plata", "oro", "platino"],
+      default: "comun",
     },
     
     estado: {
@@ -36,4 +56,9 @@ const usuarioSchema = new mongoose.Schema({
         enum: ["pendiente", "aprobado", "activo", "bloqueado"],
         default: "pendiente",
     },
-})
+}, {
+    timestamps: true,
+    versionKey: false,
+});
+
+export default mongoose.model("Usuario", usuarioSchema);
