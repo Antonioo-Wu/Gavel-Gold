@@ -56,6 +56,12 @@ const usuarioSchema = new mongoose.Schema({
         enum: ["pendiente", "aprobado", "activo", "bloqueado"],
         default: "pendiente",
     },
+
+    rol: {
+        type: String,
+        enum: ["usuario", "admin"],
+        default: "usuario",
+    },
 }, {
     timestamps: true,
     versionKey: false,
