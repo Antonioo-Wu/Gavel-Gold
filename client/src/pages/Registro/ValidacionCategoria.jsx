@@ -1,6 +1,6 @@
 import React from 'react';
 import FeedbackScreen from '../../components/FeedbackScreen';
-import ActionButton from '../../components/ActionButton';
+
 
 export default function ValidacionCategoria() {
   return (

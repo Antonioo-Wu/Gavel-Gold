@@ -1,6 +1,6 @@
 import React from 'react';
 import FeedbackScreen from '../../components/FeedbackScreen';
-import Perfil from '../Perfil';
+
 
 export default function RegistroExito() {
   return (
