@@ -16,7 +16,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Eutas
+// Rutas
 app.use(authRoutes);
 app.use(usuarioRoutes);
 app.use(adminRoutes);
