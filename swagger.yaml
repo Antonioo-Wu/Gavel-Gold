@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Gavel Gold API
   version: 1.0.0
-  description: API actual del backend de Gavel Gold reconstruida a partir de las rutas implementadas.
+  description: API del backend de Gavel Gold.
 
 servers:
   - url: http://localhost:3000
