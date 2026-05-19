@@ -1,58 +1,50 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../components/FormCard';
 import ActionButton from '../../components/ActionButton';
 import BottomNav from '../../components/BottomNav';
+import { CreacionBienPasosStyles } from '../../styles/CreacionBienPasos';
 
 export default function CreacionBienPaso2() {
-  const navigate = useNavigate();
+  const navigation = useNavigation();
 
   return (
-    <div style={{ backgroundColor: '#1E1B16', minHeight: '100vh', padding: '24px', paddingBottom: '100px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      
+    <View style={styles.container}>
       <FormCard>
-        <h2 style={{ textAlign: 'center', fontSize: '24px', marginTop: 0, marginBottom: '8px', color: '#1A1A1A' }}>
-          Ingrese los<br/>datos del bien a<br/>subastar
-        </h2>
+        <Text style={styles.title}>
+          Ingrese los{'\n'}datos del bien a{'\n'}subastar
+        </Text>
         
-        <p style={{ textAlign: 'center', fontSize: '12px', color: '#555', marginBottom: '24px' }}>
+        <Text style={styles.subtitle}>
           Agrega mínimo 6 fotos de tu producto a subastar
-        </p>
+        </Text>
 
-        {/* Cuadro simulado de subida de imagen */}
-        <div style={{ 
-          width: '100%', height: '200px', backgroundColor: '#EFEFEF', 
-          borderRadius: '8px', display: 'flex', justifyContent: 'center', 
-          alignItems: 'center', marginBottom: '24px', cursor: 'pointer' 
-        }}>
-          <span style={{ fontSize: '48px', color: '#CCC' }}>📷</span>
-        </div>
+        <TouchableOpacity style={styles.imageUploadBox}>
+          <Text style={styles.cameraIcon}>📷</Text>
+        </TouchableOpacity>
 
-        {/* Checkbox y link de términos */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-          <input type="checkbox" id="termsBien" />
-          <label htmlFor="termsBien" style={{ fontSize: '14px', color: '#333' }}>
+        <View style={styles.checkboxContainer}>
+          <TouchableOpacity style={styles.checkboxMock} />
+          <Text style={styles.checkboxLabel}>
             Acepto los Términos y Condiciones
-          </label>
-        </div>
+          </Text>
+        </View>
         
-        <div style={{ marginBottom: '24px', paddingLeft: '24px' }}>
-          <span 
-            onClick={() => navigate('/terminos-envio')} 
-            style={{ fontSize: '14px', color: '#555', textDecoration: 'underline', cursor: 'pointer' }}
-          >
-            Ver Términos y Condiciones
-          </span>
-        </div>
+        <View style={styles.linkContainer}>
+          <TouchableOpacity onPress={() => navigation.navigate('TerminosEnvio')}>
+            <Text style={styles.linkText}>Ver Términos y Condiciones</Text>
+          </TouchableOpacity>
+        </View>
 
         <ActionButton 
           text="Subastar!" 
           variant="solid" 
-          onClick={() => navigate('/crear-bien-exito')} 
+          onPress={() => navigation.navigate('CreacionBienExito')} 
         />
       </FormCard>
 
       <BottomNav />
-    </div>
+    </View>
   );
 }

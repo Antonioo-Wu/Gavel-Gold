@@ -5,7 +5,7 @@ export default function CreacionBienExito() {
   return (
     <FeedbackScreen 
       text={"\n\n¡Has\ningresado\ntu bien a\nsubastar!"} 
-      navigateTo="/subastas" // Al tocar, te devuelve al inicio
+      navigateTo="Subastas" 
     />
   );
 }
