@@ -1,383 +1,475 @@
 openapi: 3.0.0
 info:
-  title: API Sistema de Subastas
-  version: 2.3.0
-  description: |
-    API para gestión de subastas online. 
+  title: Gavel Gold API
+  version: 1.0.0
+  description: API actual del backend de Gavel Gold reconstruida a partir de las rutas implementadas.
 
 servers:
-  - url: http://localhost:3000/api
+  - url: http://localhost:3000
 
 security:
   - BearerAuth: []
 
+tags:
+  - name: Autenticación
+  - name: Usuarios
+  - name: Administración
+  - name: Artículos
+  - name: Subastas
+
 paths:
-  # =========================
-  # AUTENTICACIÓN Y REGISTRO
-  # =========================
-  /usuarios/registro-inicial:
-    post:
-      tags: [Autenticación]
-      summary: Registro inicial del usuario
-      security: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UsuarioRegistroInicial'
-      responses:
-        "201":
-          description: Usuario registrado en estado pendiente
-        "400":
-          $ref: '#/components/responses/ErrorValidacion'
-
-  /usuarios/{id}/verificar:
-    post:
-      tags: [Administración]
-      summary: Verificar usuario y asignar categoría (Interno)
-      parameters:
-        - $ref: '#/components/parameters/idUsuario'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [categoria]
-              properties:
-                categoria: { $ref: '#/components/schemas/CategoriaUsuario' }
-      responses:
-        "200":
-          description: Usuario verificado correctamente
-        "401":
-          $ref: '#/components/responses/NoAutorizado'
-        "403":
-          $ref: '#/components/responses/Prohibido'
-        "404":
-          $ref: '#/components/responses/NoEncontrado'
-
-  /usuarios/activar:
-    post:
-      tags: [Autenticación]
-      summary: Activar cuenta mediante token y password
-      security: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [token, password]
-              properties:
-                token: { type: string }
-                password: { type: string, format: password }
-      responses:
-        "200":
-          description: Usuario activado correctamente
-        "400":
-          description: Token inválido o expirado
-
   /auth/login:
     post:
       tags: [Autenticación]
-      summary: Login de usuario
+      summary: Iniciar sesión
       security: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              required: [email, password]
-              properties:
-                email: { type: string, format: email }
-                password: { type: string }
+              $ref: '#/components/schemas/LoginRequest'
       responses:
-        "200":
+        '200':
           description: Login exitoso
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  token: { type: string }
-                  usuario: { $ref: '#/components/schemas/Usuario' }
-        "401":
-          $ref: '#/components/responses/NoAutorizado'
-    
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          $ref: '#/components/responses/Error401'
+
   /auth/logout:
     post:
       tags: [Autenticación]
-      summary: Cerrar sesión del usuario
-      description: Invalida el token actual del usuario.
+      summary: Cerrar sesión
       responses:
-        "204":
-          description: Sesión cerrada exitosamente (sin contenido)
-        "401":
-          $ref: '#/components/responses/NoAutorizado'
+        '204':
+          description: Sesión cerrada
+        '401':
+          $ref: '#/components/responses/Error401'
 
-  # =========================
-  # GESTIÓN DE USUARIOS
-  # =========================
+  /usuarios/registro-inicial:
+    post:
+      tags: [Autenticación]
+      summary: Registrar usuario en estado pendiente
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistroInicialRequest'
+      responses:
+        '201':
+          description: Usuario registrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistroInicialResponse'
+        '400':
+          $ref: '#/components/responses/Error400'
+
+  /usuarios/activar:
+    post:
+      tags: [Autenticación]
+      summary: Activar cuenta con token y contraseña
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivarCuentaRequest'
+      responses:
+        '200':
+          description: Usuario activado
+        '400':
+          $ref: '#/components/responses/Error400'
+
   /usuarios/{id}:
     get:
       tags: [Usuarios]
-      summary: Obtener datos de usuario
+      summary: Obtener usuario por id
       parameters:
-        - $ref: '#/components/parameters/idUsuario'
+        - $ref: '#/components/parameters/UsuarioId'
       responses:
-        "200":
-          description: Datos del usuario
+        '200':
+          description: Usuario encontrado
           content:
             application/json:
-              schema: { $ref: '#/components/schemas/Usuario' }
-        "404":
-          $ref: '#/components/responses/NoEncontrado'
+              schema:
+                $ref: '#/components/schemas/Usuario'
+        '401':
+          $ref: '#/components/responses/Error401'
+        '404':
+          $ref: '#/components/responses/Error404'
 
   /usuarios/{id}/medios-pago:
     get:
       tags: [Usuarios]
-      summary: Listar medios de pago
+      summary: Listar medios de pago del usuario
       parameters:
-        - $ref: '#/components/parameters/idUsuario'
+        - $ref: '#/components/parameters/UsuarioId'
       responses:
-        "200":
+        '200':
           description: Lista de medios de pago
           content:
             application/json:
               schema:
                 type: array
-                items: { $ref: '#/components/schemas/MedioPago' }
-        "404":
-          $ref: '#/components/responses/NoEncontrado'
+                items:
+                  $ref: '#/components/schemas/MedioPago'
+        '401':
+          $ref: '#/components/responses/Error401'
     post:
       tags: [Usuarios]
-      summary: Agregar nuevo medio de pago
+      summary: Agregar medio de pago
       parameters:
-        - $ref: '#/components/parameters/idUsuario'
+        - $ref: '#/components/parameters/UsuarioId'
       requestBody:
         required: true
         content:
           application/json:
-            schema: { $ref: '#/components/schemas/MedioPago' }
+            schema:
+              $ref: '#/components/schemas/MedioPagoCreateRequest'
       responses:
-        "201":
-          description: Medio agregado
-        "400":
-          $ref: '#/components/responses/ErrorValidacion'
+        '201':
+          description: Medio de pago agregado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MedioPagoCreateResponse'
+        '400':
+          $ref: '#/components/responses/Error400'
+        '401':
+          $ref: '#/components/responses/Error401'
+        '404':
+          $ref: '#/components/responses/Error404'
 
   /usuarios/{id}/subastas-activas:
     get:
       tags: [Usuarios]
-      summary: Subastas donde participa el usuario
+      summary: Listar subastas activas del usuario
       parameters:
-        - $ref: '#/components/parameters/idUsuario'
+        - $ref: '#/components/parameters/UsuarioId'
       responses:
-        "200":
-          description: Lista de subastas activas
-          content:
-            application/json:
-              schema:
-                type: array
-                items: { $ref: '#/components/schemas/Subasta' }
-        "404":
-          $ref: '#/components/responses/NoEncontrado'
-  /usuarios/{id}/estadisticas:
-    get:
-      tags: [Usuarios]
-      summary: Obtener métricas de participación del usuario (Asistencias, victorias, etc)
-      parameters:
-        - $ref: '#/components/parameters/idUsuario'
-      responses:
-        "200":
-          description: Estadísticas detalladas de participación
-          content:
-            application/json:
-              schema: { $ref: '#/components/schemas/MetricasUsuario' }
-
-  /usuarios/{id}/historial-participacion:
-    get:
-      tags: [Usuarios]
-      summary: Historial de subastas y resultados del usuario
-      parameters:
-        - $ref: '#/components/parameters/idUsuario'
-      responses:
-        "200":
-          description: Listado de subastas asistidas y si ganó o no
-          content:
-            application/json:
-              schema:
-                type: array
-                items: { $ref: '#/components/schemas/HistorialParticipacion' }
-  # =========================
-  # ARTÍCULOS
-  # =========================
-  /usuarios/{id}/articulos:
-    get:
-      tags: [Artículos]
-      summary: Artículos propuestos por el usuario
-      parameters:
-        - $ref: '#/components/parameters/idUsuario'
-      responses:
-        "200":
-          description: Lista de artículos
-        "404":
-          $ref: '#/components/responses/NoEncontrado'
-    post:
-      tags: [Artículos]
-      summary: Proponer nuevo artículo
-      parameters:
-        - $ref: '#/components/parameters/idUsuario'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema: { $ref: '#/components/schemas/CrearArticulo' }
-      responses:
-        "201":
-          description: Propuesta recibida
-        "400":
-          $ref: '#/components/responses/ErrorValidacion'
-
-  # =========================
-  # SUBASTAS Y DINÁMICA
-  # =========================
-  /subastas:
-    get:
-      tags: [Subastas]
-      summary: Listar subastas
-      responses:
-        "200":
+        '200':
           description: Lista de subastas
           content:
             application/json:
               schema:
                 type: array
-                items: { $ref: '#/components/schemas/Subasta' }
-    post:
-      tags: [Subastas]
-      summary: Crear subasta (Admin)
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema: { $ref: '#/components/schemas/CrearSubasta' }
-      responses:
-        "201":
-          description: Subasta creada
-        "403":
-          $ref: '#/components/responses/Prohibido'
+                items:
+                  $ref: '#/components/schemas/Subasta'
 
-  /subastas/{id}/agregarArticulo:
-    post:
-      tags: [Subastas]
-      summary: Agregar un artículo a la subasta
-      description: Vincula un artículo aprobado a una subasta mediante su ID.
-      parameters:
-        - $ref: '#/components/parameters/idSubasta'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [articuloId, precioBase]
-              properties:
-                articuloId:
-                  type: integer
-                  description: ID del artículo que se desea subastar.
-                precioBase:
-                  type: number
-                  format: float
-                  example: 1500.50
-                  description: El precio inicial con el que arranca la puja para este artículo.
-      responses:
-        "201":
-          description: Artículo agregado exitosamente a la subasta.
-        "400":
-          $ref: '#/components/responses/ErrorValidacion'
-        "403":
-          $ref: '#/components/responses/Prohibido'
-        "404":
-          description: No se encontró la subasta o el artículo.
-
-  /subastas/{id}/articulos:
+  /usuarios/{id}/estadisticas:
     get:
-      tags: [Subastas]
-      summary: Ver artículos de esta subasta
+      tags: [Usuarios]
+      summary: Obtener estadísticas de participación
       parameters:
-        - $ref: '#/components/parameters/idSubasta'
+        - $ref: '#/components/parameters/UsuarioId'
       responses:
-        "200":
-          description: Lista de artículos en subasta
-        "404":
-          $ref: '#/components/responses/NoEncontrado'
-      
-
-  /subastas/{id}/participar:
-    post:
-      tags: [Subastas]
-      summary: Validar acceso a la subasta
-      description: Verifica que el usuario cumpla con la categoría y tenga medios de pago validados.
-      parameters:
-        - $ref: '#/components/parameters/idSubasta'
-      responses:
-        "200":
-          description: Acceso permitido
-        "403":
-          description: Categoría insuficiente o sin medios de pago validados.
-
-  /subastas/{id}/pujar:
-    post:
-      tags: [Pujas]
-      summary: Realizar oferta
-      description: El usuario se identifica mediante el Bearer Token
-      parameters:
-        - $ref: '#/components/parameters/idSubasta'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/NuevaPuja'
-      responses:
-        "200":
-          description: Puja aceptada
+        '200':
+          description: Estadísticas del usuario
           content:
             application/json:
-              schema: { $ref: '#/components/schemas/Puja' }
-        "409":
-          description: Puja rechazada (monto bajo, subasta cerrada o medio de pago inválido)
+              schema:
+                $ref: '#/components/schemas/EstadisticasUsuario'
 
-  /subastas/{id}/historial-pujas:
+  /usuarios/{id}/historial-participacion:
     get:
-      tags: [Pujas]
-      summary: Historial de la subasta
+      tags: [Usuarios]
+      summary: Obtener historial de participación
       parameters:
-        - $ref: '#/components/parameters/idSubasta'
+        - $ref: '#/components/parameters/UsuarioId'
       responses:
-        "200":
-          description: Listado cronológico de pujas
+        '200':
+          description: Historial de participación
           content:
             application/json:
               schema:
                 type: array
-                items: { $ref: '#/components/schemas/Puja' }
-        "404":
-          $ref: '#/components/responses/NoEncontrado'
+                items:
+                  $ref: '#/components/schemas/HistorialParticipacion'
+
+  /usuarios/{id}/articulos:
+    get:
+      tags: [Artículos]
+      summary: Listar artículos del usuario
+      parameters:
+        - $ref: '#/components/parameters/UsuarioId'
+      responses:
+        '200':
+          description: Lista de artículos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Articulo'
+    post:
+      tags: [Artículos]
+      summary: Proponer un artículo
+      parameters:
+        - $ref: '#/components/parameters/UsuarioId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrearArticuloRequest'
+      responses:
+        '201':
+          description: Artículo propuesto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrearArticuloResponse'
+        '400':
+          $ref: '#/components/responses/Error400'
+
+  /usuarios/{id}/verificar:
+    post:
+      tags: [Administración]
+      summary: Verificar usuario y asignar categoría
+      parameters:
+        - $ref: '#/components/parameters/UsuarioId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerificarUsuarioRequest'
+      responses:
+        '200':
+          description: Usuario verificado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificarUsuarioResponse'
+        '401':
+          $ref: '#/components/responses/Error401'
+        '403':
+          $ref: '#/components/responses/Error403'
+        '404':
+          $ref: '#/components/responses/Error404'
+
+  /admin/articulos/pendientes:
+    get:
+      tags: [Administración]
+      summary: Listar artículos pendientes
+      responses:
+        '200':
+          description: Lista de artículos pendientes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticuloPendiente'
+
+  /admin/articulos/{id}/aprobar:
+    post:
+      tags: [Administración]
+      summary: Aprobar artículo
+      parameters:
+        - $ref: '#/components/parameters/ArticuloId'
+      responses:
+        '200':
+          description: Artículo aprobado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccionArticuloResponse'
+        '404':
+          $ref: '#/components/responses/Error404'
+
+  /admin/articulos/{id}/rechazar:
+    post:
+      tags: [Administración]
+      summary: Rechazar artículo
+      parameters:
+        - $ref: '#/components/parameters/ArticuloId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RechazarArticuloRequest'
+      responses:
+        '200':
+          description: Artículo rechazado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccionArticuloResponse'
+        '400':
+          $ref: '#/components/responses/Error400'
+        '404':
+          $ref: '#/components/responses/Error404'
+
+  /admin/subastas:
+    post:
+      tags: [Administración]
+      summary: Crear subasta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrearSubastaRequest'
+      responses:
+        '201':
+          description: Subasta creada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrearSubastaResponse'
+        '400':
+          $ref: '#/components/responses/Error400'
+
+  /admin/subastas/{id}/agregarArticulo:
+    post:
+      tags: [Administración]
+      summary: Agregar artículo a una subasta
+      parameters:
+        - $ref: '#/components/parameters/SubastaId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgregarArticuloSubastaRequest'
+      responses:
+        '201':
+          description: Artículo agregado a la subasta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgregarArticuloSubastaResponse'
+        '400':
+          $ref: '#/components/responses/Error400'
+        '404':
+          $ref: '#/components/responses/Error404'
+
+  /subastas:
+    get:
+      tags: [Subastas]
+      summary: Listar subastas
+      security: []
+      responses:
+        '200':
+          description: Lista de subastas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subasta'
+
+  /subastas/{id}/articulos:
+    get:
+      tags: [Subastas]
+      summary: Listar artículos de una subasta
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/SubastaId'
+      responses:
+        '200':
+          description: Lista de artículos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Articulo'
+        '404':
+          $ref: '#/components/responses/Error404'
+
+  /subastas/{id}/participar:
+    post:
+      tags: [Subastas]
+      summary: Validar acceso para participar
+      parameters:
+        - $ref: '#/components/parameters/SubastaId'
+      responses:
+        '200':
+          description: Acceso permitido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensajeResponse'
+        '401':
+          $ref: '#/components/responses/Error401'
+        '403':
+          $ref: '#/components/responses/Error403'
+        '404':
+          $ref: '#/components/responses/Error404'
+
+  /subastas/{id}/pujar:
+    post:
+      tags: [Subastas]
+      summary: Realizar puja
+      parameters:
+        - $ref: '#/components/parameters/SubastaId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PujaRequest'
+      responses:
+        '200':
+          description: Puja aceptada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PujaResponse'
+        '400':
+          $ref: '#/components/responses/Error400'
+        '401':
+          $ref: '#/components/responses/Error401'
+        '404':
+          $ref: '#/components/responses/Error404'
+        '409':
+          $ref: '#/components/responses/Error409'
+
+  /subastas/{id}/historial-pujas:
+    get:
+      tags: [Subastas]
+      summary: Obtener historial de pujas de una subasta
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/SubastaId'
+      responses:
+        '200':
+          description: Historial de pujas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HistorialPuja'
+        '404':
+          $ref: '#/components/responses/Error404'
 
   /subastas/{id}/resultado:
     get:
       tags: [Subastas]
-      summary: Consultar ganador
+      summary: Obtener resultado de una subasta
+      security: []
       parameters:
-        - $ref: '#/components/parameters/idSubasta'
+        - $ref: '#/components/parameters/SubastaId'
       responses:
-        "200":
-          description: Datos del cierre y ganador
-        "404":
-          $ref: '#/components/responses/NoEncontrado'
+        '200':
+          description: Resultado de la subasta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultadoSubasta'
+        '404':
+          $ref: '#/components/responses/Error404'
 
 components:
   securitySchemes:
@@ -387,134 +479,540 @@ components:
       bearerFormat: JWT
 
   parameters:
-    idUsuario:
+    UsuarioId:
       name: id
       in: path
       required: true
-      schema: { type: integer }
-    idSubasta:
+      schema:
+        type: string
+    ArticuloId:
       name: id
       in: path
       required: true
-      schema: { type: integer }
+      schema:
+        type: string
+    SubastaId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
 
   responses:
-    ErrorValidacion:
-      description: Error en los datos.
+    Error400:
+      description: Solicitud inválida
       content:
         application/json:
-          schema: { $ref: '#/components/schemas/Error' }
-    NoAutorizado:
-      description: No autenticado o token inválido.
-    Prohibido:
-      description: Sin permisos suficientes.
-    NoEncontrado:
-      description: No existe el recurso solicitado.
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Error401:
+      description: No autorizado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Error403:
+      description: Prohibido
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Error404:
+      description: Recurso no encontrado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Error409:
+      description: Conflicto
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
 
   schemas:
-    Error:
+    ErrorResponse:
       type: object
       properties:
-        codigo: { type: string }
-        mensaje: { type: string }
+        codigo:
+          type: string
+        mensaje:
+          type: string
+
+    MensajeResponse:
+      type: object
+      properties:
+        mensaje:
+          type: string
 
     CategoriaUsuario:
       type: string
       enum: [comun, especial, plata, oro, platino]
 
-    UsuarioRegistroInicial:
+    UsuarioRol:
+      type: string
+      enum: [usuario, admin]
+
+    EstadoUsuario:
+      type: string
+      enum: [pendiente, aprobado, activo, bloqueado]
+
+    EstadoArticulo:
+      type: string
+      enum: [pendiente, aprobado, rechazado, disponible, subastado, retirado]
+
+    EstadoSubasta:
+      type: string
+      enum: [proximamente, abierta, cerrada]
+
+    MonedaSubasta:
+      type: string
+      enum: [ARS, USD]
+
+    TipoMedioPago:
+      type: string
+      enum: [CUENTA_BANCARIA, TARJETA, CHEQUE]
+
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+
+    LoginResponse:
+      type: object
+      properties:
+        mensaje:
+          type: string
+        token:
+          type: string
+        usuario:
+          $ref: '#/components/schemas/LoginUsuario'
+
+    LoginUsuario:
+      type: object
+      properties:
+        id:
+          type: string
+        nombre:
+          type: string
+        apellido:
+          type: string
+        email:
+          type: string
+        categoria:
+          $ref: '#/components/schemas/CategoriaUsuario'
+        rol:
+          $ref: '#/components/schemas/UsuarioRol'
+
+    RegistroInicialRequest:
       type: object
       required: [nombre, apellido, email, documentoFrente, documentoDorso]
       properties:
-        nombre: { type: string }
-        apellido: { type: string }
-        email: { type: string, format: email }
-        pais: { type: string }
-        domicilio: { type: string }
-        documentoFrente: { type: string, format: uri }
-        documentoDorso: { type: string, format: uri }
+        nombre:
+          type: string
+        apellido:
+          type: string
+        email:
+          type: string
+          format: email
+        pais:
+          type: string
+        domicilio:
+          type: string
+        documentoFrente:
+          type: string
+        documentoDorso:
+          type: string
+
+    RegistroInicialResponse:
+      type: object
+      properties:
+        mensaje:
+          type: string
+        usuarioId:
+          type: string
+
+    ActivarCuentaRequest:
+      type: object
+      required: [token, password]
+      properties:
+        token:
+          type: string
+        password:
+          type: string
+          format: password
 
     Usuario:
       type: object
       properties:
-        id: { type: integer }
-        nombre: { type: string }
-        apellido: { type: string }
-        email: { type: string }
-        categoria: { $ref: '#/components/schemas/CategoriaUsuario' }
-        estado: { type: string, enum: [pendiente, aprobado, activo, bloqueado] }
+        _id:
+          type: string
+        id:
+          type: integer
+        nombre:
+          type: string
+        apellido:
+          type: string
+        email:
+          type: string
+          format: email
+        pais:
+          type: string
+        domicilio:
+          type: string
+        documentoFrente:
+          type: string
+        documentoDorso:
+          type: string
+        categoria:
+          $ref: '#/components/schemas/CategoriaUsuario'
+        estado:
+          $ref: '#/components/schemas/EstadoUsuario'
+        rol:
+          $ref: '#/components/schemas/UsuarioRol'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
 
-    CrearArticulo:
+    MedioPago:
       type: object
-      required: [nombre, descripcion, fotos, declaracionPropiedad]
       properties:
-        nombre: { type: string }
-        descripcion: { type: string }
-        fotos: { type: array, minItems: 6, items: { type: string, format: uri } }
-        declaracionPropiedad: { type: boolean }
+        _id:
+          type: string
+        id:
+          type: integer
+        usuarioId:
+          type: string
+        tipo:
+          $ref: '#/components/schemas/TipoMedioPago'
+        detalle:
+          type: string
+        validado:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    MedioPagoCreateRequest:
+      type: object
+      required: [tipo, detalle]
+      properties:
+        tipo:
+          $ref: '#/components/schemas/TipoMedioPago'
+        detalle:
+          type: string
+
+    MedioPagoCreateResponse:
+      type: object
+      properties:
+        mensaje:
+          type: string
+        medioPago:
+          $ref: '#/components/schemas/MedioPago'
+
+    Articulo:
+      type: object
+      properties:
+        _id:
+          type: string
+        id:
+          type: integer
+        nombre:
+          type: string
+        descripcion:
+          type: string
+        precioBase:
+          type: number
+        estado:
+          $ref: '#/components/schemas/EstadoArticulo'
+        motivoRechazo:
+          type: string
+          nullable: true
+        fechaIngreso:
+          type: string
+          format: date-time
+        fotos:
+          type: array
+          items:
+            type: string
+        declaracionPropiedad:
+          type: boolean
+        propietarioId:
+          type: string
+        subasta:
+          type: string
+          nullable: true
+        categoria:
+          type: string
+        disponible:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ArticuloPendiente:
+      allOf:
+        - $ref: '#/components/schemas/Articulo'
+
+    CrearArticuloRequest:
+      type: object
+      required: [nombre, fotos, declaracionPropiedad]
+      properties:
+        nombre:
+          type: string
+        descripcion:
+          type: string
+        fotos:
+          type: array
+          items:
+            type: string
+        declaracionPropiedad:
+          type: boolean
+
+    CrearArticuloResponse:
+      type: object
+      properties:
+        mensaje:
+          type: string
+        articulo:
+          $ref: '#/components/schemas/Articulo'
+
+    VerificarUsuarioRequest:
+      type: object
+      required: [categoria]
+      properties:
+        categoria:
+          $ref: '#/components/schemas/CategoriaUsuario'
+
+    VerificarUsuarioResponse:
+      type: object
+      properties:
+        mensaje:
+          type: string
+        usuario:
+          $ref: '#/components/schemas/Usuario'
+        activationToken:
+          type: string
+
+    AccionArticuloResponse:
+      type: object
+      properties:
+        mensaje:
+          type: string
+        articulo:
+          $ref: '#/components/schemas/Articulo'
+
+    RechazarArticuloRequest:
+      type: object
+      required: [motivo]
+      properties:
+        motivo:
+          type: string
+
+    CrearSubastaRequest:
+      type: object
+      required: [titulo, fechaInicio, fechaFin, categoriaRequerida]
+      properties:
+        titulo:
+          type: string
+        fechaInicio:
+          type: string
+          format: date-time
+        fechaFin:
+          type: string
+          format: date-time
+        categoriaRequerida:
+          $ref: '#/components/schemas/CategoriaUsuario'
+        moneda:
+          $ref: '#/components/schemas/MonedaSubasta'
 
     Subasta:
       type: object
       properties:
-        id: { type: integer }
-        titulo: { type: string }
-        fechaInicio: { type: string, format: date-time }
-        fechaFin: { type: string, format: date-time } # <--- Agregado
-        estado: { type: string, enum: [proximamente, abierta, cerrada] }
-        moneda: { type: string, enum: [ARS, USD] }
+        _id:
+          type: string
+        id:
+          type: integer
+        titulo:
+          type: string
+        fechaInicio:
+          type: string
+          format: date-time
+        fechaFin:
+          type: string
+          format: date-time
+        categoriaRequerida:
+          $ref: '#/components/schemas/CategoriaUsuario'
+        estado:
+          $ref: '#/components/schemas/EstadoSubasta'
+        moneda:
+          $ref: '#/components/schemas/MonedaSubasta'
+        articulos:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
 
-    CrearSubasta:
+    CrearSubastaResponse:
       type: object
-      required: [titulo, fechaInicio, fechaFin, categoriaRequerida, moneda] # <--- fechaFin ahora es requerida
       properties:
-        titulo: { type: string }
-        fechaInicio: { type: string, format: date-time }
-        fechaFin: { type: string, format: date-time } # <--- Agregado
-        categoriaRequerida: { $ref: '#/components/schemas/CategoriaUsuario' }
-        moneda: { type: string, enum: [ARS, USD] }
+        mensaje:
+          type: string
+        subasta:
+          $ref: '#/components/schemas/Subasta'
 
-    MedioPago:
+    AgregarArticuloSubastaRequest:
       type: object
-      required: [tipo, detalle]
+      required: [articuloId, precioBase]
       properties:
-        id: { type: integer }
-        tipo: { type: string, enum: [CUENTA_BANCARIA, TARJETA, CHEQUE] }
-        detalle: { type: string }
-        validado: { type: boolean, default: false }
+        articuloId:
+          type: string
+        precioBase:
+          type: number
+          minimum: 0.01
 
-    NuevaPuja:
+    AgregarArticuloSubastaResponse:
+      type: object
+      properties:
+        mensaje:
+          type: string
+        articulo:
+          $ref: '#/components/schemas/Articulo'
+
+    PujaRequest:
       type: object
       required: [monto, medioPagoId]
       properties:
-        monto: { type: number, minimum: 0.01 }
-        medioPagoId: { type: integer }
+        monto:
+          type: number
+          minimum: 0.01
+        medioPagoId:
+          type: string
 
-    Puja:
+    PujaResponse:
       type: object
       properties:
-        id: { type: integer }
-        monto: { type: number }
-        fecha: { type: string, format: date-time }
+        mensaje:
+          type: string
+        puja:
+          $ref: '#/components/schemas/PujaConDetalles'
+
+    PujaConDetalles:
+      type: object
+      properties:
+        _id:
+          type: string
+        subastaId:
+          type: string
+        usuarioId:
+          type: object
+          properties:
+            _id:
+              type: string
+            nombre:
+              type: string
+            apellido:
+              type: string
+        monto:
+          type: number
+        medioPagoId:
+          type: string
+        fecha:
+          type: string
+          format: date-time
+
+    HistorialPuja:
+      type: object
+      properties:
+        id:
+          type: string
+        monto:
+          type: number
+        fecha:
+          type: string
+          format: date-time
         usuario:
           type: object
           properties:
-            id: { type: integer }
-            nombre: { type: string }
-        subastaId: { type: integer }
-    MetricasUsuario:
+            id:
+              type: string
+            nombre:
+              type: string
+        subastaId:
+          type: string
+
+    ResultadoSubasta:
       type: object
       properties:
-        asistencias: { type: integer, description: "Subastas donde pujó" }
-        victorias: { type: integer, description: "Subastas donde ganó" }
-        importeOfertadoAcumulado: { type: number }
-        importePagadoAcumulado: { type: number }
+        subasta:
+          type: object
+          properties:
+            id:
+              type: string
+            titulo:
+              type: string
+            estado:
+              $ref: '#/components/schemas/EstadoSubasta'
+            fechaCierre:
+              type: string
+              format: date-time
+        ganador:
+          nullable: true
+          type: object
+          properties:
+            usuarioId:
+              type: string
+            nombre:
+              type: string
+            apellido:
+              type: string
+            montoCierre:
+              type: number
+
+    EstadisticasUsuario:
+      type: object
+      properties:
+        asistencias:
+          type: integer
+        victorias:
+          type: integer
+        importeOfertadoAcumulado:
+          type: number
+        importePagadoAcumulado:
+          type: number
 
     HistorialParticipacion:
       type: object
       properties:
-        subastaId: { type: integer }
-        titulo: { type: string }
-        fechaCierre: { type: string, format: date-time }
-        miOfertaMax: { type: number }
-        ganador: { type: boolean }
-        estado: { type: string }
+        subastaId:
+          type: string
+        titulo:
+          type: string
+        fechaCierre:
+          type: string
+          format: date-time
+        miOfertaMax:
+          type: number
+        ganador:
+          type: boolean
+        estado:
+          $ref: '#/components/schemas/EstadoSubasta'
