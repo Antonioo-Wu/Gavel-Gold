@@ -1,0 +1,98 @@
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+// Importa tus pantallas (ajusta la ruta según donde las guardes)
+
+// Página principal
+import Splash from './app/Splash';
+import Login from './app/Login/Login';
+
+// Subastas
+import ListadeSubastas from './app/ListadeSubastas';
+import SubastaDetalles from './app/SubastaDetalles';
+
+// Recupero de contraseña
+import Recupero from './app/Login/Recupero';
+import RecuperoExito from './app/Login/RecuperoExito';
+
+
+
+// Creación de Cuenta
+import Registro from './app/Registro/RegistroUsuario';
+import MensajeEspera from './app/Registro/MensajeEspera';
+import ValidacionCategoria from './app/Registro/ValidacionCategoria';
+import GenerarPassword from './app/Registro/GenerarPassword';
+import RegistroExito from './app/Registro/RegistroExito';
+import Perfil from './app/CuentaUsuario/Perfil';
+
+// Método de Pago
+import SeleccionMetodoPago from './app/Registro/SeleccionMetodoPago';
+import MetodoPagoTarjeta from './app/Registro/MetodosdePago/MetodoPagoTarjeta';
+import MetodoPagoCuentaBancaria from './app/Registro/MetodosdePago/MetodoPagoCuentaBancaria';
+import MetodoPagoCheque from './app/Registro/MetodosdePago/MetodoPagoCheque';
+
+// Legales
+import TerminosCompra from './app/Legales/TerminosCompra';
+import TerminosEnvio from './app/Legales/TerminosEnvio';
+import TerminosyCondiciones from './app/Legales/TerminosyCondiciones';
+import PoliticadePrivacidad from './app/Legales/PoliticadePrivacidad';
+import SobreNosotros from './app/Legales/SobreNosotros';
+
+// Crear Subasta
+import CreacionBienPaso1 from './app/CrearSubasta/CreacionBienPaso1';
+import CreacionBienPaso2 from './app/CrearSubasta/CreacionBienPaso2';
+import CreacionBienExito from './app/CrearSubasta/CreacionBienExito';
+
+// Puja
+import MensajeExitoPuja from './app/Puja/MensajeExitoPuja';
+import SeguimientoPuja from './app/Puja/SeguimientoPuja';
+
+
+const Stack = createNativeStackNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Recupero" component={Recupero} />
+        <Stack.Screen name="RecuperoExito" component={RecuperoExito} />
+        
+        <Stack.Screen name="Perfil" component={Perfil} />
+        <Stack.Screen name="Registro" component={Registro} />
+        <Stack.Screen name="MensajeEspera" component={MensajeEspera} />
+        <Stack.Screen name="ValidacionCategoria" component={ValidacionCategoria} />
+        <Stack.Screen name="GenerarPassword" component={GenerarPassword} />
+        <Stack.Screen name="RegistroExito" component={RegistroExito} />     
+
+        <Stack.Screen name="SeleccionMetodoPago" component={SeleccionMetodoPago} />
+        <Stack.Screen name="MetodoPagoTarjeta" component={MetodoPagoTarjeta} />
+        <Stack.Screen name="MetodoPagoCuentaBancaria" component={MetodoPagoCuentaBancaria} />
+        <Stack.Screen name="MetodoPagoCheque" component={MetodoPagoCheque} />
+        
+        <Stack.Screen name="TerminosCompra" component={TerminosCompra} />
+        <Stack.Screen name="TerminosEnvio" component={TerminosEnvio} />
+        <Stack.Screen name="TerminosyCondiciones" component={TerminosyCondiciones} />
+        <Stack.Screen name="PoliticadePrivacidad" component={PoliticadePrivacidad} />
+        <Stack.Screen name="SobreNosotros" component={SobreNosotros} />
+
+        <Stack.Screen name="CreacionBienPaso1" component={CreacionBienPaso1} />
+        <Stack.Screen name="CreacionBienPaso2" component={CreacionBienPaso2} />
+        <Stack.Screen name="CreacionBienExito" component={CreacionBienExito} />
+
+
+       
+        <Stack.Screen name="MensajeExitoPuja" component={MensajeExitoPuja} />
+        <Stack.Screen name="SeguimientoPuja" component={SeguimientoPuja} />
+
+        <Stack.Screen name="ListadeSubastas" component={ListadeSubastas} />
+        <Stack.Screen name="SubastaDetalles" component={SubastaDetalles} />
+
+
+
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
