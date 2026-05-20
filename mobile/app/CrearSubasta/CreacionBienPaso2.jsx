@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, CheckBox } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, CheckBox } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../components/FormCard';
 import ActionButton from '../../components/ActionButton';
 import BottomNav from '../../components/BottomNav';
+
+import { CreacionBienStyles } from '../../styles/CreacionBien.js';
 
 export default function CreacionBienPaso2() {
   const navigation = useNavigation();
@@ -14,7 +16,7 @@ export default function CreacionBienPaso2() {
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <FormCard>
           <Text style={styles.title}>
-            Ingrese los{"\n"} datos del bien a{"\n"} subastar
+            Ingrese los datos del bien a subastar
           </Text>
           
           <Text style={styles.subtitle}>
@@ -56,61 +58,3 @@ export default function CreacionBienPaso2() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#1E1B16',
-  },
-  scrollContent: {
-    padding: 24,
-    paddingBottom: 100,
-    alignItems: 'center',
-  },
-  title: {
-    textAlign: 'center',
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 8,
-    color: '#1A1A1A',
-    lineHeight: 30,
-  },
-  subtitle: {
-    textAlign: 'center',
-    fontSize: 12,
-    color: '#555',
-    marginBottom: 24,
-  },
-  uploadBox: {
-    width: '100%',
-    height: 200,
-    backgroundColor: '#EFEFEF',
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  uploadIcon: {
-    fontSize: 48,
-  },
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginBottom: 8,
-  },
-  checkboxLabel: {
-    fontSize: 14,
-    color: '#333',
-    flex: 1,
-  },
-  termsLink: {
-    paddingLeft: 24,
-    marginBottom: 24,
-  },
-  termsLinkText: {
-    fontSize: 14,
-    color: '#555',
-    textDecorationLine: 'underline',
-  },
-});

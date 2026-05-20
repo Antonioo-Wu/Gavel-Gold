@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, ScrollView, StyleSheet, Picker, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, ScrollView, Picker, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../components/FormCard';
 import CustomInput from '../../components/CustomInput';
 import ActionButton from '../../components/ActionButton';
 import BottomNav from '../../components/BottomNav';
+
+import { CreacionBienStyles } from '../../styles/CreacionBien.js'; 
 
 export default function CreacionBienPaso1() {
   const navigation = useNavigation();
@@ -18,7 +20,7 @@ export default function CreacionBienPaso1() {
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <FormCard>
           <Text style={styles.title}>
-            Ingrese los{"\n"} datos del bien a{"\n"} subastar
+            Ingrese los datos del bien a subastar
           </Text>
 
           <CustomInput 
@@ -77,77 +79,3 @@ export default function CreacionBienPaso1() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#1E1B16',
-  },
-  scrollContent: {
-    padding: 24,
-    paddingBottom: 100,
-    alignItems: 'center',
-  },
-  title: {
-    textAlign: 'center',
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 24,
-    color: '#1A1A1A',
-    lineHeight: 30,
-  },
-  tagContainer: {
-    backgroundColor: '#333',
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: 4,
-    marginBottom: 24,
-    alignSelf: 'flex-start',
-  },
-  tagText: {
-    color: 'white',
-    fontSize: 12,
-  },
-  label: {
-    color: '#555',
-    fontSize: 14,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  amountContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 16,
-    marginBottom: 24,
-  },
-  currencySymbol: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#1A1A1A',
-  },
-  amountInput: {
-    flex: 1,
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#1A1A1A',
-  },
-  pickerContainer: {
-    marginBottom: 24,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    backgroundColor: 'white',
-  },
-  picker: {
-    height: 50,
-  },
-  textarea: {
-    width: '100%',
-    height: 120,
-    padding: 12,
-    borderRadius: 8,
-    backgroundColor: '#F0F0F0',
-    marginBottom: 24,
-    textAlignVertical: 'top',
-  },
-});
