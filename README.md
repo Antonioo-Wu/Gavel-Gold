@@ -69,3 +69,14 @@ El maquetado de la app y plano de despliegue de la misma se realizó y encuentra
 ## Primer Entrega - Desarrollo de Pantallas utilziando la Herramienta Android Studio
 El desarrollo frontend alojado en este repositorio corresponde a una serie de pantallas implementadas de forma complementaria. El objetivo principal de este código es poner en práctica el uso del entorno Android Studio, aplicando los conceptos de diseño de interfaces nativas (XML) y navegación móvil enseñados durante las clases teóricas y prácticas de la materia. [GavelandGold Pantallas](https://github.com/defrancisco/GavelandGold)
 
+
+
+## Entorno de Desarrollo (Expo)
+Para agilizar el desarrollo y evitar configuraciones pesadas de emuladores como Android Studio, este proyecto se inicializó y desarrolló utilizando **Expo**. Esto permitió probar la aplicación en tiempo real directamente sobre un dispositivo físico mediante la aplicación Expo Go, escribiendo el código enteramente desde Visual Studio Code.
+
+Para levantar el proyecto en otro equipo:
+1. Instalar las dependencias con `npm install`
+2. Iniciar el servidor local con `npx expo start`
+3. Escanear el código QR resultante con la app Expo Go desde el celular.
+
+Si hay inconvenientes se recomienda utilizar `npx expo start -c` para eliminar cache.
