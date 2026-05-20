@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from '../../components/ActionButton';
+import { legajesStyles } from '../../styles/Legales';
 
 export default function TerminosCompra() {
   const navigation = useNavigation();
@@ -36,7 +37,7 @@ export default function TerminosCompra() {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <Text style={styles.title}>Confirmación de{"\n"}Puja y Términos de{"\n"}Compra</Text>
+        <Text style={styles.title}>Confirmación de Puja y Términos de Compra</Text>
         
         <Text style={styles.introText}>
           Al registrar un medio de pago y/o participar activamente en cualquier subasta de <Text style={styles.bold}>Gavel & Gold</Text>, declara y acepta irrevocablemente lo siguiente:
@@ -45,10 +46,10 @@ export default function TerminosCompra() {
         <View style={styles.listContainer}>
           {terms.map((term, index) => (
             <View key={index} style={styles.listItem}>
-              <Text style={styles.termNumber}>{index + 1}. </Text>
-              <View style={styles.termContent}>
-                <Text style={styles.termTitle}>{term.title}</Text>
-                <Text style={styles.termText}>{term.content}</Text>
+              <Text style={styles.itemNumber}>{index + 1}. </Text>
+              <View style={styles.itemContent}>
+                <Text style={styles.itemTitle}>{term.title}</Text>
+                <Text style={styles.itemText}>{term.content}</Text>
               </View>
             </View>
           ))}
@@ -65,61 +66,3 @@ export default function TerminosCompra() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F8FAF8',
-  },
-  scrollContent: {
-    flex: 1,
-    padding: 24,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#1A1A1A',
-    marginBottom: 16,
-    lineHeight: 34,
-  },
-  introText: {
-    fontSize: 14,
-    color: '#333',
-    marginBottom: 24,
-    lineHeight: 21,
-  },
-  bold: {
-    fontWeight: 'bold',
-  },
-  listContainer: {
-    marginTop: 8,
-  },
-  listItem: {
-    flexDirection: 'row',
-    marginBottom: 16,
-  },
-  termNumber: {
-    fontSize: 14,
-    color: '#333',
-    fontWeight: '600',
-    marginRight: 8,
-  },
-  termContent: {
-    flex: 1,
-  },
-  termTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
-  },
-  termText: {
-    fontSize: 14,
-    color: '#333',
-    lineHeight: 21,
-  },
-  footer: {
-    padding: 24,
-    backgroundColor: '#F8FAF8',
-  },
-});

@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native';
 
 export const CreacionBienStyles = StyleSheet.create({
-  // --- Estilos Compartidos ---
   container: {
     flex: 1,
     backgroundColor: '#1E1B16',
@@ -19,7 +18,6 @@ export const CreacionBienStyles = StyleSheet.create({
     color: '#1A1A1A',
     lineHeight: 30,
   },
-  // --- Estilos Específicos: Paso 1 ---
   tagContainer: {
     backgroundColor: '#333',
     paddingHorizontal: 12,
@@ -74,8 +72,6 @@ export const CreacionBienStyles = StyleSheet.create({
     marginBottom: 24,
     textAlignVertical: 'top',
   },
-
-  // --- Estilos Específicos: Paso 2 ---
   subtitle: {
     textAlign: 'center',
     fontSize: 12,

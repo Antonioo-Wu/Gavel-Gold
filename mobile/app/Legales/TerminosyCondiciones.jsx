@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from '../../components/ActionButton';
+import { legajesStyles } from '../../styles/Legales';
 
 export default function TerminosYCondiciones() {
   const navigation = useNavigation();
@@ -28,7 +29,7 @@ export default function TerminosYCondiciones() {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <Text style={styles.title}>Términos y{"\n"} Condiciones de Uso</Text>
+        <Text style={styles.title}>Términos y Condiciones de Uso</Text>
         
         <Text style={styles.introText}>
           El acceso y uso de la plataforma Gavel & Gold está sujeto a los siguientes términos y condiciones. Al utilizar nuestra aplicación, usted acepta cumplir con estas normativas:
@@ -37,10 +38,10 @@ export default function TerminosYCondiciones() {
         <View style={styles.listContainer}>
           {terms.map((term, index) => (
             <View key={index} style={styles.listItem}>
-              <Text style={styles.termNumber}>{index + 1}. </Text>
-              <View style={styles.termContent}>
-                <Text style={styles.termTitle}>{term.title}</Text>
-                <Text style={styles.termText}>{term.content}</Text>
+              <Text style={styles.itemNumber}>{index + 1}. </Text>
+              <View style={styles.itemContent}>
+                <Text style={styles.itemTitle}>{term.title}</Text>
+                <Text style={styles.itemText}>{term.content}</Text>
               </View>
             </View>
           ))}
@@ -57,58 +58,3 @@ export default function TerminosYCondiciones() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F8FAF8',
-  },
-  scrollContent: {
-    flex: 1,
-    padding: 24,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#1A1A1A',
-    marginBottom: 16,
-    lineHeight: 34,
-  },
-  introText: {
-    fontSize: 14,
-    color: '#333',
-    marginBottom: 24,
-    lineHeight: 21,
-  },
-  listContainer: {
-    marginTop: 8,
-  },
-  listItem: {
-    flexDirection: 'row',
-    marginBottom: 16,
-  },
-  termNumber: {
-    fontSize: 14,
-    color: '#333',
-    fontWeight: '600',
-    marginRight: 8,
-  },
-  termContent: {
-    flex: 1,
-  },
-  termTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
-  },
-  termText: {
-    fontSize: 14,
-    color: '#333',
-    lineHeight: 21,
-  },
-  footer: {
-    padding: 24,
-    backgroundColor: '#F8FAF8',
-  },
-});
