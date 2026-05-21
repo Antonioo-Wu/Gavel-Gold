@@ -6,8 +6,8 @@ export default function RecuperoExito() {
   const navigation = useNavigation();
 
   return (
-    <FeedbackScreen 
-      text={"Listo\nRecibirá un mail\ncon los pasos a\nseguir"} 
+    <FeedbackScreen
+      text={"Listo\nRecibirá un mail\ncon los pasos a\nseguir"}
       onPress={() => navigation.navigate('Login')}
     />
   );

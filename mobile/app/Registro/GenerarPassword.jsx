@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../components/FormCard';
 import CustomInput from '../../components/CustomInput';
 import ActionButton from '../../components/ActionButton';
+
+import { registroStyles as styles } from '../../styles/registro/Registro';
 
 export default function GenerarPassword() {
   const navigation = useNavigation();
@@ -16,7 +18,7 @@ export default function GenerarPassword() {
           <Text style={styles.subtitle}>Generar contraseña personal</Text>
           <CustomInput label="Contraseña" secureTextEntry placeholder="Ingrese la contraseña" />
           <CustomInput label="Confirmar contraseña" secureTextEntry placeholder="Confirme la contraseña" />
-          
+
           <View style={styles.list}>
             <Text style={styles.listItem}>• Mínimo 8 caracteres</Text>
             <Text style={styles.listItem}>• Incluir mayúsculas, minúsculas, números y un carácter especial</Text>
@@ -29,12 +31,3 @@ export default function GenerarPassword() {
     </ImageBackground>
   );
 }
-
-const styles = StyleSheet.create({
-  background: { flex: 1, justifyContent: 'center' },
-  container: { padding: 24 },
-  title: { color: 'white', fontSize: 24, textAlign: 'center', marginBottom: 24, fontWeight: 'bold' },
-  subtitle: { color: '#333', textAlign: 'center', marginBottom: 24, fontWeight: 'bold' },
-  list: { marginBottom: 24, paddingLeft: 16 },
-  listItem: { fontSize: 12, color: '#777', marginBottom: 4 }
-});

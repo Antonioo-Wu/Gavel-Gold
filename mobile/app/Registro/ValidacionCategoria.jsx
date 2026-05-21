@@ -6,8 +6,8 @@ export default function ValidacionCategoria() {
   const navigation = useNavigation();
 
   return (
-    <FeedbackScreen 
-      text={"¡Se le ha asignado\nla categoría\n'Común'!\n\n\n\nA continuación, se le\npedirá crear una\ncontraseña para su\ncuenta."} 
+    <FeedbackScreen
+      text={"¡Se le ha asignado\nla categoría\n'Común'!\n\n\n\nA continuación, se le\npedirá crear una\ncontraseña para su\ncuenta."}
       onPress={() => navigation.navigate('GenerarPassword')}
     />
   );

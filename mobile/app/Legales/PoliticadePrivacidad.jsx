@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from '../../components/ActionButton';
+import { legajesStyles as styles } from '../../styles/legajes/Legales';
 
 export default function PoliticaPrivacidad() {
   const navigation = useNavigation();
@@ -28,8 +29,8 @@ export default function PoliticaPrivacidad() {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <Text style={styles.title}>Política de{'\n'}Privacidad</Text>
-        
+        <Text style={styles.title}>Política de Privacidad</Text>
+
         <Text style={styles.introText}>
           En Gavel & Gold, la privacidad y seguridad de sus datos son nuestra prioridad. Esta política describe cómo recopilamos, utilizamos y protegemos su información:
         </Text>
@@ -37,10 +38,10 @@ export default function PoliticaPrivacidad() {
         <View style={styles.listContainer}>
           {policies.map((policy, index) => (
             <View key={index} style={styles.listItem}>
-              <Text style={styles.policyNumber}>{index + 1}. </Text>
-              <View style={styles.policyContent}>
-                <Text style={styles.policyTitle}>{policy.title}</Text>
-                <Text style={styles.policyText}>{policy.content}</Text>
+              <Text style={styles.itemNumber}>{index + 1}. </Text>
+              <View style={styles.itemContent}>
+                <Text style={styles.itemTitle}>{policy.title}</Text>
+                <Text style={styles.itemText}>{policy.content}</Text>
               </View>
             </View>
           ))}
@@ -48,67 +49,12 @@ export default function PoliticaPrivacidad() {
       </ScrollView>
 
       <View style={styles.footer}>
-        <ActionButton 
-          text="Volver" 
-          variant="solid" 
-          onPress={() => navigation.goBack()} 
+        <ActionButton
+          text="Volver"
+          variant="solid"
+          onPress={() => navigation.goBack()}
         />
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F8FAF8',
-  },
-  scrollContent: {
-    flex: 1,
-    padding: 24,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#1A1A1A',
-    marginBottom: 16,
-    lineHeight: 34,
-  },
-  introText: {
-    fontSize: 14,
-    color: '#333',
-    marginBottom: 24,
-    lineHeight: 21,
-  },
-  listContainer: {
-    marginTop: 8,
-  },
-  listItem: {
-    flexDirection: 'row',
-    marginBottom: 16,
-  },
-  policyNumber: {
-    fontSize: 14,
-    color: '#333',
-    fontWeight: '600',
-    marginRight: 8,
-  },
-  policyContent: {
-    flex: 1,
-  },
-  policyTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
-  },
-  policyText: {
-    fontSize: 14,
-    color: '#333',
-    lineHeight: 21,
-  },
-  footer: {
-    padding: 24,
-    backgroundColor: '#F8FAF8',
-  },
-});

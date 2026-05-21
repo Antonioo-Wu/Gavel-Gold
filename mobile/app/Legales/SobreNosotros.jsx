@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from '../../components/ActionButton';
+import { legajesStyles as styles } from '../../styles/legajes/Legales';
 
 export default function SobreNosotros() {
   const navigation = useNavigation();
@@ -9,8 +10,8 @@ export default function SobreNosotros() {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <Text style={styles.title}>Sobre Nosotros</Text>
-        
+        <Text style={styles.titleSobreNosotros}>Sobre Nosotros</Text>
+
         <Text style={styles.paragraph}>
           En <Text style={styles.bold}>Gavel & Gold</Text>, fusionamos el prestigio y la emoción de las casas de subastas tradicionales con la inmediatez de la tecnología digital. Nacimos con la visión de democratizar el acceso a piezas únicas, obras de arte, artículos de diseñador y coleccionables, permitiendo a postores de todo el mundo participar en tiempo real en nuestras subastas físicas presenciales.
         </Text>
@@ -21,43 +22,12 @@ export default function SobreNosotros() {
       </ScrollView>
 
       <View style={styles.footer}>
-        <ActionButton 
-          text="Volver" 
-          variant="solid" 
-          onPress={() => navigation.goBack()} 
+        <ActionButton
+          text="Volver"
+          variant="solid"
+          onPress={() => navigation.goBack()}
         />
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F8FAF8',
-  },
-  scrollContent: {
-    flex: 1,
-    padding: 24,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#1A1A1A',
-    marginBottom: 24,
-    lineHeight: 34,
-  },
-  paragraph: {
-    fontSize: 14,
-    color: '#333',
-    marginBottom: 16,
-    lineHeight: 21,
-  },
-  bold: {
-    fontWeight: 'bold',
-  },
-  footer: {
-    padding: 24,
-    backgroundColor: '#F8FAF8',
-  },
-});
