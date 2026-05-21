@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from '../../components/ActionButton';
-import { legajesStyles as styles } from '../../styles/Legales';
+import { legajesStyles as styles } from '../../styles/legajes/Legales';
 
 export default function TerminosEnvio() {
   const navigation = useNavigation();
@@ -38,7 +38,7 @@ export default function TerminosEnvio() {
     <View style={styles.container}>
       <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>Declaración Jurada y Términos de Envío</Text>
-        
+
         <Text style={styles.introText}>
           Al enviar esta solicitud, usted, el "Usuario Solicitante", declara y acepta lo siguiente:
         </Text>
@@ -57,10 +57,10 @@ export default function TerminosEnvio() {
       </ScrollView>
 
       <View style={styles.footer}>
-        <ActionButton 
-          text="Aceptar y Continuar" 
-          variant="solid" 
-          onPress={() => navigation.navigate('CreacionBienExito')} 
+        <ActionButton
+          text="Aceptar y Continuar"
+          variant="solid"
+          onPress={() => navigation.navigate('CreacionBienExito')}
         />
       </View>
     </View>

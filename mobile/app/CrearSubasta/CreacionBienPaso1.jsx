@@ -6,7 +6,7 @@ import CustomInput from '../../components/CustomInput';
 import ActionButton from '../../components/ActionButton';
 import BottomNav from '../../components/BottomNav';
 
-import { CreacionBienStyles as styles } from '../../styles/CreacionBien.js'; 
+import { CreacionBienStyles as styles } from '../../styles/crearSubasta/CreacionBien.js';
 
 export default function CreacionBienPaso1() {
   const navigation = useNavigation();
@@ -23,19 +23,19 @@ export default function CreacionBienPaso1() {
             Ingrese los datos del bien a subastar
           </Text>
 
-          <CustomInput 
-            label="Nombre del bien" 
+          <CustomInput
+            label="Nombre del bien"
             placeholder="Ej: Reloj de bolsillo antiguo"
             value={itemName}
             onChangeText={setItemName}
           />
-          
+
           <View style={styles.tagContainer}>
             <Text style={styles.tagText}>✓ Etiqueta</Text>
           </View>
 
           <Text style={styles.label}>Ingrese su monto de valor base</Text>
-          
+
           <View style={styles.amountContainer}>
             <Text style={styles.currencySymbol}>$</Text>
             <TextInput
@@ -67,10 +67,10 @@ export default function CreacionBienPaso1() {
             onChangeText={setDescription}
           />
 
-          <ActionButton 
-            text="Continuar" 
-            variant="solid" 
-            onPress={() => navigation.navigate('CreacionBienPaso2')} 
+          <ActionButton
+            text="Continuar"
+            variant="solid"
+            onPress={() => navigation.navigate('CreacionBienPaso2')}
           />
         </FormCard>
       </ScrollView>

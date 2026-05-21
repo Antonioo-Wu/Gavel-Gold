@@ -5,7 +5,7 @@ import FormCard from '../../components/FormCard';
 import ActionButton from '../../components/ActionButton';
 import BottomNav from '../../components/BottomNav';
 
-import { CreacionBienStyles as styles } from '../../styles/CreacionBien.js';
+import { CreacionBienStyles as styles } from '../../styles/crearSubasta/CreacionBien.js';
 
 export default function CreacionBienPaso2() {
   const navigation = useNavigation();
@@ -18,7 +18,7 @@ export default function CreacionBienPaso2() {
           <Text style={styles.title}>
             Ingrese los datos del bien a subastar
           </Text>
-          
+
           <Text style={styles.subtitle}>
             Agrega mínimo 6 fotos de tu producto a subastar
           </Text>
@@ -36,8 +36,8 @@ export default function CreacionBienPaso2() {
               Acepto los Términos y Condiciones
             </Text>
           </View>
-          
-          <TouchableOpacity 
+
+          <TouchableOpacity
             style={styles.termsLink}
             onPress={() => navigation.navigate('TerminosEnvio')}
           >
@@ -46,10 +46,10 @@ export default function CreacionBienPaso2() {
             </Text>
           </TouchableOpacity>
 
-          <ActionButton 
-            text="¡Subastar!" 
-            variant="solid" 
-            onPress={() => navigation.navigate('CreacionBienExito')} 
+          <ActionButton
+            text="¡Subastar!"
+            variant="solid"
+            onPress={() => navigation.navigate('CreacionBienExito')}
           />
         </FormCard>
       </ScrollView>

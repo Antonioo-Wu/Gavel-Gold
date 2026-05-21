@@ -3,15 +3,15 @@ import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import BottomNav from '../../components/BottomNav';
 
-import { PerfilStlyes as styles } from '../../styles/Perfil.js';
+import { PerfilStlyes as styles } from '../../styles/cuentaUsuario/Perfil.js';
 
 export default function Perfil() {
   const navigation = useNavigation();
 
   const gridItems = [
-    { icon: '👤', label: 'Mis datos', onPress: () => {} },
+    { icon: '👤', label: 'Mis datos', onPress: () => { } },
     { icon: '💳', label: 'Métodos de\npago', onPress: () => navigation.navigate('SeleccionMetodoPago') },
-    { icon: '📈', label: 'Mis\nmétricas', onPress: () => {} },
+    { icon: '📈', label: 'Mis\nmétricas', onPress: () => { } },
   ];
 
   const infoItems = [
@@ -24,7 +24,7 @@ export default function Perfil() {
     <View style={styles.container}>
       <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>Mi Perfil</Text>
-        
+
         <Text style={styles.category}>Categoría: Común</Text>
 
         <View style={styles.gridContainer}>
@@ -38,7 +38,7 @@ export default function Perfil() {
 
         <View style={styles.infoCard}>
           <Text style={styles.infoTitle}>Más información</Text>
-          
+
           {infoItems.map((item, index) => (
             <TouchableOpacity key={index} style={styles.infoItem} onPress={item.onPress}>
               <Text style={styles.infoIcon}>{item.icon}</Text>

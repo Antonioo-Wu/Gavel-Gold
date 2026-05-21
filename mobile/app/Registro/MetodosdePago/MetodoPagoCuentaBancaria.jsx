@@ -5,7 +5,7 @@ import FormCard from '../../../components/FormCard';
 import CustomInput from '../../../components/CustomInput';
 import ActionButton from '../../../components/ActionButton';
 
-import { metodosDePagoStyles as styles } from '../../../styles/MetodosDePago';
+import { metodosDePagoStyles as styles } from '../../../styles/metodosDePago/MetodosDePago';
 
 export default function MetodoPagoCuentaBancaria() {
   const navigation = useNavigation();

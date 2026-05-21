@@ -4,9 +4,9 @@ import FeedbackScreen from '../../components/FeedbackScreen';
 
 export default function MensajeExitoPuja() {
   const navigation = useNavigation();
-  
+
   return (
-    <FeedbackScreen 
+    <FeedbackScreen
       text="¡Has ganado la subasta!"
       onPress={() => navigation.navigate('SeguimientoPuja')}
     />

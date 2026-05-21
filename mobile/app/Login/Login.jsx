@@ -5,7 +5,7 @@ import FormCard from '../../components/FormCard';
 import CustomInput from '../../components/CustomInput';
 import ActionButton from '../../components/ActionButton';
 
-import { loginStyles as styles } from '../../styles/Login';
+import { loginStyles as styles } from '../../styles/login/Login';
 
 export default function Login() {
   const navigation = useNavigation();
@@ -17,11 +17,11 @@ export default function Login() {
       <View style={styles.containerCenter}>
         <Image source={require('../../assets/logos/logotipo.png')} style={styles.logo} />
         <Text style={styles.title}>Inicio de Sesión</Text>
-        
+
         <FormCard>
           <CustomInput label="Email" placeholder="Valor" value={email} onChangeText={setEmail} />
           <CustomInput label="Password" placeholder="Valor" value={password} onChangeText={setPassword} secureTextEntry />
-          
+
           <ActionButton text="Ingresar" variant="solid" onPress={() => navigation.navigate('ListadeSubastas')} />
 
           <View style={styles.footer}>

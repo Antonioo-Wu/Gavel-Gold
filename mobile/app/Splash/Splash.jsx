@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import { splashStyles as styles } from '../styles/Splash';
+import { splashStyles as styles } from '../../styles/Splash';
 
 export default function Splash() {
   const navigation = useNavigation();

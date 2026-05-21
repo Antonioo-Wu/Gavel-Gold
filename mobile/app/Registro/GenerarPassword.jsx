@@ -5,7 +5,7 @@ import FormCard from '../../components/FormCard';
 import CustomInput from '../../components/CustomInput';
 import ActionButton from '../../components/ActionButton';
 
-import { registroStyles as styles } from '../../styles/Registro';
+import { registroStyles as styles } from '../../styles/registro/Registro';
 
 export default function GenerarPassword() {
   const navigation = useNavigation();
@@ -18,7 +18,7 @@ export default function GenerarPassword() {
           <Text style={styles.subtitle}>Generar contraseña personal</Text>
           <CustomInput label="Contraseña" secureTextEntry placeholder="Ingrese la contraseña" />
           <CustomInput label="Confirmar contraseña" secureTextEntry placeholder="Confirme la contraseña" />
-          
+
           <View style={styles.list}>
             <Text style={styles.listItem}>• Mínimo 8 caracteres</Text>
             <Text style={styles.listItem}>• Incluir mayúsculas, minúsculas, números y un carácter especial</Text>

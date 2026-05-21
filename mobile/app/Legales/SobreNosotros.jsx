@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from '../../components/ActionButton';
-import { legajesStyles as styles } from '../../styles/Legales';
+import { legajesStyles as styles } from '../../styles/legajes/Legales';
 
 export default function SobreNosotros() {
   const navigation = useNavigation();
@@ -11,7 +11,7 @@ export default function SobreNosotros() {
     <View style={styles.container}>
       <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <Text style={styles.titleSobreNosotros}>Sobre Nosotros</Text>
-        
+
         <Text style={styles.paragraph}>
           En <Text style={styles.bold}>Gavel & Gold</Text>, fusionamos el prestigio y la emoción de las casas de subastas tradicionales con la inmediatez de la tecnología digital. Nacimos con la visión de democratizar el acceso a piezas únicas, obras de arte, artículos de diseñador y coleccionables, permitiendo a postores de todo el mundo participar en tiempo real en nuestras subastas físicas presenciales.
         </Text>
@@ -22,10 +22,10 @@ export default function SobreNosotros() {
       </ScrollView>
 
       <View style={styles.footer}>
-        <ActionButton 
-          text="Volver" 
-          variant="solid" 
-          onPress={() => navigation.goBack()} 
+        <ActionButton
+          text="Volver"
+          variant="solid"
+          onPress={() => navigation.goBack()}
         />
       </View>
     </View>

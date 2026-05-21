@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from '../../components/ActionButton';
-import { legajesStyles as styles } from '../../styles/Legales';
+import { legajesStyles as styles } from '../../styles/legajes/Legales';
 
 export default function TerminosCompra() {
   const navigation = useNavigation();
@@ -38,7 +38,7 @@ export default function TerminosCompra() {
     <View style={styles.container}>
       <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>Confirmación de Puja y Términos de Compra</Text>
-        
+
         <Text style={styles.introText}>
           Al registrar un medio de pago y/o participar activamente en cualquier subasta de <Text style={styles.bold}>Gavel & Gold</Text>, declara y acepta irrevocablemente lo siguiente:
         </Text>
@@ -57,10 +57,10 @@ export default function TerminosCompra() {
       </ScrollView>
 
       <View style={styles.footer}>
-        <ActionButton 
-          text="Acepto y Continúo" 
-          variant="solid" 
-          onPress={() => navigation.goBack()} 
+        <ActionButton
+          text="Acepto y Continúo"
+          variant="solid"
+          onPress={() => navigation.goBack()}
         />
       </View>
     </View>

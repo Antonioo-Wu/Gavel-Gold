@@ -4,7 +4,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import FormCard from '../../components/FormCard';
 import ActionButton from '../../components/ActionButton';
 
-import { seguimientoPujaStyles as styles } from '../../styles/SeguimientoPuja';
+import { seguimientoPujaStyles as styles } from '../../styles/puja/SeguimientoPuja';
 export default function SeguimientoPuja() {
     const navigation = useNavigation();
     const route = useRoute();

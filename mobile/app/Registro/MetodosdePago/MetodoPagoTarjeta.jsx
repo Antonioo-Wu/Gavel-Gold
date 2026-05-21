@@ -5,7 +5,7 @@ import FormCard from '../../../components/FormCard';
 import CustomInput from '../../../components/CustomInput';
 import ActionButton from '../../../components/ActionButton';
 
-import { metodosDePagoStyles as styles } from '../../../styles/MetodosDePago';
+import { metodosDePagoStyles as styles } from '../../../styles/metodosDePago/MetodosDePago';
 
 export default function MetodoPagoTarjeta() {
   const navigation = useNavigation();
@@ -16,7 +16,7 @@ export default function MetodoPagoTarjeta() {
       <FormCard>
         <Text style={styles.header}>Ingrese sus datos</Text>
         <CustomInput label="Número de tarjeta" placeholder="0000 0000 0000" keyboardType="numeric" />
-        
+
         <View style={styles.inputRowTarjeta}>
           <View style={styles.inputItem}><CustomInput label="Vencimiento" placeholder="MM" keyboardType="numeric" /></View>
           <View style={styles.inputItem}><CustomInput label=" " placeholder="YYYY" keyboardType="numeric" /></View>

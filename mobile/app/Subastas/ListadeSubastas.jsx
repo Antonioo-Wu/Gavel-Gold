@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, TextInput, ScrollView } from 'react-native';
-import BottomNav from '../components/BottomNav';
-import AuctionCard from '../components/AuctionCard';
+import BottomNav from '../../components/BottomNav';
+import AuctionCard from '../../components/AuctionCard';
 
-import { listaDeSubastasStyles as styles } from '../styles/ListaDeSubastas';
+import { listaDeSubastasStyles as styles } from '../../styles/subastas/ListaDeSubastas';
 
 export default function ListadeSubastas() {
   const subastas = [

@@ -5,7 +5,7 @@ import FormCard from '../../components/FormCard';
 import CustomInput from '../../components/CustomInput';
 import ActionButton from '../../components/ActionButton';
 
-import { loginStyles as styles } from '../../styles/Login';
+import { loginStyles as styles } from '../../styles/login/Login';
 
 export default function Recupero() {
   const navigation = useNavigation();

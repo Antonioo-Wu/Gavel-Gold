@@ -6,8 +6,8 @@ export default function MensajeEspera() {
   const navigation = useNavigation();
 
   return (
-    <FeedbackScreen 
-      text={"\n\n¡Tu cuenta está en revisión!\nPronto recibirás una notificación por correo."} 
+    <FeedbackScreen
+      text={"\n\n¡Tu cuenta está en revisión!\nPronto recibirás una notificación por correo."}
       onPress={() => navigation.navigate('Login')}
     />
   );

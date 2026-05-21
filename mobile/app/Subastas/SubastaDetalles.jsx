@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import BottomNav from '../components/BottomNav';
+import BottomNav from '../../components/BottomNav';
 
-import { subastaDetallesStlyes as styles } from '../styles/SubastaDetalles';
+import { subastaDetallesStlyes as styles } from '../../styles/SubastaDetalles';
 
 export default function SubastaDetalles() {
   const route = useRoute();
@@ -40,7 +40,7 @@ export default function SubastaDetalles() {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      
+
       <BottomNav />
     </View>
   );

@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../components/FormCard';
 import ActionButton from '../../components/ActionButton';
 
-import { registroStyles as styles } from '../../styles/Registro';
+import { registroStyles as styles } from '../../styles/registro/Registro';
 
 export default function SeleccionMetodoPago() {
   const navigation = useNavigation();
@@ -14,7 +14,7 @@ export default function SeleccionMetodoPago() {
       <Text style={styles.title}>Creación de Cuenta</Text>
       <FormCard>
         <Text style={styles.headerCentered}>Añadir un método de pago</Text>
-        
+
         <View style={styles.paymentRow}>
           <TouchableOpacity style={styles.paymentBtn} onPress={() => navigation.navigate('MetodoPagoCuenta')}>
             <Text>Cuenta bancaria</Text>

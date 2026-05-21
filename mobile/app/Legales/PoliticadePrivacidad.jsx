@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from '../../components/ActionButton';
-import { legajesStyles as styles } from '../../styles/Legales';
+import { legajesStyles as styles } from '../../styles/legajes/Legales';
 
 export default function PoliticaPrivacidad() {
   const navigation = useNavigation();
@@ -30,7 +30,7 @@ export default function PoliticaPrivacidad() {
     <View style={styles.container}>
       <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>Política de Privacidad</Text>
-        
+
         <Text style={styles.introText}>
           En Gavel & Gold, la privacidad y seguridad de sus datos son nuestra prioridad. Esta política describe cómo recopilamos, utilizamos y protegemos su información:
         </Text>
@@ -49,10 +49,10 @@ export default function PoliticaPrivacidad() {
       </ScrollView>
 
       <View style={styles.footer}>
-        <ActionButton 
-          text="Volver" 
-          variant="solid" 
-          onPress={() => navigation.goBack()} 
+        <ActionButton
+          text="Volver"
+          variant="solid"
+          onPress={() => navigation.goBack()}
         />
       </View>
     </View>
