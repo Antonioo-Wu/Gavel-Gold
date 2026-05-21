@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
+import { categoryPillStyles as styles } from '../styles/components/CategoryPill';
 
 export default function CategoryPill({ category }) {
   const colors = {
@@ -10,16 +11,11 @@ export default function CategoryPill({ category }) {
     Común: { bg: '#555555', text: '#FFFFFF' }
   };
 
-  const style = colors[category] || colors['Común'];
+  const styleConfig = colors[category] || colors['Común'];
 
   return (
-    <View style={[styles.pill, { backgroundColor: style.bg }]}>
-      <Text style={[styles.text, { color: style.text }]}>{category}</Text>
+    <View style={[styles.pill, { backgroundColor: styleConfig.bg }]}>
+      <Text style={[styles.text, { color: styleConfig.text }]}>{category}</Text>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  pill: { paddingHorizontal: 12, paddingVertical: 4, borderRadius: 50, alignSelf: 'flex-start' },
-  text: { fontWeight: 'bold', fontSize: 12 }
-});

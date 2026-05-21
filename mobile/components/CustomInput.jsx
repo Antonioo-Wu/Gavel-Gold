@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput } from 'react-native';
+import { customInputStyles as styles } from '../styles/components/CustomInput';
 
 export default function CustomInput({ label, placeholder, value, onChangeText, secureTextEntry, keyboardType = 'default' }) {
   return (
@@ -16,9 +17,3 @@ export default function CustomInput({ label, placeholder, value, onChangeText, s
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { marginBottom: 16 },
-  label: { color: '#555', fontSize: 14, fontWeight: 'bold', marginBottom: 8 },
-  input: { width: '100%', padding: 12, borderRadius: 8, borderWidth: 1, borderColor: '#ccc', fontSize: 14 }
-});
