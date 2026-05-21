@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, Text, Image, ImageBackground, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../components/FormCard';
 import CustomInput from '../../components/CustomInput';
 import ActionButton from '../../components/ActionButton';
+
+import { loginStyles as styles } from '../../styles/Login';
 
 export default function Login() {
   const navigation = useNavigation();
@@ -12,7 +14,7 @@ export default function Login() {
 
   return (
     <ImageBackground source={require('../../assets/fondo_dorado.jpg')} style={styles.background}>
-      <View style={styles.container}>
+      <View style={styles.containerCenter}>
         <Image source={require('../../assets/logos/logotipo.png')} style={styles.logo} />
         <Text style={styles.title}>Inicio de Sesión</Text>
         
@@ -35,12 +37,3 @@ export default function Login() {
     </ImageBackground>
   );
 }
-
-const styles = StyleSheet.create({
-  background: { flex: 1, justifyContent: 'center' },
-  container: { padding: 24, alignItems: 'center' },
-  logo: { width: 96, height: 96, marginBottom: 16, resizeMode: 'contain' },
-  title: { color: 'white', fontSize: 24, marginBottom: 32, fontWeight: 'bold' },
-  footer: { marginTop: 24, alignItems: 'center' },
-  link: { fontWeight: 'bold', color: '#555', marginBottom: 15 }
-});
