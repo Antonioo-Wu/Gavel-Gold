@@ -29,8 +29,13 @@ const articuloSchema = new mongoose.Schema(
 
     estado: {
       type: String,
-      enum: ["disponible", "subastado", "retirado"],
-      default: "disponible",
+      enum: ["pendiente", "aprobado", "rechazado", "disponible", "subastado", "retirado"],
+      default: "pendiente",
+    },
+
+    motivoRechazo: {
+      type: String,
+      default: null,
     },
 
     fechaIngreso: {
