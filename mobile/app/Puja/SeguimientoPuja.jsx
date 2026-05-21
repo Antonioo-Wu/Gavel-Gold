@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, ImageBackground } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import FormCard from '../../components/FormCard';
 import ActionButton from '../../components/ActionButton';
 
+import { seguimientoPujaStyles as styles } from '../../styles/SeguimientoPuja';
 export default function SeguimientoPuja() {
     const navigation = useNavigation();
     const route = useRoute();
@@ -14,18 +15,15 @@ export default function SeguimientoPuja() {
         <ImageBackground source={require('../../assets/fondo_dorado.jpg')} style={styles.background}>
             <FormCard>
                 <Text style={styles.header}>Seguimiento post venta</Text>
+
                 <View style={styles.detalle}>
                     <Text>Monto: ${facturacion.montoPujado}</Text>
                     <Text>Total: ${facturacion.total}</Text>
                 </View>
-                <ActionButton text="Finalizar" variant="solid" onPress={() => navigation.navigate('Subastas')} />
+
+                <ActionButton text="Finalizar" variant="solid" onPress={() => navigation.navigate('Subastas')}
+                />
             </FormCard>
         </ImageBackground>
     );
 }
-
-const styles = StyleSheet.create({
-    background: { flex: 1, justifyContent: 'center', padding: 24 },
-    header: { textAlign: 'center', fontWeight: 'bold', marginBottom: 16 },
-    detalle: { backgroundColor: '#F5F5F5', padding: 16, borderRadius: 8 }
-});
