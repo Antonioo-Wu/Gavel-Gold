@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../components/FormCard';
 import CustomInput from '../../components/CustomInput';
 import ActionButton from '../../components/ActionButton';
+
+import { registroStyles } from '../../styles/Registro';
 
 export default function GenerarPassword() {
   const navigation = useNavigation();
@@ -29,12 +31,3 @@ export default function GenerarPassword() {
     </ImageBackground>
   );
 }
-
-const styles = StyleSheet.create({
-  background: { flex: 1, justifyContent: 'center' },
-  container: { padding: 24 },
-  title: { color: 'white', fontSize: 24, textAlign: 'center', marginBottom: 24, fontWeight: 'bold' },
-  subtitle: { color: '#333', textAlign: 'center', marginBottom: 24, fontWeight: 'bold' },
-  list: { marginBottom: 24, paddingLeft: 16 },
-  listItem: { fontSize: 12, color: '#777', marginBottom: 4 }
-});

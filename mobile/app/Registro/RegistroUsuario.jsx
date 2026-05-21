@@ -1,17 +1,19 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../components/FormCard';
 import CustomInput from '../../components/CustomInput';
 import ActionButton from '../../components/ActionButton';
 
+import { registroStyles } from '../../styles/Registro';
+
 export default function RegistroUsuario() {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.container}>
+    <View style={styles.containerDark}>
       <FormCard>
-        <Text style={styles.header}>Ingrese sus datos</Text>
+        <Text style={styles.headerDark}>Ingrese sus datos</Text>
         <Text style={styles.subtext}>Todos los campos son obligatorios.</Text>
         
         <CustomInput label="Nombre" placeholder="Ingrese su nombre" />
@@ -29,9 +31,3 @@ export default function RegistroUsuario() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#1E1B16', padding: 24, justifyContent: 'center' },
-  header: { fontSize: 20, fontWeight: 'bold', marginBottom: 8 },
-  subtext: { fontSize: 12, color: '#555', marginBottom: 24 }
-});
