@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../../components/FormCard';
 import CustomInput from '../../../components/CustomInput';
 import ActionButton from '../../../components/ActionButton';
+
+import { metodosDePagoStyles as styles } from '../../../styles/MetodosDePago';
 
 export default function MetodoPagoCuentaBancaria() {
   const navigation = useNavigation();
@@ -27,10 +29,3 @@ export default function MetodoPagoCuentaBancaria() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#1E1B16', padding: 24, justifyContent: 'center' },
-  title: { color: 'white', textAlign: 'center', marginBottom: 24, fontSize: 24, fontWeight: 'bold' },
-  header: { color: '#1A1A1A', fontWeight: 'bold', marginBottom: 8 },
-  buttons: { flexDirection: 'row', gap: 16, marginTop: 24 }
-});
