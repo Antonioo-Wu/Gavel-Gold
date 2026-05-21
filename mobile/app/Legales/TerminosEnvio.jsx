@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from '../../components/ActionButton';
-import { legajesStyles } from '../../styles/Legales';
+import { legajesStyles as styles } from '../../styles/Legales';
 
 export default function TerminosEnvio() {
   const navigation = useNavigation();

@@ -5,7 +5,7 @@ import FormCard from '../../components/FormCard';
 import ActionButton from '../../components/ActionButton';
 import BottomNav from '../../components/BottomNav';
 
-import { CreacionBienStyles } from '../../styles/CreacionBien.js';
+import { CreacionBienStyles as styles } from '../../styles/CreacionBien.js';
 
 export default function CreacionBienPaso2() {
   const navigation = useNavigation();

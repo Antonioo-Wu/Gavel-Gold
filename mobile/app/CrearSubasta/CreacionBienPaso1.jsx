@@ -6,7 +6,7 @@ import CustomInput from '../../components/CustomInput';
 import ActionButton from '../../components/ActionButton';
 import BottomNav from '../../components/BottomNav';
 
-import { CreacionBienStyles } from '../../styles/CreacionBien.js'; 
+import { CreacionBienStyles as styles } from '../../styles/CreacionBien.js'; 
 
 export default function CreacionBienPaso1() {
   const navigation = useNavigation();

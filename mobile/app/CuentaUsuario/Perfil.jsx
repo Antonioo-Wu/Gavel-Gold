@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import BottomNav from '../../components/BottomNav';
 
-import { PerfilStlyes } from '../../styles/Perfil.js';
+import { PerfilStlyes as styles } from '../../styles/Perfil.js';
 
 export default function Perfil() {
   const navigation = useNavigation();
