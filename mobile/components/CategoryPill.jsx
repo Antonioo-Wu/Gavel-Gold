@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { categoryPillStyles as styles } from '../styles/components/CategoryPill';
+import { categoryPillStyles as styles } from '../styles/components/CategoryPill.js';
 
 export default function CategoryPill({ category }) {
   const colors = {

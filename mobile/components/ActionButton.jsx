@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text } from 'react-native';
-import { auctionButtonStyles as styles } from '../styles/components/AuctionButton';
+import { auctionButtonStyles as styles } from '../styles/components/AuctionButton.js';
 
 export default function ActionButton({ text, onPress, variant = 'solid' }) {
   return (

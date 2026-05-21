@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import BottomNav from '../../components/BottomNav';
 
-import { subastaDetallesStlyes as styles } from '../../styles/SubastaDetalles';
+import { subastaDetallesStlyes as styles } from '../../styles/subastas/SubastaDetalles';
 
 export default function SubastaDetalles() {
   const route = useRoute();
@@ -14,7 +14,7 @@ export default function SubastaDetalles() {
     id: id,
     title: "Subasta Ghibli",
     catalog: [
-      { id: 1001, name: "Reloj de Totoro original", price: 15000, desc: "Reloj despertador original.", img: require('../assets/images/totoro_clock.jpg') },
+      { id: 1001, name: "Reloj de Totoro original", price: 15000, desc: "Reloj despertador original.", img: require('../../assets/images/totoro_clock.jpg') },
     ],
     currentIndex: 0
   });

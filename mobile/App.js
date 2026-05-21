@@ -5,12 +5,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // Importa tus pantallas (ajusta la ruta según donde las guardes)
 
 // Página principal
-import Splash from './app/Splash';
+import Splash from './app/Splash/Splash';
 import Login from './app/Login/Login';
 
 // Subastas
-import ListadeSubastas from './app/ListadeSubastas';
-import SubastaDetalles from './app/SubastaDetalles';
+import ListadeSubastas from './app/Subastas/ListadeSubastas';
+import SubastaDetalles from './app/Subastas/SubastaDetalles';
 
 // Recupero de contraseña
 import Recupero from './app/Login/Recupero';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { bottomNavStyles as styles } from '../styles/components/BottomNav';
+import { bottomNavStyles as styles } from '../styles/components/BottomNav.js';
 
 export default function BottomNav() {
   const navigation = useNavigation();

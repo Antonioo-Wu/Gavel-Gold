@@ -7,8 +7,8 @@ import { listaDeSubastasStyles as styles } from '../../styles/subastas/ListaDeSu
 
 export default function ListadeSubastas() {
   const subastas = [
-    { id: "S01", title: 'Subasta Especial Ghibli', category: 'Platino', image: require('../assets/images/totoro_clock.jpg'), estado: 'En vivo' },
-    { id: "S02", title: 'Subasta Fotografía Vintage', category: 'Oro', image: require('../assets/images/camera.jpg'), estado: 'Próxima' }
+    { id: "S01", title: 'Subasta Especial Ghibli', category: 'Platino', image: require('../../assets/images/totoro_clock.jpg'), estado: 'En vivo' },
+    { id: "S02", title: 'Subasta Fotografía Vintage', category: 'Oro', image: require('../../assets/images/camera.jpg'), estado: 'Próxima' }
   ];
 
   return (

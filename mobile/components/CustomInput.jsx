@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput } from 'react-native';
-import { customInputStyles as styles } from '../styles/components/CustomInput';
+import { customInputStyles as styles } from '../styles/components/CustomInput.js';
 
 export default function CustomInput({ label, placeholder, value, onChangeText, secureTextEntry, keyboardType = 'default' }) {
   return (

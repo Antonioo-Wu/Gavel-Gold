@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CategoryPill from './CategoryPill';
-import { auctionCardStyles as styles } from '../styles/components/AuctionCard';
+import { auctionCardStyles as styles } from '../styles/components/AuctionCard.js';
 
 export default function AuctionCard({ id, title, category, image, estado }) {
   const navigation = useNavigation();
