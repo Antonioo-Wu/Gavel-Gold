@@ -5,7 +5,7 @@ import FormCard from '../../components/FormCard';
 import CustomInput from '../../components/CustomInput';
 import ActionButton from '../../components/ActionButton';
 
-import { registroStyles } from '../../styles/Registro';
+import { registroStyles as styles } from '../../styles/Registro';
 
 export default function GenerarPassword() {
   const navigation = useNavigation();

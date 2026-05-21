@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, ScrollView } from 'react-native';
 import BottomNav from '../components/BottomNav';
 import AuctionCard from '../components/AuctionCard';
+
+import { listaDeSubastasStyles as styles } from '../styles/ListaDeSubastas';
 
 export default function ListadeSubastas() {
   const subastas = [
@@ -12,9 +14,9 @@ export default function ListadeSubastas() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Subastas</Text>
-      <TextInput style={styles.search} placeholder="Búsqueda..." />
+      <TextInput style={styles.search} placeholder="Búsqueda..." placeholderTextColor="#777" />
 
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         {subastas.map(subasta => (
           <AuctionCard key={subasta.id} {...subasta} />
         ))}
@@ -24,9 +26,3 @@ export default function ListadeSubastas() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 24, backgroundColor: '#090909' },
-  title: { fontSize: 24, color: 'white', marginBottom: 16, fontWeight: 'bold' },
-  search: { backgroundColor: '#1E1B16', padding: 12, borderRadius: 8, color: 'white', marginBottom: 16 }
-});

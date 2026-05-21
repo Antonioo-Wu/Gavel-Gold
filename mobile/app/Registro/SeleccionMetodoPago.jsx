@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../components/FormCard';
 import ActionButton from '../../components/ActionButton';
 
-import { registroStyles } from '../../styles/Registro';
+import { registroStyles as styles } from '../../styles/Registro';
 
 export default function SeleccionMetodoPago() {
   const navigation = useNavigation();

@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+
+import { splashStyles as styles } from '../styles/Splash';
 
 export default function Splash() {
   const navigation = useNavigation();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.replace('Login'); // Usamos replace para que no vuelvan atrás al splash
+      navigation.replace('Login');
     }, 2000);
     return () => clearTimeout(timer);
   }, [navigation]);
@@ -18,8 +20,3 @@ export default function Splash() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' },
-  logo: { width: 250, resizeMode: 'contain' }
-});
