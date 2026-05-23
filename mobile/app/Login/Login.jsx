@@ -5,11 +5,10 @@ import FormCard from '../../components/FormCard';
 import CustomInput from '../../components/CustomInput';
 import ActionButton from '../../components/ActionButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_URL } from '../../config/api';
 
 import { loginStyles as styles } from '../../styles/login/Login';
 
-//Reemplazar los X.X con la IPv4 de tu pc
-const API_URL = 'http://192.168.X.X:3000';
 
 export default function Login() {
   const navigation = useNavigation();
@@ -59,10 +58,10 @@ export default function Login() {
         <Text style={styles.title}>Inicio de Sesión</Text>
 
         <FormCard>
-          <CustomInput label="Email" placeholder="Valor" value={email} onChangeText={setEmail} />
-          <CustomInput label="Password" placeholder="Valor" value={password} onChangeText={setPassword} secureTextEntry />
+          <CustomInput label="Email" placeholder="ejemplo@correo.com" value={email} onChangeText={setEmail} />
+          <CustomInput label="Password" placeholder="Tu contraseña" value={password} onChangeText={setPassword} secureTextEntry />
 
-          <ActionButton text="Ingresar" variant="solid" onPress={() => navigation.navigate('ListadeSubastas')} />
+          <ActionButton text={isLoading ? "Conectando..." : "Ingresar"} variant="solid" onPress={handleLogin} />
 
           <View style={styles.footer}>
             <TouchableOpacity onPress={() => navigation.navigate('Recupero')}>
