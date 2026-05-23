@@ -16,11 +16,16 @@ export default function SeleccionMetodoPago() {
         <Text style={styles.headerCentered}>Añadir un método de pago</Text>
 
         <View style={styles.paymentRow}>
-          <TouchableOpacity style={styles.paymentBtn} onPress={() => navigation.navigate('MetodoPagoCuenta')}>
+          <TouchableOpacity style={styles.paymentBtn} onPress={() => navigation.navigate('MetodoPagoCuentaBancaria')}>
             <Text>Cuenta bancaria</Text>
           </TouchableOpacity>
+
           <TouchableOpacity style={styles.paymentBtn} onPress={() => navigation.navigate('MetodoPagoTarjeta')}>
             <Text>Tarjeta</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.paymentBtn} onPress={() => navigation.navigate('MetodoPagoCheque')}>
+            <Text>Cheque</Text>
           </TouchableOpacity>
         </View>
 

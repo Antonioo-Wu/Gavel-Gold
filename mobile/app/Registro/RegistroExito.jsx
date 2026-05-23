@@ -8,7 +8,7 @@ export default function RegistroExito() {
 
   return (
     <FeedbackScreen
-      text={"¡Has creado tu\ncuenta\nexitosamente!"}
+      text={"¡Has creado tu cuenta exitosamente!"}
       onPress={() => navigation.navigate('Perfil')}
     />
   );
