@@ -110,4 +110,10 @@ export const CreacionBienStyles = StyleSheet.create({
     color: '#555',
     textDecorationLine: 'underline',
   },
+  loadingIndicator: {
+    marginVertical: 20,
+  },
+  checkboxItem: {
+    marginRight: 10,
+  }
 });
