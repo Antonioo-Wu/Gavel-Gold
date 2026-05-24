@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { SafeAreaView, ScrollView, Text, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../components/FormCard';
 import CustomInput from '../../components/CustomInput';
@@ -51,23 +51,27 @@ export default function RegistroUsuario() {
   };
 
   return (
-    <View style={styles.containerDark}>
-      <FormCard>
-        <Text style={styles.headerDark}>Ingrese sus datos</Text>
-        <Text style={styles.subtext}>Todos los campos son obligatorios.</Text>
+    <SafeAreaView style={styles.containerDark}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}
+      >
+        <FormCard>
+          <Text style={styles.headerDark}>Ingrese sus datos</Text>
+          <Text style={styles.subtext}>Todos los campos son obligatorios.</Text>
 
-        <CustomInput label="Nombre" placeholder="Ingrese su nombre" value={nombre} onChangeText={setNombre} />
-        <CustomInput label="Apellido" placeholder="Ingrese su apellido" value={apellido} onChangeText={setApellido} />
-        {/* NOTA: Para archivos necesitas instalar: npx expo install expo-document-picker */}
-        <ActionButton text="Subir DNI Frente" variant="outline" onPress={() => { }} />
-        <ActionButton text="Subir DNI Dorso" variant="outline" onPress={() => { }} />
+          <CustomInput label="Nombre" placeholder="Ingrese su nombre" value={nombre} onChangeText={setNombre} />
+          <CustomInput label="Apellido" placeholder="Ingrese su apellido" value={apellido} onChangeText={setApellido} />
+          {/* NOTA: Para archivos necesitas instalar: npx expo install expo-document-picker */}
+          <ActionButton text="Subir DNI Frente" variant="outline" onPress={() => { }} />
+          <ActionButton text="Subir DNI Dorso" variant="outline" onPress={() => { }} />
 
-        <CustomInput label="Domicilio" placeholder="Ingrese su domicilio" value={domicilio} onChangeText={setDomicilio} />
-        <CustomInput label="País" placeholder="Ingrese su país" value={pais} onChangeText={setPais} />
-        <CustomInput label="Mail" placeholder="Ingrese su mail" value={email} onChangeText={setEmail} />
+          <CustomInput label="Domicilio" placeholder="Ingrese su domicilio" value={domicilio} onChangeText={setDomicilio} />
+          <CustomInput label="País" placeholder="Ingrese su país" value={pais} onChangeText={setPais} />
+          <CustomInput label="Mail" placeholder="Ingrese su mail" value={email} onChangeText={setEmail} />
 
-        <ActionButton text={isLoading ? "Enviando..." : "Continuar"} variant="solid" onPress={handleRegistroInicial} />
-      </FormCard>
-    </View>
+          <ActionButton text={isLoading ? "Enviando..." : "Continuar"} variant="solid" onPress={handleRegistroInicial} />
+        </FormCard>
+      </ScrollView>
+    </SafeAreaView >
   );
 }
