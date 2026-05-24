@@ -2,7 +2,6 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-// Importa tus pantallas (ajusta la ruta según donde las guardes)
 
 // Página principal
 import Splash from './app/Splash/Splash';
@@ -25,6 +24,7 @@ import ValidacionCategoria from './app/Registro/ValidacionCategoria';
 import GenerarPassword from './app/Registro/GenerarPassword';
 import RegistroExito from './app/Registro/RegistroExito';
 import Perfil from './app/CuentaUsuario/Perfil';
+import DatosUsuario from './app/CuentaUsuario/DatosUsuario';
 
 // Método de Pago
 import UsuarioMediosPago from './app/CuentaUsuario/UsuarioMediosPago';
@@ -62,6 +62,7 @@ export default function App() {
         <Stack.Screen name="RecuperoExito" component={RecuperoExito} />
         
         <Stack.Screen name="Perfil" component={Perfil} />
+        <Stack.Screen name="DatosUsuario" component={DatosUsuario} />
         <Stack.Screen name="Registro" component={Registro} />
         <Stack.Screen name="MensajeEspera" component={MensajeEspera} />
         <Stack.Screen name="ValidacionCategoria" component={ValidacionCategoria} />

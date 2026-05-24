@@ -53,7 +53,7 @@ export default function Perfil() {
 
 
   const gridItems = [
-    { icon: '👤', label: 'Mis datos', onPress: () => { } },
+    { icon: '👤', label: 'Mis datos', onPress: () => navigation.navigate('DatosUsuario') },
     { icon: '💳', label: 'Métodos de pago', onPress: () => navigation.navigate('UsuarioMediosPago') },
     { icon: '📈', label: 'Mis métricas', onPress: () => { } },
   ];

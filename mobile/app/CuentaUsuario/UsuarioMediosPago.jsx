@@ -3,7 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, Alert } fr
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { PerfilStlyes as styles } from '../../styles/cuentaUsuario/Perfil.js';
+import { UsuarioMediosPagoStyles as styles } from '../../styles/cuentaUsuario/UsuarioMediosPago.js';
 import { API_URL } from '../../config/api.js';
 
 export default function UsuarioMediosPago() {
