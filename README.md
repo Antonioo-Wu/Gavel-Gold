@@ -80,3 +80,9 @@ Para levantar el proyecto en otro equipo:
 3. Escanear el código QR resultante con la app Expo Go desde el celular.
 
 Si hay inconvenientes se recomienda utilizar `npx expo start -c` para eliminar cache.
+
+## Configuración inicial
+Para que la aplicación conecte con tu base de datos local, necesitas configurar la URL del backend:
+1. En `mobile/config` crea el archivo `api.js`
+2. Dentro de ese archivo, copia y pega lo siguiente: `export const API_URL = 'http://192.168.X.X:3000';`
+3. Por último, reemplaza las X.X por la dirección IPv4 de tu pc (ejecutando `ipconfig` en la `cmd` de windows para visualizar tu IPv4)
