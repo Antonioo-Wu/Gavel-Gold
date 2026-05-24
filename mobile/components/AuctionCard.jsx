@@ -6,27 +6,31 @@ import { auctionCardStyles as styles } from '../styles/components/AuctionCard.js
 
 export default function AuctionCard({ id, title, category, image, estado }) {
   const navigation = useNavigation();
+  const imageSource = typeof image === 'string' ? { uri: image } : image;
+  const estadoText = estado === 'abierta' ? 'En vivo' : 
+                     estado === 'proximamente' ? 'Próxima' : 
+                     estado === 'cerrada' ? 'Finalizada' : estado;
 
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate('Detalles', { id })}
+      onPress={() => navigation.navigate('SubastaDetalles', { id })}
       style={styles.card}
     >
       <View style={styles.info}>
         <CategoryPill category={category} />
 
         {estado && (
-          <View style={[styles.badge, { backgroundColor: estado === 'En vivo' ? '#f44336' : '#555' }]}>
-            <Text style={styles.badgeText}>{estado}</Text>
+          <View style={[styles.badge, estado === 'abierta' ? styles.badgeActive : styles.badgeInactive]}>
+            <Text style={styles.badgeText}>{estadoText}</Text>
           </View>
         )}
 
-        <Text style={styles.id}>{id}</Text>
+        <Text style={styles.id}>#{id.slice(-6).toUpperCase()}</Text>
         <Text style={styles.title}>{title}</Text>
       </View>
 
       <Image
-        source={{ uri: image }}
+        source={imageSource}
         style={styles.image}
       />
     </TouchableOpacity>

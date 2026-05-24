@@ -42,5 +42,11 @@ export const auctionCardStyles = StyleSheet.create({
         color: 'white',
         fontSize: 10,
         fontWeight: 'bold'
+    },
+    badgeActive: {
+        backgroundColor: '#f44336',
+    },
+    badgeInactive: {
+        backgroundColor: '#555555',
     }
 });
