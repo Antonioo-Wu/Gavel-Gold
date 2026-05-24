@@ -1,1 +1,0 @@
-export const API_URL = 'http://192.168.X.X:3000'; //Reemplazar los X.X con la IPv4 de tu pc
