@@ -1,3 +1,5 @@
+import { StyleSheet } from 'react-native';
+
 export const datosUsuarioStyles = StyleSheet.create({
     dataCard: {
         backgroundColor: '#f9f9f9',

@@ -18,5 +18,14 @@ export const listaDeSubastasStyles = StyleSheet.create({
     borderRadius: 8, 
     color: 'white', 
     marginBottom: 16 
-  }
+  },
+  loadingIndicator: {
+    marginTop: 40,
+    flex: 1,
+  },
+  emptyText: {
+    textAlign: 'center',
+    marginTop: 20,
+    color: '#666',
+  },
 });

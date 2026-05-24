@@ -1,3 +1,5 @@
+import { StyleSheet } from 'react-native';
+
 export const UsuarioMediosPagoStyles = StyleSheet.create({
     paymentCard: {
         backgroundColor: '#f9f9f9',
