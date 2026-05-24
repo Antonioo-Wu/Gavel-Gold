@@ -27,6 +27,7 @@ import RegistroExito from './app/Registro/RegistroExito';
 import Perfil from './app/CuentaUsuario/Perfil';
 
 // Método de Pago
+import UsuarioMediosPago from './app/CuentaUsuario/UsuarioMediosPago';
 import SeleccionMetodoPago from './app/Registro/SeleccionMetodoPago';
 import MetodoPagoTarjeta from './app/Registro/MetodosdePago/MetodoPagoTarjeta';
 import MetodoPagoCuentaBancaria from './app/Registro/MetodosdePago/MetodoPagoCuentaBancaria';
@@ -67,6 +68,7 @@ export default function App() {
         <Stack.Screen name="GenerarPassword" component={GenerarPassword} />
         <Stack.Screen name="RegistroExito" component={RegistroExito} />     
 
+        <Stack.Screen name="UsuarioMediosPago" component={UsuarioMediosPago} />
         <Stack.Screen name="SeleccionMetodoPago" component={SeleccionMetodoPago} />
         <Stack.Screen name="MetodoPagoTarjeta" component={MetodoPagoTarjeta} />
         <Stack.Screen name="MetodoPagoCuentaBancaria" component={MetodoPagoCuentaBancaria} />
