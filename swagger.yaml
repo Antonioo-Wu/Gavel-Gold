@@ -2,49 +2,15 @@ openapi: 3.0.0
 info:
   title: API Sistema de Subastas
   version: 2.4.0
-  description: "API de subastas con items modelados como articulos, pujas por item, polling y flujo de administracion."
+  description: API de subastas con articulos, pujas por item, polling, pagos y administracion.
 
 servers:
-  - url: http://localhost:3000/api
+  - url: http://localhost:3000
 
 security:
   - BearerAuth: []
 
 paths:
-  /usuarios/registro-inicial:
-    post:
-      tags: [Autenticacion]
-      summary: Registro inicial del usuario
-      security: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UsuarioRegistroInicial'
-      responses:
-        "201":
-          description: Usuario registrado en estado pendiente
-
-  /usuarios/activar:
-    post:
-      tags: [Autenticacion]
-      summary: Activar cuenta mediante token y password
-      security: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [token, password]
-              properties:
-                token: { type: string }
-                password: { type: string }
-      responses:
-        "200":
-          description: Usuario activado correctamente
-
   /auth/login:
     post:
       tags: [Autenticacion]
@@ -63,14 +29,57 @@ paths:
       responses:
         "200":
           description: Login exitoso
+        "401":
+          $ref: '#/components/responses/NoAutorizado'
 
   /auth/logout:
     post:
       tags: [Autenticacion]
       summary: Cerrar sesion del usuario
+      description: Invalida el token actual del usuario.
       responses:
         "204":
           description: Sesion cerrada exitosamente
+        "401":
+          $ref: '#/components/responses/NoAutorizado'
+
+  /usuarios/registro-inicial:
+    post:
+      tags: [Autenticacion]
+      summary: Registro inicial del usuario
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioRegistroInicial'
+      responses:
+        "201":
+          description: Usuario registrado en estado pendiente
+        "400":
+          $ref: '#/components/responses/ErrorValidacion'
+
+  /usuarios/activar:
+    post:
+      tags: [Autenticacion]
+      summary: Activar cuenta mediante token y password
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token, password]
+              properties:
+                token: { type: string }
+                password: { type: string, format: password }
+      responses:
+        "200":
+          description: Usuario activado correctamente
+        "400":
+          description: Token invalido o expirado
 
   /usuarios/{id}:
     get:
@@ -81,6 +90,8 @@ paths:
       responses:
         "200":
           description: Datos del usuario
+        "404":
+          $ref: '#/components/responses/NoEncontrado'
 
   /usuarios/{id}/medios-pago:
     get:
@@ -100,10 +111,43 @@ paths:
         required: true
         content:
           application/json:
-            schema: { $ref: '#/components/schemas/MedioPagoCreateRequest' }
+            schema:
+              $ref: '#/components/schemas/MedioPagoCreateRequest'
       responses:
         "201":
           description: Medio agregado
+        "400":
+          $ref: '#/components/responses/ErrorValidacion'
+
+  /usuarios/{id}/subastas-activas:
+    get:
+      tags: [Usuarios]
+      summary: Subastas donde participa el usuario
+      parameters:
+        - $ref: '#/components/parameters/idUsuario'
+      responses:
+        "200":
+          description: Lista de subastas activas
+
+  /usuarios/{id}/estadisticas:
+    get:
+      tags: [Usuarios]
+      summary: Obtener metricas de participacion del usuario
+      parameters:
+        - $ref: '#/components/parameters/idUsuario'
+      responses:
+        "200":
+          description: Estadisticas detalladas de participacion
+
+  /usuarios/{id}/historial-participacion:
+    get:
+      tags: [Usuarios]
+      summary: Historial de subastas y resultados del usuario
+      parameters:
+        - $ref: '#/components/parameters/idUsuario'
+      responses:
+        "200":
+          description: Listado de subastas asistidas y si gano o no
 
   /usuarios/{id}/articulos:
     get:
@@ -114,20 +158,25 @@ paths:
       responses:
         "200":
           description: Lista de articulos
+        "404":
+          $ref: '#/components/responses/NoEncontrado'
     post:
       tags: [Articulos]
       summary: Proponer nuevo articulo
-      description: "declaracionPropiedad representa la aceptacion tipo checkbox en la UI."
+      description: declaracionPropiedad representa la aceptacion tipo checkbox en la UI.
       parameters:
         - $ref: '#/components/parameters/idUsuario'
       requestBody:
         required: true
         content:
           application/json:
-            schema: { $ref: '#/components/schemas/CrearArticulo' }
+            schema:
+              $ref: '#/components/schemas/CrearArticulo'
       responses:
         "201":
           description: Propuesta recibida
+        "400":
+          $ref: '#/components/responses/ErrorValidacion'
 
   /subastas:
     get:
@@ -143,41 +192,36 @@ paths:
         required: true
         content:
           application/json:
-            schema: { $ref: '#/components/schemas/CrearSubasta' }
+            schema:
+              $ref: '#/components/schemas/CrearSubasta'
       responses:
         "201":
           description: Subasta creada
 
-  /subastas/{id}/agregarArticulo:
-    post:
+  /subastas/{id}/articulos:
+    get:
       tags: [Subastas]
-      summary: Agregar un articulo a la subasta
+      summary: Ver articulos de esta subasta
       parameters:
         - $ref: '#/components/parameters/idSubasta'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [articuloId, precioBase]
-              properties:
-                articuloId: { type: string }
-                precioBase: { type: number }
       responses:
-        "201":
-          description: Articulo agregado exitosamente a la subasta
+        "200":
+          description: Lista de articulos en subasta
+        "404":
+          $ref: '#/components/responses/NoEncontrado'
 
   /subastas/{id}/participar:
     post:
       tags: [Subastas]
       summary: Validar acceso a la subasta
-      description: "Verifica categoria, medios de pago validados y multas activas."
+      description: Verifica categoria, medios de pago validados y multas activas.
       parameters:
         - $ref: '#/components/parameters/idSubasta'
       responses:
         "200":
           description: Acceso permitido
+        "403":
+          description: Categoria insuficiente, sin medios de pago validados o bloqueado por multa.
 
   /subastas/{subastaId}/items/{itemId}/pujar:
     post:
@@ -190,7 +234,8 @@ paths:
         required: true
         content:
           application/json:
-            schema: { $ref: '#/components/schemas/NuevaPujaItem' }
+            schema:
+              $ref: '#/components/schemas/NuevaPujaItem'
       responses:
         "200":
           description: Puja aceptada
@@ -211,7 +256,8 @@ paths:
         required: true
         content:
           application/json:
-            schema: { $ref: '#/components/schemas/NuevaPujaItem' }
+            schema:
+              $ref: '#/components/schemas/NuevaPujaItem'
       responses:
         "200":
           description: Puja aceptada
@@ -279,6 +325,43 @@ paths:
         "200":
           description: Pago registrado
 
+  /admin/articulos/pendientes:
+    get:
+      tags: [Administracion]
+      summary: Listar articulos pendientes
+      responses:
+        "200":
+          description: Lista de articulos pendientes
+
+  /admin/articulos/{id}/aprobar:
+    post:
+      tags: [Administracion]
+      summary: Aprobar articulo
+      parameters:
+        - $ref: '#/components/parameters/idArticulo'
+      responses:
+        "200":
+          description: Articulo aprobado
+
+  /admin/articulos/{id}/rechazar:
+    post:
+      tags: [Administracion]
+      summary: Rechazar articulo
+      parameters:
+        - $ref: '#/components/parameters/idArticulo'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [motivo]
+              properties:
+                motivo: { type: string }
+      responses:
+        "200":
+          description: Articulo rechazado
+
   /admin/usuarios/{id}/aprobar:
     post:
       tags: [Administracion]
@@ -296,7 +379,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/idUsuario'
       requestBody:
-        required: false
+        required: true
         content:
           application/json:
             schema:
@@ -325,6 +408,40 @@ paths:
       responses:
         "200":
           description: Categoria asignada
+
+  /admin/subastas:
+    post:
+      tags: [Administracion]
+      summary: Crear subasta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrearSubasta'
+      responses:
+        "201":
+          description: Subasta creada
+
+  /admin/subastas/{id}/agregarArticulo:
+    post:
+      tags: [Administracion]
+      summary: Agregar un articulo a la subasta
+      parameters:
+        - $ref: '#/components/parameters/idSubasta'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [articuloId, precioBase]
+              properties:
+                articuloId: { type: string }
+                precioBase: { type: number }
+      responses:
+        "201":
+          description: Articulo agregado exitosamente a la subasta
 
   /admin/articulos/{id}/precio-base:
     put:
@@ -412,10 +529,7 @@ paths:
       tags: [Administracion]
       summary: Levantar multa activa
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema: { type: string }
+        - $ref: '#/components/parameters/idMulta'
       responses:
         "200":
           description: Multa levantada
@@ -443,6 +557,11 @@ components:
       in: path
       required: true
       schema: { type: string }
+    idMulta:
+      name: id
+      in: path
+      required: true
+      schema: { type: string }
     subastaIdPath:
       name: subastaId
       in: path
@@ -453,6 +572,19 @@ components:
       in: path
       required: true
       schema: { type: string }
+
+  responses:
+    ErrorValidacion:
+      description: Error en los datos.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    NoAutorizado:
+      description: No autenticado o token invalido.
+    Prohibido:
+      description: Sin permisos suficientes.
+    NoEncontrado:
+      description: No existe el recurso solicitado.
 
   schemas:
     Error:
