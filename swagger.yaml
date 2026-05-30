@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: API Sistema de Subastas
   version: 2.4.0
-  description: API de subastas con articulos, pujas por item, polling, pagos y administracion.
+  description: API de subastas con articulos, pujas por articulo, polling, pagos y administracion.
 
 servers:
   - url: http://localhost:3000
@@ -223,19 +223,19 @@ paths:
         "403":
           description: Categoria insuficiente, sin medios de pago validados o bloqueado por multa.
 
-  /subastas/{subastaId}/items/{itemId}/pujar:
+  /subastas/{subastaId}/articulos/{articuloId}/pujar:
     post:
       tags: [Pujas]
       summary: Realizar oferta sobre un articulo dentro de la subasta
       parameters:
         - $ref: '#/components/parameters/subastaIdPath'
-        - $ref: '#/components/parameters/itemIdPath'
+        - $ref: '#/components/parameters/articuloIdPath'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NuevaPujaItem'
+              $ref: '#/components/schemas/NuevaPujaArticulo'
       responses:
         "200":
           description: Puja aceptada
@@ -246,70 +246,70 @@ paths:
         "409":
           description: Puja rechazada por regla minima/maxima, subasta cerrada o medio de pago invalido
 
-  /items/{itemId}/pujas:
+  /articulos/{articuloId}/pujas:
     post:
       tags: [Pujas]
-      summary: Realizar oferta sobre un item
+      summary: Realizar oferta sobre un articulo
       parameters:
-        - $ref: '#/components/parameters/itemIdPath'
+        - $ref: '#/components/parameters/articuloIdPath'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NuevaPujaItem'
+              $ref: '#/components/schemas/NuevaPujaArticulo'
       responses:
         "200":
           description: Puja aceptada
     get:
       tags: [Pujas]
-      summary: Historial de pujas del item
+      summary: Historial de pujas del articulo
       parameters:
-        - $ref: '#/components/parameters/itemIdPath'
+        - $ref: '#/components/parameters/articuloIdPath'
       responses:
         "200":
           description: Listado cronologico de pujas
 
-  /subastas/{subastaId}/items/{itemId}/pujas:
+  /subastas/{subastaId}/articulos/{articuloId}/pujas:
     get:
       tags: [Pujas]
-      summary: Historial de pujas por item dentro de la subasta
+      summary: Historial de pujas por articulo dentro de la subasta
       parameters:
         - $ref: '#/components/parameters/subastaIdPath'
-        - $ref: '#/components/parameters/itemIdPath'
+        - $ref: '#/components/parameters/articuloIdPath'
       responses:
         "200":
           description: Listado cronologico de pujas
 
-  /subastas/{subastaId}/items/{itemId}/pujas/estado:
+  /subastas/{subastaId}/articulos/{articuloId}/pujas/estado:
     get:
       tags: [Pujas]
       summary: Estado actual para polling
       parameters:
         - $ref: '#/components/parameters/subastaIdPath'
-        - $ref: '#/components/parameters/itemIdPath'
+        - $ref: '#/components/parameters/articuloIdPath'
       responses:
         "200":
-          description: Estado actual del item
+          description: Estado actual del articulo
 
-  /subastas/{subastaId}/items/{itemId}/resultado:
+  /subastas/{subastaId}/articulos/{articuloId}/resultado:
     get:
       tags: [Subastas]
-      summary: Consultar ganador por item
+      summary: Consultar ganador por articulo
       parameters:
         - $ref: '#/components/parameters/subastaIdPath'
-        - $ref: '#/components/parameters/itemIdPath'
+        - $ref: '#/components/parameters/articuloIdPath'
       responses:
         "200":
           description: Datos del cierre y ganador
 
-  /subastas/{subastaId}/items/{itemId}/pago:
+  /subastas/{subastaId}/articulos/{articuloId}/pago:
     post:
       tags: [Pujas]
       summary: Registrar pago de una compra ganada
       parameters:
         - $ref: '#/components/parameters/subastaIdPath'
-        - $ref: '#/components/parameters/itemIdPath'
+        - $ref: '#/components/parameters/articuloIdPath'
       requestBody:
         required: true
         content:
@@ -567,8 +567,8 @@ components:
       in: path
       required: true
       schema: { type: string }
-    itemIdPath:
-      name: itemId
+    articuloIdPath:
+      name: articuloId
       in: path
       required: true
       schema: { type: string }
@@ -727,7 +727,7 @@ components:
             numeroCheque: { type: string }
             titular: { type: string }
 
-    NuevaPujaItem:
+    NuevaPujaArticulo:
       type: object
       required: [monto, medioPagoId, confirmada]
       properties:
@@ -735,7 +735,7 @@ components:
         medioPagoId: { type: string }
         confirmada: { type: boolean }
 
-    PujaItem:
+    PujaArticulo:
       type: object
       properties:
         id: { type: string }
@@ -751,12 +751,12 @@ components:
         articuloId: { type: string }
         subastaId: { type: string }
 
-    EstadoPujaItem:
+    EstadoPujaArticulo:
       type: object
       properties:
         articulo: { $ref: '#/components/schemas/Articulo' }
         subasta: { $ref: '#/components/schemas/Subasta' }
-        pujaActual: { $ref: '#/components/schemas/PujaItem' }
+        pujaActual: { $ref: '#/components/schemas/PujaArticulo' }
         reglas:
           type: object
           properties:
