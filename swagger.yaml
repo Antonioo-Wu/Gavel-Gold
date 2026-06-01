@@ -202,6 +202,7 @@ paths:
     get:
       tags: [Subastas]
       summary: Ver articulos de esta subasta
+      description: La subasta no embebe la lista de articulos; se consulta como recurso separado.
       parameters:
         - $ref: '#/components/parameters/idSubasta'
       responses:
@@ -427,6 +428,7 @@ paths:
     post:
       tags: [Administracion]
       summary: Agregar un articulo a la subasta
+      description: Asocia un articulo existente a la subasta y define su precio base inicial.
       parameters:
         - $ref: '#/components/parameters/idSubasta'
       requestBody:
@@ -648,6 +650,7 @@ components:
 
     Subasta:
       type: object
+      description: Representa los datos propios de la subasta. Los articulos asociados se consultan con /subastas/{id}/articulos.
       properties:
         id: { type: string }
         titulo: { type: string }
