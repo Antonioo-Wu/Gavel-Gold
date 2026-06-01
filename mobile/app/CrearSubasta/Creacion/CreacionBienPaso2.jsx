@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import FormCard from '../../components/FormCard';
-import ActionButton from '../../components/ActionButton';
-import BottomNav from '../../components/BottomNav';
+import FormCard from '../../../components/FormCard.jsx';
+import ActionButton from '../../../components/ActionButton.jsx';
+import BottomNav from '../../../components/BottomNav.jsx';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Checkbox from 'expo-checkbox';
-import { API_URL } from '../../config/api.js';
+import { API_URL } from '../../../config/api.js';
 
-import { CreacionBienStyles as styles } from '../../styles/crearSubasta/CreacionBien.js';
+import { CreacionBienStyles as styles } from '../../../styles/crearSubasta/CreacionBien.js';
 
 export default function CreacionBienPaso2() {
   const navigation = useNavigation();
@@ -87,7 +87,9 @@ export default function CreacionBienPaso2() {
             <Checkbox
               style={styles.checkboxItem} value={agreeToTerms} onValueChange={setAgreeToTerms} color={agreeToTerms ? '#D4AF37' : undefined}
             />
-            <Text style={styles.checkboxLabel}>Acepto los Términos y Condiciones</Text>
+            <Text style={styles.checkboxLabel}>Declaro que soy el propietario del bien a subastar.</Text>
+            <Text style={styles.checkboxLabel}>Declaro el origen lícito del bien.</Text>
+            <Text style={styles.checkboxLabel}>Acepto la devolución con cargo en caso de rechazo.</Text>
           </View>
 
           <TouchableOpacity style={styles.termsLink} onPress={() => navigation.navigate('TerminosEnvio')}>

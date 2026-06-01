@@ -41,13 +41,28 @@ import PoliticadePrivacidad from './app/Legales/PoliticadePrivacidad';
 import SobreNosotros from './app/Legales/SobreNosotros';
 
 // Crear Subasta
-import CreacionBienPaso1 from './app/CrearSubasta/CreacionBienPaso1';
-import CreacionBienPaso2 from './app/CrearSubasta/CreacionBienPaso2';
-import CreacionBienExito from './app/CrearSubasta/CreacionBienExito';
+import CreacionBienPaso1 from './app/CrearSubasta/Creacion/CreacionBienPaso1';
+import CreacionBienPaso2 from './app/CrearSubasta/Creacion/CreacionBienPaso2';
+import CreacionBienExito from './app/CrearSubasta/Creacion/CreacionBienExito';
+
+// Seguimiento de Subasta
+import DetallePropuesta from './app/CrearSubasta/Seguimiento/DetallePropuesta';
+import MisSubastas from './app/CrearSubasta/Seguimiento/MisSubastas';
 
 // Puja
 import MensajeExitoPuja from './app/Puja/MensajeExitoPuja';
 import SeguimientoPuja from './app/Puja/SeguimientoPuja';
+
+// Errores
+import ErrorConexion from './app/Errores/ErrorConexion';
+import ErrorSaldo from './app/Errores/ErrorSaldo';
+
+
+// loadings
+import LoadingCatalogo from './app/Loadings/LoadingCatalogo';
+import LoadingPuja from './app/Loadings/LoadingPuja';
+import LoadingSubirArticulo from './app/Loadings/LoadingSubirArticulo';
+import LoadingCredenciales from './app/Loadings/LoadingCredenciales';
 
 
 const Stack = createNativeStackNavigator();
@@ -84,7 +99,8 @@ export default function App() {
         <Stack.Screen name="CreacionBienPaso1" component={CreacionBienPaso1} />
         <Stack.Screen name="CreacionBienPaso2" component={CreacionBienPaso2} />
         <Stack.Screen name="CreacionBienExito" component={CreacionBienExito} />
-
+        <Stack.Screen name="DetallePropuesta" component={DetallePropuesta} />
+        <Stack.Screen name="MisSubastas" component={MisSubastas} />
 
        
         <Stack.Screen name="MensajeExitoPuja" component={MensajeExitoPuja} />
@@ -93,7 +109,13 @@ export default function App() {
         <Stack.Screen name="ListadeSubastas" component={ListadeSubastas} />
         <Stack.Screen name="SubastaDetalles" component={SubastaDetalles} />
 
+        <Stack.Screen name="ErrorConexion" component={ErrorConexion} />
+        <Stack.Screen name="ErrorSaldo" component={ErrorSaldo} />
 
+        <Stack.Screen name="LoadingCatalogo" component={LoadingCatalogo} />
+        <Stack.Screen name="LoadingPuja" component={LoadingPuja} />
+        <Stack.Screen name="LoadingSubirArticulo" component={LoadingSubirArticulo} />
+        <Stack.Screen name="LoadingCredenciales" component={LoadingCredenciales} />
 
       </Stack.Navigator>
     </NavigationContainer>

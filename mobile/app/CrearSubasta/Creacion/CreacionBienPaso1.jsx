@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
-import FormCard from '../../components/FormCard';
-import CustomInput from '../../components/CustomInput';
-import ActionButton from '../../components/ActionButton';
-import BottomNav from '../../components/BottomNav';
+import FormCard from '../../../components/FormCard.jsx';
+import CustomInput from '../../../components/CustomInput.jsx';
+import ActionButton from '../../../components/ActionButton.jsx';
+import BottomNav from '../../../components/BottomNav.jsx';
 
-import { CreacionBienStyles as styles } from '../../styles/crearSubasta/CreacionBien.js';
+import { CreacionBienStyles as styles } from '../../../styles/crearSubasta/CreacionBien.js';
 
 export default function CreacionBienPaso1() {
   const navigation = useNavigation();

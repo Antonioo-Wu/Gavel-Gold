@@ -92,6 +92,12 @@ export default function Perfil() {
         </View>
       </ScrollView>
 
+      // Acá debería ir un botón de "Mis Subastas" @Nachoooo tiene que ser cremita como esta en el figma!!!!
+
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <Text style={styles.logoutText}>Mis Subastas</Text>
+      </TouchableOpacity>
+
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.logoutText}>Cerrar Sesión</Text>
       </TouchableOpacity>

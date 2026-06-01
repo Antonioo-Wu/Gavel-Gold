@@ -59,7 +59,7 @@ export default function Login() {
 
         <FormCard>
           <CustomInput label="Email" placeholder="ejemplo@correo.com" value={email} onChangeText={setEmail} />
-          <CustomInput label="Password" placeholder="Tu contraseña" value={password} onChangeText={setPassword} secureTextEntry />
+          <CustomInput label="Password" placeholder="tu contraseña" value={password} onChangeText={setPassword} secureTextEntry />
 
           <ActionButton text={isLoading ? "Conectando..." : "Ingresar"} variant="solid" onPress={handleLogin} />
 

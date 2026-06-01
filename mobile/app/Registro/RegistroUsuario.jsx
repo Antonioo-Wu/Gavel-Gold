@@ -17,9 +17,10 @@ export default function RegistroUsuario() {
   const [pais, setPais] = useState('');
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [dni, setDni] = useState(null);
 
   const handleRegistroInicial = async () => {
-    if (!nombre || !apellido || !email || !domicilio || !pais) {
+    if (!nombre || !apellido || !email || !domicilio || !pais || !dni) {
       Alert.alert("Error", "Todos los campos son obligatorios");
       return;
     }
@@ -61,9 +62,8 @@ export default function RegistroUsuario() {
 
           <CustomInput label="Nombre" placeholder="Ingrese su nombre" value={nombre} onChangeText={setNombre} />
           <CustomInput label="Apellido" placeholder="Ingrese su apellido" value={apellido} onChangeText={setApellido} />
-          {/* NOTA: Para archivos necesitas instalar: npx expo install expo-document-picker */}
-          <ActionButton text="Subir DNI Frente" variant="outline" onPress={() => { }} />
-          <ActionButton text="Subir DNI Dorso" variant="outline" onPress={() => { }} />
+          <CustomInput label="DNI" placeholder="Ingrese su DNI" value={dni} onChangeText={setDni} />
+         
 
           <CustomInput label="Domicilio" placeholder="Ingrese su domicilio" value={domicilio} onChangeText={setDomicilio} />
           <CustomInput label="País" placeholder="Ingrese su país" value={pais} onChangeText={setPais} />
