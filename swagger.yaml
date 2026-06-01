@@ -29,6 +29,10 @@ paths:
       responses:
         "200":
           description: Login exitoso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
         "401":
           $ref: '#/components/responses/NoAutorizado'
 
@@ -663,7 +667,16 @@ components:
         apellido: { type: string }
         email: { type: string }
         categoria: { $ref: '#/components/schemas/CategoriaUsuario' }
+        rol: { type: string, enum: [usuario, admin] }
         estado: { type: string, enum: [pendiente, aprobado, activo, bloqueado, rechazado] }
+
+    LoginResponse:
+      type: object
+      properties:
+        mensaje: { type: string }
+        token: { type: string }
+        usuario:
+          $ref: '#/components/schemas/Usuario'
 
     CrearArticulo:
       type: object
