@@ -304,6 +304,50 @@ paths:
         "200":
           description: Datos del cierre y ganador
 
+  /subastas/{subastaId}/articulos/{articuloId}/rechazar:
+    post:
+      tags: [Subastas]
+      summary: Rechazar la adjudicacion de un articulo
+      description: Permite que el usuario ganador decline la compra antes de registrar el pago.
+      parameters:
+        - $ref: '#/components/parameters/subastaIdPath'
+        - $ref: '#/components/parameters/articuloIdPath'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                motivo:
+                  type: string
+                  description: Motivo opcional del rechazo.
+      responses:
+        "200":
+          description: Adjudicacion rechazada por el usuario
+
+  /subastas/{subastaId}/articulos/{articuloId}/aceptar:
+    post:
+      tags: [Subastas]
+      summary: Aceptar la adjudicacion de un articulo
+      description: Permite que el usuario ganador confirme la compra antes de registrar el pago.
+      parameters:
+        - $ref: '#/components/parameters/subastaIdPath'
+        - $ref: '#/components/parameters/articuloIdPath'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                motivo:
+                  type: string
+                  description: Motivo opcional de la aceptacion.
+      responses:
+        "200":
+          description: Adjudicacion aceptada por el usuario
+
   /subastas/{subastaId}/articulos/{articuloId}/pago:
     post:
       tags: [Pujas]
