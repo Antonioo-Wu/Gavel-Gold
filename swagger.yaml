@@ -189,18 +189,7 @@ paths:
       responses:
         "200":
           description: Lista de subastas
-    post:
-      tags: [Subastas]
-      summary: Crear subasta
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CrearSubasta'
-      responses:
-        "201":
-          description: Subasta creada
+
 
   /subastas/{id}/articulos:
     get:
@@ -251,29 +240,7 @@ paths:
         "409":
           description: Puja rechazada por regla minima/maxima, subasta cerrada o medio de pago invalido
 
-  /articulos/{articuloId}/pujas:
-    post:
-      tags: [Pujas]
-      summary: Realizar oferta sobre un articulo
-      parameters:
-        - $ref: '#/components/parameters/articuloIdPath'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/NuevaPujaArticulo'
-      responses:
-        "200":
-          description: Puja aceptada
-    get:
-      tags: [Pujas]
-      summary: Historial de pujas del articulo
-      parameters:
-        - $ref: '#/components/parameters/articuloIdPath'
-      responses:
-        "200":
-          description: Listado cronologico de pujas
+  # /articulos/{articuloId}/pujas removed — use /subastas/{subastaId}/articulos/{articuloId}/pujas instead
 
   /subastas/{subastaId}/articulos/{articuloId}/pujas:
     get:
@@ -311,8 +278,12 @@ paths:
   /subastas/{subastaId}/articulos/{articuloId}/rechazar:
     post:
       tags: [Subastas]
-      summary: Rechazar la adjudicacion de un articulo
-      description: Permite que el usuario ganador decline la compra antes de registrar el pago.
+      summary: Usuario rechaza precio/comisión propuesto tras aprobación admin
+      description: >-
+        Flujo: el artículo fue aprobado por el admin y asociado a la subasta con
+        un precio base y reglas. Este endpoint permite al usuario ganador
+        rechazar la adjudicación (por ejemplo si no acepta el precio o la comisión)
+        antes de registrar el pago.
       parameters:
         - $ref: '#/components/parameters/subastaIdPath'
         - $ref: '#/components/parameters/articuloIdPath'
@@ -325,16 +296,19 @@ paths:
               properties:
                 motivo:
                   type: string
-                  description: Motivo opcional del rechazo.
+                  description: Motivo opcional del rechazo por parte del usuario.
       responses:
         "200":
-          description: Adjudicacion rechazada por el usuario
+          description: Usuario rechazó la adjudicación
 
   /subastas/{subastaId}/articulos/{articuloId}/aceptar:
     post:
       tags: [Subastas]
-      summary: Aceptar la adjudicacion de un articulo
-      description: Permite que el usuario ganador confirme la compra antes de registrar el pago.
+      summary: Usuario acepta precio/comisión propuesto tras aprobación admin
+      description: >-
+        Flujo: una vez el admin aprobó el artículo y definió precio base y
+        comisión, el usuario ganador puede aceptar la adjudicación y confirmar
+        la compra para proceder al registro del pago.
       parameters:
         - $ref: '#/components/parameters/subastaIdPath'
         - $ref: '#/components/parameters/articuloIdPath'
@@ -345,12 +319,12 @@ paths:
             schema:
               type: object
               properties:
-                motivo:
+                comentario:
                   type: string
-                  description: Motivo opcional de la aceptacion.
+                  description: Comentario opcional del usuario al aceptar.
       responses:
         "200":
-          description: Adjudicacion aceptada por el usuario
+          description: Usuario aceptó la adjudicación y confirma la compra
 
   /subastas/{subastaId}/articulos/{articuloId}/pago:
     post:
