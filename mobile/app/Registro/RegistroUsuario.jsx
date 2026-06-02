@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { SafeAreaView, ScrollView, Text, Alert } from 'react-native';
+import { SafeAreaView, Image, ScrollView, Text, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../components/FormCard';
 import CustomInput from '../../components/CustomInput';
 import ActionButton from '../../components/ActionButton';
 import { API_URL } from '../../config/api';
+import logotipo from '../../assets/logos/logotipo.png';
+
 
 import { registroStyles as styles } from '../../styles/registro/Registro';
 
@@ -56,6 +58,10 @@ export default function RegistroUsuario() {
       <ScrollView
         contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}
       >
+        
+        
+        <Text style={styles.title}>Cree su Cuenta</Text>
+
         <FormCard>
           <Text style={styles.headerDark}>Ingrese sus datos</Text>
           <Text style={styles.subtext}>Todos los campos son obligatorios.</Text>
