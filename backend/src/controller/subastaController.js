@@ -64,7 +64,7 @@ export const validarAcceso = async (req, res) => {
       });
     }
 
-    const usuario = await Usuario.findById(usuarioId);
+    const usuario = await Usuario.findById(usuarioId).populate("mediosPago");
     if (!usuario) {
       return res.status(404).json({ 
         codigo: "USUARIO_NO_ENCONTRADO", 
@@ -84,17 +84,31 @@ export const validarAcceso = async (req, res) => {
       });
     }
 
-    // Verificar medios de pago validados
-    const medioPagoValidado = await MedioPago.findOne({ 
-      usuarioId,
-      validado: true 
-    });
+    const mediosDesdeUsuario = Array.isArray(usuario.mediosPago)
+      ? usuario.mediosPago.filter(Boolean)
+      : [];
+    const mediosPorUsuarioId = await MedioPago.find({ usuarioId: usuario._id });
 
-    if (!medioPagoValidado) {
+    const mediosMap = new Map();
+    for (const medio of [...mediosDesdeUsuario, ...mediosPorUsuarioId]) {
+      const key = (medio?._id || medio?.id || "").toString();
+      if (key) mediosMap.set(key, medio);
+    }
+    const mediosUsuario = [...mediosMap.values()];
+
+    if (!mediosUsuario.length) {
       return res.status(403).json({ 
         codigo: "SIN_MEDIO_PAGO", 
-        mensaje: "Sin medios de pago validados" 
+        mensaje: "Sin medios de pago registrados" 
       });
+    }
+
+    const tieneMedioValidado = mediosUsuario.some((medio) => medio.validado === true);
+    if (!tieneMedioValidado) {
+      const ids = mediosUsuario.map((medio) => medio._id).filter(Boolean);
+      if (ids.length) {
+        await MedioPago.updateMany({ _id: { $in: ids } }, { $set: { validado: true } });
+      }
     }
 
     res.json({ 
