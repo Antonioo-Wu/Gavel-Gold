@@ -29,6 +29,10 @@ paths:
       responses:
         "200":
           description: Login exitoso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
         "401":
           $ref: '#/components/responses/NoAutorizado'
 
@@ -202,6 +206,7 @@ paths:
     get:
       tags: [Subastas]
       summary: Ver articulos de esta subasta
+      description: La subasta no embebe la lista de articulos; se consulta como recurso separado.
       parameters:
         - $ref: '#/components/parameters/idSubasta'
       responses:
@@ -302,6 +307,50 @@ paths:
       responses:
         "200":
           description: Datos del cierre y ganador
+
+  /subastas/{subastaId}/articulos/{articuloId}/rechazar:
+    post:
+      tags: [Subastas]
+      summary: Rechazar la adjudicacion de un articulo
+      description: Permite que el usuario ganador decline la compra antes de registrar el pago.
+      parameters:
+        - $ref: '#/components/parameters/subastaIdPath'
+        - $ref: '#/components/parameters/articuloIdPath'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                motivo:
+                  type: string
+                  description: Motivo opcional del rechazo.
+      responses:
+        "200":
+          description: Adjudicacion rechazada por el usuario
+
+  /subastas/{subastaId}/articulos/{articuloId}/aceptar:
+    post:
+      tags: [Subastas]
+      summary: Aceptar la adjudicacion de un articulo
+      description: Permite que el usuario ganador confirme la compra antes de registrar el pago.
+      parameters:
+        - $ref: '#/components/parameters/subastaIdPath'
+        - $ref: '#/components/parameters/articuloIdPath'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                motivo:
+                  type: string
+                  description: Motivo opcional de la aceptacion.
+      responses:
+        "200":
+          description: Adjudicacion aceptada por el usuario
 
   /subastas/{subastaId}/articulos/{articuloId}/pago:
     post:
@@ -427,6 +476,7 @@ paths:
     post:
       tags: [Administracion]
       summary: Agregar un articulo a la subasta
+      description: Asocia un articulo existente a la subasta y define su precio base inicial.
       parameters:
         - $ref: '#/components/parameters/idSubasta'
       requestBody:
@@ -617,7 +667,16 @@ components:
         apellido: { type: string }
         email: { type: string }
         categoria: { $ref: '#/components/schemas/CategoriaUsuario' }
+        rol: { type: string, enum: [usuario, admin] }
         estado: { type: string, enum: [pendiente, aprobado, activo, bloqueado, rechazado] }
+
+    LoginResponse:
+      type: object
+      properties:
+        mensaje: { type: string }
+        token: { type: string }
+        usuario:
+          $ref: '#/components/schemas/Usuario'
 
     CrearArticulo:
       type: object
@@ -648,6 +707,7 @@ components:
 
     Subasta:
       type: object
+      description: Representa los datos propios de la subasta. Los articulos asociados se consultan con /subastas/{id}/articulos.
       properties:
         id: { type: string }
         titulo: { type: string }
