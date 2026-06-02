@@ -66,4 +66,12 @@ export const generateActivationToken = (usuario) => {
   );
 };
 
+export const generatePasswordResetToken = (usuario) => {
+  return jwt.sign(
+    { id: usuario._id, type: "password_reset" },
+    SECRET_KEY,
+    { expiresIn: "1h" }
+  );
+};
+
 export const getSecretKey = () => SECRET_KEY;
