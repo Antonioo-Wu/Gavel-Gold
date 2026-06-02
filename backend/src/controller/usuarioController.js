@@ -28,8 +28,27 @@ export const obtenerUsuario = async (req, res) => {
 export const obtenerMediosPago = async (req, res) => {
   try {
     const { id } = req.params;
+    if (req.user?.rol !== "admin" && req.user?.id?.toString() !== id.toString()) {
+      return res.status(403).json({
+        codigo: "PERMISO_DENEGADO",
+        mensaje: "No puedes consultar medios de pago de otro usuario",
+      });
+    }
 
-    const mediosPago = await MedioPago.find({ usuarioId: id });
+    const usuario = await Usuario.findById(id).populate("mediosPago");
+    if (!usuario) {
+      return res.status(404).json({
+        codigo: "USUARIO_NO_ENCONTRADO",
+        mensaje: "Usuario no existe",
+      });
+    }
+
+    // Compatibilidad: si el array aún no está sincronizado, caer al filtro por usuarioId.
+    let mediosPago = usuario.mediosPago || [];
+    if (!mediosPago.length) {
+      mediosPago = await MedioPago.find({ usuarioId: id });
+    }
+
     res.json(mediosPago);
   } catch (error) {
     res.status(500).json({ 
@@ -43,6 +62,12 @@ export const agregarMedioPago = async (req, res) => {
   try {
     const { id } = req.params;
     const { tipo, detalle } = req.body;
+    if (req.user?.rol !== "admin" && req.user?.id?.toString() !== id.toString()) {
+      return res.status(403).json({
+        codigo: "PERMISO_DENEGADO",
+        mensaje: "No puedes agregar medios de pago a otro usuario",
+      });
+    }
 
     if (!tipo || !detalle) {
       return res.status(400).json({ 
@@ -73,10 +98,17 @@ export const agregarMedioPago = async (req, res) => {
       usuarioId: id,
       tipo,
       detalle,
-      validado: false,
+      validado: true,
     });
 
     await nuevoMedio.save();
+
+    if (!Array.isArray(usuario.mediosPago)) {
+      usuario.mediosPago = [];
+    }
+    usuario.mediosPago.push(nuevoMedio._id);
+    await usuario.save();
+
     res.status(201).json({ 
       mensaje: "Medio de pago agregado",
       medioPago: nuevoMedio 

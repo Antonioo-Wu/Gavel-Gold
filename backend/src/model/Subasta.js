@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 
 const subastaSchema = new mongoose.Schema({
     id: {
-        type: Number,
-        required: true,
+        type: String,
         unique: true,
+        sparse: true,
     },
 
     titulo: {
@@ -50,6 +50,13 @@ const subastaSchema = new mongoose.Schema({
 }, {
     timestamps: true,
     versionKey: false,
+});
+
+// Antes de guardar, si no tiene `id`, asignar string de `_id`
+subastaSchema.pre('save', function () {
+    if (!this.id) {
+        this.id = this._id ? this._id.toString() : undefined;
+    }
 });
 
 export default mongoose.model("Subasta", subastaSchema);

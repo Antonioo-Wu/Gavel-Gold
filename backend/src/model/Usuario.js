@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
 
 const usuarioSchema = new mongoose.Schema({
+
     id: {
-        type: Number,
-        required: true,
+        type: String,
         unique: true,
+        sparse: true,
     },
 
     nombre: {
@@ -62,9 +63,21 @@ const usuarioSchema = new mongoose.Schema({
         enum: ["usuario", "admin"],
         default: "usuario",
     },
+
+    mediosPago: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "MedioPago",
+    }],
 }, {
     timestamps: true,
     versionKey: false,
+});
+
+// Antes de guardar, si no tiene `id`, asignar el string de `_id`
+usuarioSchema.pre('save', function () {
+    if (!this.id) {
+        this.id = this._id ? this._id.toString() : undefined;
+    }
 });
 
 export default mongoose.model("Usuario", usuarioSchema);

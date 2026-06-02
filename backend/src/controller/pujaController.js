@@ -1,10 +1,11 @@
 import Puja from "../model/Puja.js";
 import Subasta from "../model/Subasta.js";
 import MedioPago from "../model/MedioPago.js";
+import Articulo from "../model/Articulo.js";
 
 export const realizarPuja = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { subastaId, articuloId } = req.params;
     const { monto, medioPagoId } = req.body;
     const usuarioId = req.user.id;
 
@@ -22,12 +23,23 @@ export const realizarPuja = async (req, res) => {
       });
     }
 
-    const subasta = await Subasta.findById(id);
+    const subasta = await Subasta.findById(subastaId);
     if (!subasta) {
       return res.status(404).json({ 
         codigo: "SUBASTA_NO_ENCONTRADA", 
         mensaje: "Subasta no existe" 
       });
+    }
+
+    // verificar articulo
+    const articulo = await Articulo.findById(articuloId);
+    if (!articulo) {
+      return res.status(404).json({ codigo: "ARTICULO_NO_ENCONTRADO", mensaje: "Artículo no existe" });
+    }
+
+    // verificar que articulo pertenezca a la subasta
+    if (!articulo.subasta || articulo.subasta.toString() !== subastaId) {
+      return res.status(400).json({ codigo: "ARTICULO_NO_EN_SUBASTA", mensaje: "Artículo no pertenece a la subasta indicada" });
     }
 
     // Verificar estado de subasta
@@ -57,7 +69,7 @@ export const realizarPuja = async (req, res) => {
     }
 
     // Obtener mejor puja anterior
-    const mejorPujaAnterior = await Puja.findOne({ subastaId: id })
+    const mejorPujaAnterior = await Puja.findOne({ subastaId: subastaId, articuloId })
       .sort({ monto: -1 });
 
     if (mejorPujaAnterior && monto <= mejorPujaAnterior.monto) {
@@ -68,7 +80,8 @@ export const realizarPuja = async (req, res) => {
     }
 
     const nuevaPuja = new Puja({
-      subastaId: id,
+      subastaId: subastaId,
+      articuloId,
       usuarioId,
       monto,
       medioPagoId,
@@ -95,30 +108,33 @@ export const realizarPuja = async (req, res) => {
 
 export const obtenerHistorialPujas = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { subastaId, articuloId } = req.params;
 
-    const subasta = await Subasta.findById(id);
+    const subasta = await Subasta.findById(subastaId);
     if (!subasta) {
-      return res.status(404).json({ 
-        codigo: "SUBASTA_NO_ENCONTRADA", 
-        mensaje: "Subasta no existe" 
-      });
+      return res.status(404).json({ codigo: "SUBASTA_NO_ENCONTRADA", mensaje: "Subasta no existe" });
     }
 
-    const pujas = await Puja.find({ subastaId: id })
+    const articulo = await Articulo.findById(articuloId);
+    if (!articulo) {
+      return res.status(404).json({ codigo: "ARTICULO_NO_ENCONTRADO", mensaje: "Artículo no existe" });
+    }
+
+    const pujas = await Puja.find({ subastaId: subastaId, articuloId })
       .populate("usuarioId", "nombre apellido")
       .sort({ fecha: 1 })
       .lean();
 
     const pujaFormateadas = pujas.map(puja => ({
-      id: puja._id,
+      id: puja.id || puja._id,
       monto: puja.monto,
       fecha: puja.fecha,
       usuario: {
-        id: puja.usuarioId._id,
+        id: puja.usuarioId.id || puja.usuarioId._id,
         nombre: puja.usuarioId.nombre,
       },
       subastaId: puja.subastaId,
+      articuloId: puja.articuloId,
     }));
 
     res.json(pujaFormateadas);
@@ -132,20 +148,20 @@ export const obtenerHistorialPujas = async (req, res) => {
 
 export const obtenerResultado = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { subastaId, articuloId } = req.params;
 
-    const subasta = await Subasta.findById(id)
-      .populate("articulos");
-
+    const subasta = await Subasta.findById(subastaId).populate("articulos");
     if (!subasta) {
-      return res.status(404).json({ 
-        codigo: "SUBASTA_NO_ENCONTRADA", 
-        mensaje: "Subasta no existe" 
-      });
+      return res.status(404).json({ codigo: "SUBASTA_NO_ENCONTRADA", mensaje: "Subasta no existe" });
     }
 
-    // Obtener ganador (mejor puja)
-    const mejorPuja = await Puja.findOne({ subastaId: id })
+    const articulo = await Articulo.findById(articuloId);
+    if (!articulo) {
+      return res.status(404).json({ codigo: "ARTICULO_NO_ENCONTRADO", mensaje: "Artículo no existe" });
+    }
+
+    // Obtener ganador (mejor puja para el articulo)
+    const mejorPuja = await Puja.findOne({ subastaId: subastaId, articuloId })
       .sort({ monto: -1 })
       .populate("usuarioId");
 
@@ -156,17 +172,60 @@ export const obtenerResultado = async (req, res) => {
         estado: subasta.estado,
         fechaCierre: subasta.fechaFin,
       },
-      ganador: mejorPuja ? {
-        usuarioId: mejorPuja.usuarioId._id,
-        nombre: mejorPuja.usuarioId.nombre,
-        apellido: mejorPuja.usuarioId.apellido,
-        montoCierre: mejorPuja.monto,
-      } : null,
+      ganador: mejorPuja
+        ? {
+            usuarioId: mejorPuja.usuarioId._id,
+            nombre: mejorPuja.usuarioId.nombre,
+            apellido: mejorPuja.usuarioId.apellido,
+            montoCierre: mejorPuja.monto,
+          }
+        : null,
     });
   } catch (error) {
     res.status(500).json({ 
       codigo: "ERROR_SERVIDOR", 
       mensaje: error.message 
     });
+  }
+};
+
+export const obtenerEstadoPuja = async (req, res) => {
+  try {
+    const { subastaId, articuloId } = req.params;
+
+    const subasta = await Subasta.findById(subastaId);
+    if (!subasta) {
+      return res.status(404).json({ codigo: "SUBASTA_NO_ENCONTRADA", mensaje: "Subasta no existe" });
+    }
+
+    const articulo = await Articulo.findById(articuloId);
+    if (!articulo) {
+      return res.status(404).json({ codigo: "ARTICULO_NO_ENCONTRADO", mensaje: "Artículo no existe" });
+    }
+
+    const mejorPuja = await Puja.findOne({ subastaId: subastaId, articuloId })
+      .sort({ monto: -1 })
+      .populate("usuarioId", "nombre apellido")
+      .lean();
+
+    const reglas = {
+      montoMinimo: articulo.precioBase,
+      montoMaximo: articulo.pujaMaxima || null,
+      requiereConfirmacion: articulo.requiereConfirmacion || false,
+    };
+
+    res.json({
+      articulo,
+      subasta,
+      pujaActual: mejorPuja ? {
+        id: mejorPuja.id || mejorPuja._id,
+        monto: mejorPuja.monto,
+        fecha: mejorPuja.fecha,
+        usuario: mejorPuja.usuarioId ? { id: mejorPuja.usuarioId.id || mejorPuja.usuarioId._id, nombre: mejorPuja.usuarioId.nombre } : null,
+      } : null,
+      reglas,
+    });
+  } catch (error) {
+    res.status(500).json({ codigo: "ERROR_SERVIDOR", mensaje: error.message });
   }
 };
