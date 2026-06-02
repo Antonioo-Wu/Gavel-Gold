@@ -3,9 +3,9 @@ import mongoose from "mongoose";
 const articuloSchema = new mongoose.Schema(
   {
     id: {
-      type: Number,
-      required: true,
+      type: String,
       unique: true,
+      sparse: true,
     },
 
     nombre: {
@@ -23,8 +23,9 @@ const articuloSchema = new mongoose.Schema(
 
     precioBase: {
       type: Number,
-      required: true,
+      required: false,
       min: 0.01,
+      default: null,
     },
 
     estado: {
@@ -90,5 +91,12 @@ const articuloSchema = new mongoose.Schema(
     versionKey: false,
   }
 );
+
+// Antes de guardar, si no tiene `id`, asignar string de `_id`
+articuloSchema.pre('save', function () {
+  if (!this.id) {
+    this.id = this._id ? this._id.toString() : undefined;
+  }
+});
 
 export default mongoose.model("Articulo", articuloSchema);

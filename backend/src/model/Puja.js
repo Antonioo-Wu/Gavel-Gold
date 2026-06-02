@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 
 const pujaSchema = new mongoose.Schema({
     id: {
-        type: Number,
-        required: true,
+        type: String,
         unique: true,
+        sparse: true,
     },
 
     subastaId: {
@@ -31,6 +31,12 @@ const pujaSchema = new mongoose.Schema({
         required: true,
     },
 
+    articuloId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Articulo",
+        required: false,
+    },
+
     fecha: {
         type: Date,
         default: Date.now,
@@ -39,6 +45,13 @@ const pujaSchema = new mongoose.Schema({
 }, {
     timestamps: true,
     versionKey: false,
+});
+
+// Antes de guardar, si no tiene `id`, asignar string de `_id`
+pujaSchema.pre('save', function () {
+    if (!this.id) {
+        this.id = this._id ? this._id.toString() : undefined;
+    }
 });
 
 export default mongoose.model("Puja", pujaSchema);

@@ -4,9 +4,11 @@ const SECRET_KEY = process.env.JWT_SECRET || "tu_secret_key_muy_segura";
 
 export const authMiddleware = async (req, res, next) => {
   try {
+
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      console.log("[authMiddleware] NO_TOKEN ->", req.method, req.originalUrl);
       return res.status(401).json({
         codigo: "NO_TOKEN",
         mensaje: "Token no proporcionado",
