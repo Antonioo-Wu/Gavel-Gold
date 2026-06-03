@@ -1,6 +1,7 @@
 import Subasta from "../model/Subasta.js";
 import Articulo from "../model/Articulo.js";
 import MedioPago from "../model/MedioPago.js";
+import Multa from "../model/Multa.js";
 import Usuario from "../model/Usuario.js";
 
 export const listarSubastas = async (req, res) => {
@@ -81,6 +82,14 @@ export const validarAcceso = async (req, res) => {
       return res.status(403).json({ 
         codigo: "CATEGORIA_INSUFICIENTE", 
         mensaje: "Categoría insuficiente para participar" 
+      });
+    }
+
+    const multasActivas = await Multa.find({ usuarioId: usuario._id, activa: true });
+    if (multasActivas.length > 0) {
+      return res.status(403).json({ 
+        codigo: "MULTA_ACTIVA", 
+        mensaje: "El usuario tiene multas activas" 
       });
     }
 

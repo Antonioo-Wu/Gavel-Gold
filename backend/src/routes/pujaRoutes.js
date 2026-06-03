@@ -22,5 +22,10 @@ router.get(
 	"/subastas/:subastaId/articulos/:articuloId/resultado",
 	pujaController.obtenerResultado
 );
+router.post(
+	"/subastas/:subastaId/articulos/:articuloId/pago",
+	authMiddleware,
+	pujaController.registrarPago
+);
 
 export default router;
