@@ -8,11 +8,23 @@ const router = express.Router();
 router.use(authMiddleware);
 router.use(adminMiddleware);
 
-router.get("/admin/articulos/pendientes", adminController.obtenerArticulosPendientes);
-router.post("/admin/articulos/:id/aprobar", adminController.aprobarArticulo);
-router.post("/admin/articulos/:id/rechazar", adminController.rechazarArticulo);
-router.post("/admin/subastas", adminController.crearSubasta);
-router.post("/admin/subastas/:id/agregarArticulo", adminController.agregarArticuloSubasta);
-router.post("/usuarios/:id/verificar", adminController.verificarUsuario);
+router.get("/articulos/pendientes", adminController.obtenerArticulosPendientes);
+router.post("/articulos/:id/aprobar", adminController.aprobarArticulo);
+router.post("/articulos/:id/rechazar", adminController.rechazarArticulo);
+router.post("/subastas", adminController.crearSubasta);
+router.post("/subastas/:id/agregarArticulo", adminController.agregarArticuloSubasta);
+
+router.put("/articulos/:id/precio-base", adminController.definirPrecioArticulo);
+router.put("/subastas/:id/comision", adminController.definirComisionSubasta);
+
+router.post("/articulos/:id/cerrar", adminController.cerrarArticulo);
+router.post("/subastas/:id/cerrar", adminController.cerrarSubasta);
+
+router.post("/multas", adminController.crearMulta);
+router.post("/multas/:id/levantar", adminController.levantarMulta);
+
+router.post("/usuarios/:id/aprobar", adminController.aprobarUsuario);
+router.post("/usuarios/:id/rechazar", adminController.rechazarUsuario);
+router.post("/usuarios/:id/categoria", adminController.asignarCategoria);
 
 export default router;

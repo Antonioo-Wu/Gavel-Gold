@@ -16,12 +16,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Rutas
+
+
 app.use(authRoutes);
 app.use(usuarioRoutes);
-app.use(adminRoutes);
 app.use(subastaRoutes);
 app.use(pujaRoutes);
+app.use("/admin", adminRoutes);
 
 const PORT = process.env.PORT;
 
