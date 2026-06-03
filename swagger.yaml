@@ -47,6 +47,45 @@ paths:
         "401":
           $ref: '#/components/responses/NoAutorizado'
 
+  /auth/recuperar-password:
+    post:
+      tags: [Autenticacion]
+      summary: Solicitar recuperacion de contrasena
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email: { type: string, format: email }
+      responses:
+        "200":
+          description: Email de recuperacion enviado
+
+  /auth/resetear-password:
+    post:
+      tags: [Autenticacion]
+      summary: Resetear contrasena con token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token, password]
+              properties:
+                token: { type: string }
+                password: { type: string, format: password }
+      responses:
+        "200":
+          description: Contrasena reseteada correctamente
+        "400":
+          description: Token invalido o expirado
+
   /usuarios/registro-inicial:
     post:
       tags: [Autenticacion]
@@ -182,6 +221,48 @@ paths:
         "400":
           $ref: '#/components/responses/ErrorValidacion'
 
+  /usuarios/{id}/articulos/pendientes-aceptacion:
+    get:
+      tags: [Articulos]
+      summary: Articulos pendientes de aceptacion del usuario
+      parameters:
+        - $ref: '#/components/parameters/idUsuario'
+      responses:
+        "200":
+          description: Lista de articulos pendientes de aceptacion
+
+  /usuarios/{id}/articulos/{articuloId}/aceptar:
+    post:
+      tags: [Articulos]
+      summary: Usuario acepta condiciones del articulo
+      description: El usuario acepta el precio base y comision fijados por el admin.
+      parameters:
+        - $ref: '#/components/parameters/idUsuario'
+        - $ref: '#/components/parameters/articuloIdPath'
+      responses:
+        "200":
+          description: Condiciones aceptadas
+
+  /usuarios/{id}/articulos/{articuloId}/rechazar:
+    post:
+      tags: [Articulos]
+      summary: Usuario rechaza condiciones del articulo
+      description: El usuario rechaza el precio base y comision fijados por el admin.
+      parameters:
+        - $ref: '#/components/parameters/idUsuario'
+        - $ref: '#/components/parameters/articuloIdPath'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                motivo: { type: string }
+      responses:
+        "200":
+          description: Condiciones rechazadas
+
   /subastas:
     get:
       tags: [Subastas]
@@ -275,57 +356,6 @@ paths:
         "200":
           description: Datos del cierre y ganador
 
-  /subastas/{subastaId}/articulos/{articuloId}/rechazar:
-    post:
-      tags: [Subastas]
-      summary: Usuario rechaza precio/comisión propuesto tras aprobación admin
-      description: >-
-        Flujo: el artículo fue aprobado por el admin y asociado a la subasta con
-        un precio base y reglas. Este endpoint permite al usuario ganador
-        rechazar la adjudicación (por ejemplo si no acepta el precio o la comisión)
-        antes de registrar el pago.
-      parameters:
-        - $ref: '#/components/parameters/subastaIdPath'
-        - $ref: '#/components/parameters/articuloIdPath'
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                motivo:
-                  type: string
-                  description: Motivo opcional del rechazo por parte del usuario.
-      responses:
-        "200":
-          description: Usuario rechazó la adjudicación
-
-  /subastas/{subastaId}/articulos/{articuloId}/aceptar:
-    post:
-      tags: [Subastas]
-      summary: Usuario acepta precio/comisión propuesto tras aprobación admin
-      description: >-
-        Flujo: una vez el admin aprobó el artículo y definió precio base y
-        comisión, el usuario ganador puede aceptar la adjudicación y confirmar
-        la compra para proceder al registro del pago.
-      parameters:
-        - $ref: '#/components/parameters/subastaIdPath'
-        - $ref: '#/components/parameters/articuloIdPath'
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                comentario:
-                  type: string
-                  description: Comentario opcional del usuario al aceptar.
-      responses:
-        "200":
-          description: Usuario aceptó la adjudicación y confirma la compra
-
   /subastas/{subastaId}/articulos/{articuloId}/pago:
     post:
       tags: [Pujas]
@@ -359,12 +389,23 @@ paths:
   /admin/articulos/{id}/aprobar:
     post:
       tags: [Administracion]
-      summary: Aprobar articulo
+      summary: Aprobar articulo con precio base y comision
+      description: El admin define precioBase y comision, el articulo pasa a pendiente_aceptacion para que el usuario acepte/rechace.
       parameters:
         - $ref: '#/components/parameters/idArticulo'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [precioBase, comision]
+              properties:
+                precioBase: { type: number, minimum: 0.01 }
+                comision: { type: number, minimum: 0 }
       responses:
         "200":
-          description: Articulo aprobado
+          description: Condiciones enviadas al usuario para aceptacion
 
   /admin/articulos/{id}/rechazar:
     post:
@@ -673,8 +714,9 @@ components:
         fotos:
           type: array
           items: { type: string, format: uri }
-        estado: { type: string, enum: [pendiente, aprobado, rechazado, disponible, subastado, vendido, cerrado, retirado] }
-        precioBase: { type: number }
+        estado: { type: string, enum: [pendiente, pendiente_aceptacion, aprobado, rechazado, disponible, subastado, vendido, cerrado, retirado] }
+        precioBase: { type: number, nullable: true }
+        comision: { type: number, nullable: true }
         pujaActual: { type: number }
         pujaMaxima: { type: number, nullable: true }
         requiereConfirmacion: { type: boolean }
@@ -710,9 +752,8 @@ components:
       type: object
       properties:
         id: { type: string }
-        tipo: { type: string, enum: [CUENTA_BANCARIA, TARJETA, CHEQUE_CERTIFICADO] }
-        detalles: { type: object }
-        estadoVerificacion: { type: string, enum: [pendiente, verificado, rechazado] }
+        tipo: { type: string, enum: [CUENTA_BANCARIA, TARJETA, CHEQUE] }
+        detalle: { type: object }
         validado: { type: boolean }
 
     MedioPagoCreateRequest:
@@ -723,10 +764,10 @@ components:
 
     MedioPagoCuentaBancariaRequest:
       type: object
-      required: [tipo, detalles]
+      required: [tipo, detalle]
       properties:
         tipo: { type: string, enum: [CUENTA_BANCARIA] }
-        detalles:
+        detalle:
           type: object
           required: [cbu]
           properties:
@@ -737,10 +778,10 @@ components:
 
     MedioPagoTarjetaRequest:
       type: object
-      required: [tipo, detalles]
+      required: [tipo, detalle]
       properties:
         tipo: { type: string, enum: [TARJETA] }
-        detalles:
+        detalle:
           type: object
           required: [titular]
           properties:
@@ -750,10 +791,10 @@ components:
 
     MedioPagoChequeRequest:
       type: object
-      required: [tipo, detalles]
+      required: [tipo, detalle]
       properties:
-        tipo: { type: string, enum: [CHEQUE_CERTIFICADO] }
-        detalles:
+        tipo: { type: string, enum: [CHEQUE] }
+        detalle:
           type: object
           required: [banco]
           properties:
