@@ -2,6 +2,7 @@ import Puja from "../model/Puja.js";
 import Subasta from "../model/Subasta.js";
 import MedioPago from "../model/MedioPago.js";
 import Articulo from "../model/Articulo.js";
+import Venta from "../model/Venta.js";
 
 export const realizarPuja = async (req, res) => {
   try {
@@ -225,6 +226,63 @@ export const obtenerEstadoPuja = async (req, res) => {
       } : null,
       reglas,
     });
+  } catch (error) {
+    res.status(500).json({ codigo: "ERROR_SERVIDOR", mensaje: error.message });
+  }
+};
+
+export const registrarPago = async (req, res) => {
+  try {
+    const { subastaId, articuloId } = req.params;
+    const { modalidadEntrega } = req.body;
+    const usuarioId = req.user.id;
+
+    if (!modalidadEntrega) {
+      return res.status(400).json({ codigo: "CAMPOS_REQUERIDOS", mensaje: "modalidadEntrega requerida" });
+    }
+
+    if (!["retiro", "envio"].includes(modalidadEntrega)) {
+      return res.status(400).json({ codigo: "MODALIDAD_INVALIDA", mensaje: "modalidadEntrega debe ser retiro o envio" });
+    }
+
+    const subasta = await Subasta.findById(subastaId);
+    if (!subasta) {
+      return res.status(404).json({ codigo: "SUBASTA_NO_ENCONTRADA", mensaje: "Subasta no existe" });
+    }
+
+    const articulo = await Articulo.findById(articuloId);
+    if (!articulo) {
+      return res.status(404).json({ codigo: "ARTICULO_NO_ENCONTRADO", mensaje: "Artículo no existe" });
+    }
+
+    const mejorPuja = await Puja.findOne({ subastaId, articuloId }).sort({ monto: -1 });
+    if (!mejorPuja) {
+      return res.status(400).json({ codigo: "SIN_GANADOR", mensaje: "No hay pujas para este artículo" });
+    }
+
+    if (mejorPuja.usuarioId.toString() !== usuarioId.toString()) {
+      return res.status(403).json({ codigo: "NO_SOS_GANADOR", mensaje: "No eres el ganador de este artículo" });
+    }
+
+    const ventaExistente = await Venta.findOne({ articuloId, subastaId });
+    if (ventaExistente) {
+      return res.status(400).json({ codigo: "VENTA_YA_REGISTRADA", mensaje: "El pago ya fue registrado" });
+    }
+
+    const venta = new Venta({
+      articuloId,
+      subastaId,
+      ganadorId: usuarioId,
+      montoFinal: mejorPuja.monto,
+      estadoPago: "pagado",
+      modalidadEntrega,
+    });
+    await venta.save();
+
+    articulo.estado = "vendido";
+    await articulo.save();
+
+    res.json({ mensaje: "Pago registrado", venta });
   } catch (error) {
     res.status(500).json({ codigo: "ERROR_SERVIDOR", mensaje: error.message });
   }

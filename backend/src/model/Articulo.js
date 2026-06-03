@@ -28,9 +28,16 @@ const articuloSchema = new mongoose.Schema(
       default: null,
     },
 
+    comision: {
+      type: Number,
+      required: false,
+      min: 0,
+      default: null,
+    },
+
     estado: {
       type: String,
-      enum: ["pendiente", "aprobado", "rechazado", "disponible", "subastado", "retirado"],
+      enum: ["pendiente", "pendiente_aceptacion", "aprobado", "rechazado", "disponible", "subastado", "vendido", "cerrado", "retirado"],
       default: "pendiente",
     },
 

@@ -12,5 +12,8 @@ router.get("/usuarios/:id/estadisticas", authMiddleware, usuarioController.obten
 router.get("/usuarios/:id/historial-participacion", authMiddleware, usuarioController.obtenerHistorialParticipacion);
 router.get("/usuarios/:id/articulos", authMiddleware, usuarioController.obtenerArticulosUsuario);
 router.post("/usuarios/:id/articulos", authMiddleware, usuarioController.proponerArticulo);
+router.get("/usuarios/:id/articulos/pendientes-aceptacion", authMiddleware, usuarioController.obtenerArticulosPendientesAceptacion);
+router.post("/usuarios/:id/articulos/:articuloId/aceptar", authMiddleware, usuarioController.aceptarCondicionesArticulo);
+router.post("/usuarios/:id/articulos/:articuloId/rechazar", authMiddleware, usuarioController.rechazarCondicionesArticulo);
 
 export default router;

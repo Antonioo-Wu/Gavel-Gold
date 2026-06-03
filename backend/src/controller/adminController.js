@@ -25,6 +25,28 @@ export const obtenerArticulosPendientes = async (req, res) => {
 export const aprobarArticulo = async (req, res) => {
   try {
     const { id } = req.params;
+    const { precioBase, comision } = req.body;
+
+    if (precioBase == null || comision == null) {
+      return res.status(400).json({ 
+        codigo: "CAMPOS_REQUERIDOS", 
+        mensaje: "precioBase y comision son requeridos" 
+      });
+    }
+
+    if (precioBase < 0.01) {
+      return res.status(400).json({ 
+        codigo: "PRECIO_INVALIDO", 
+        mensaje: "Precio base debe ser mayor a 0" 
+      });
+    }
+
+    if (comision < 0) {
+      return res.status(400).json({ 
+        codigo: "COMISION_INVALIDA", 
+        mensaje: "Comisión debe ser mayor o igual a 0" 
+      });
+    }
 
     const articulo = await Articulo.findById(id);
     if (!articulo) {
@@ -41,12 +63,14 @@ export const aprobarArticulo = async (req, res) => {
       });
     }
 
-    articulo.estado = "aprobado";
+    articulo.precioBase = precioBase;
+    articulo.comision = comision;
+    articulo.estado = "pendiente_aceptacion";
     articulo.motivoRechazo = null;
     await articulo.save();
 
     res.json({ 
-      mensaje: "Artículo aprobado",
+      mensaje: "Condiciones enviadas al usuario para aceptación",
       articulo 
     });
   } catch (error) {
