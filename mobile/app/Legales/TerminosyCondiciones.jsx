@@ -3,6 +3,7 @@ import { View, Text, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from '../../components/ActionButton';
 import { legajesStyles as styles } from '../../styles/legajes/Legales';
+import { API_URL } from '../../config/api.js';
 
 export default function TerminosYCondiciones() {
   const navigation = useNavigation();
@@ -35,7 +36,7 @@ export default function TerminosYCondiciones() {
           El acceso y uso de la plataforma Gavel & Gold está sujeto a los siguientes términos y condiciones. Al utilizar nuestra aplicación, usted acepta cumplir con estas normativas:
         </Text>
 
-        <View style={styles.listContainer}>
+        <View style={styles.listContainer} style={styles.scrollContent}>
           {terms.map((term, index) => (
             <View key={index} style={styles.listItem}>
               <Text style={styles.itemNumber}>{index + 1}. </Text>

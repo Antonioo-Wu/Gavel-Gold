@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 
 const medioPagoSchema = new mongoose.Schema({
     id: {
-        type: Number,
-        required: true,
+        type: String,
         unique: true,
+        sparse: true,
     },
 
     usuarioId: {
@@ -20,7 +20,7 @@ const medioPagoSchema = new mongoose.Schema({
     },
 
     detalle: {
-        type: String,
+        type: Object,
         required: true,
     },
 
@@ -32,6 +32,13 @@ const medioPagoSchema = new mongoose.Schema({
 }, {
     timestamps: true,
     versionKey: false,
+});
+
+// Antes de guardar, si no tiene `id`, asignar string de `_id`
+medioPagoSchema.pre('save', function () {
+    if (!this.id) {
+        this.id = this._id ? this._id.toString() : undefined;
+    }
 });
 
 export default mongoose.model("MedioPago", medioPagoSchema);

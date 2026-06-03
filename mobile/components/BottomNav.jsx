@@ -10,7 +10,7 @@ export default function BottomNav() {
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.navButton}
-        onPress={() => navigation.navigate('Inicio')}
+        onPress={() => navigation.navigate('ListadeSubastas')}
       >
         <Text style={styles.navIcon}>🏠</Text>
         <Text style={styles.navLabel}>Inicio</Text>
@@ -18,7 +18,7 @@ export default function BottomNav() {
 
       <TouchableOpacity
         style={[styles.navButton, styles.active]}
-        onPress={() => navigation.navigate('Subastas')}
+        onPress={() => navigation.navigate('ListadeSubastas')}
       >
         <Text style={styles.navIcon}>🛍️</Text>
         <Text style={styles.navLabel}>Subastas</Text>

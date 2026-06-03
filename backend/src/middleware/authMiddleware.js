@@ -4,9 +4,11 @@ const SECRET_KEY = process.env.JWT_SECRET || "tu_secret_key_muy_segura";
 
 export const authMiddleware = async (req, res, next) => {
   try {
+
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      console.log("[authMiddleware] NO_TOKEN ->", req.method, req.originalUrl);
       return res.status(401).json({
         codigo: "NO_TOKEN",
         mensaje: "Token no proporcionado",
@@ -61,6 +63,14 @@ export const generateActivationToken = (usuario) => {
     { id: usuario._id, type: "activation" },
     SECRET_KEY,
     { expiresIn: "7d" }
+  );
+};
+
+export const generatePasswordResetToken = (usuario) => {
+  return jwt.sign(
+    { id: usuario._id, type: "password_reset" },
+    SECRET_KEY,
+    { expiresIn: "1h" }
   );
 };
 

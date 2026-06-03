@@ -1,65 +1,128 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform, Dimensions } from 'react-native';
 
-export const PerfilStlyes = StyleSheet.create({
-  container: {
+// Obtenemos el ancho exacto de la pantalla del celular
+const { width } = Dimensions.get('window');
+
+export const backgroundSource = require('../../assets/fondo_dorado.jpg');
+
+export const PerfilStyles = StyleSheet.create({
+  background: {
     flex: 1,
-    backgroundColor: '#fff',
+    width: '100%',
+    height: '100%',
   },
-  scrollContent: {
+  // Contenedor general (solo ocupa la pantalla)
+  mainContainer: {
     flex: 1,
-    padding: 16,
-    paddingBottom: 20,
+    paddingTop: Platform.OS === 'ios' ? 50 : 30, // Margen superior seguro
   },
+  // ESTE ES EL SECRETO: El contenido del scroll NO DEBE tener flex: 1
+  scrollContentContainer: {
+    paddingHorizontal: 20,
+    paddingBottom: 100, // Deja espacio para que la navbar no lo pise
+  },
+  
+  // --- Textos ---
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
+    color: '#090909', // Si tu fondo es muy oscuro, cambialo a '#FFFFFF'
     marginBottom: 8,
-    color: '#1A1A1A',
   },
-  category: {
+  categoryContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  categoryText: {
     fontSize: 14,
-    color: '#555',
-    marginBottom: 16,
+    color: '#090909',
+    marginRight: 8,
+    fontWeight: '600',
   },
+  categoryBadge: {
+    backgroundColor: '#E0BF66', // Dorado
+    paddingHorizontal: 12,
+    paddingVertical: 4, 
+    borderRadius: 12,
+  },
+  categoryBadgeText: {
+    color: '#FFFFFF',
+    fontSize: 12, 
+    fontWeight: 'bold',
+  },
+  
+  // --- Grilla de Íconos (Adaptable a cualquier pantalla) ---
   gridContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginVertical: 16,
+    justifyContent: 'space-between',
+    marginBottom: 24, 
   },
-  gridItem: {
+  gridItemWrapper: {
     alignItems: 'center',
-    padding: 12,
-    backgroundColor: '#333',
-    borderRadius: 8,
-    flex: 1,
-    marginHorizontal: 8,
+    // Divide el ancho disponible en 3, asegurando que nunca se aplasten
+    width: (width - 40) / 3.2, 
+  },
+  gridIconContainer: {
+    backgroundColor: '#090909',
+    width: 50, 
+    height: 50, 
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 8,
   },
   gridIcon: {
-    fontSize: 28,
-    marginBottom: 8,
+    fontSize: 22,
   },
   gridLabel: {
     fontSize: 12,
-    color: 'white',
-    fontWeight: 'bold',
+    color: '#090909', 
     textAlign: 'center',
+    fontWeight: '600',
   },
+
+  // --- Botón Mis Subastas ---
+  subastasButton: {
+    backgroundColor: '#090909',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 14, // Usa padding, no height fijo
+    borderRadius: 12,
+    marginBottom: 24,
+  },
+  subastasText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+
+  // --- Lista de Información (Caja Blanca) ---
   infoCard: {
-    marginTop: 24,
+    backgroundColor: '#FFFFFF', 
+    borderRadius: 16,
+    paddingHorizontal: 16, 
+    paddingVertical: 10,
+    marginBottom: 24,
   },
   infoTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 12,
-    color: '#1A1A1A',
+    color: '#090909',
+    marginBottom: 5,
   },
   infoItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 12,
+    justifyContent: 'space-between',
+    paddingVertical: 14,
     borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    borderBottomColor: '#F0F0F0',
+  },
+  infoItemLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   infoIcon: {
     fontSize: 20,
@@ -67,19 +130,27 @@ export const PerfilStlyes = StyleSheet.create({
   },
   infoLabel: {
     fontSize: 14,
-    color: '#333',
+    color: '#090909',
+    fontWeight: '500',
   },
+  arrowIcon: {
+    fontSize: 18,
+    color: '#A49A8A',
+  },
+
+  // --- Botón Cerrar Sesión ---
   logoutButton: {
-    margin: 16,
-    marginBottom: 80,
-    backgroundColor: '#d32f2f',
-    paddingVertical: 12,
-    borderRadius: 8,
+    backgroundColor: 'transparent',
+    borderWidth: 1.5,
+    borderColor: '#FFFFFF',
+    paddingVertical: 14, // Usa padding, no height fijo
+    borderRadius: 12,
     alignItems: 'center',
+    marginBottom: 10,
   },
   logoutText: {
-    color: 'white',
-    fontSize: 16,
+    color: '#FFFFFF', 
+    fontSize: 15,
     fontWeight: 'bold',
-  },
+  }
 });
