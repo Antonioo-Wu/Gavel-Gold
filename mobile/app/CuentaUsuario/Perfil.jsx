@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'; // <-- Acá agregamos useState y useEffect
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import BottomNav from '../../components/BottomNav';
@@ -17,7 +17,9 @@ export default function Perfil() {
         const userDataString = await AsyncStorage.getItem('userData');
         if (userDataString) {
           const usuario = JSON.parse(userDataString);
-          const category = usuario.categoria.charAt(0).toUpperCase() + usuario.categoria.slice(1);
+          // Le sumamos una pequeña validación por si el usuario no tiene categoría asignada
+          const cat = usuario.categoria || 'comun';
+          const category = cat.charAt(0).toUpperCase() + cat.slice(1);
           setCategoria(category);
         }
       } catch (error) {
@@ -50,7 +52,6 @@ export default function Perfil() {
       navigation.navigate('Splash'); 
     }
   };
-
 
   const gridItems = [
     { icon: '👤', label: 'Mis datos', onPress: () => navigation.navigate('DatosUsuario') },
@@ -92,9 +93,9 @@ export default function Perfil() {
         </View>
       </ScrollView>
 
-      // Acá debería ir un botón de "Mis Subastas" @Nachoooo tiene que ser cremita como esta en el figma!!!!
+      {/* Acá debería ir un botón de "Mis Subastas" @Nachoooo tiene que ser cremita como esta en el figma!!!! */}
 
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+      <TouchableOpacity style={styles.logoutButton} onPress={() => console.log("Ir a Mis Subastas")}>
         <Text style={styles.logoutText}>Mis Subastas</Text>
       </TouchableOpacity>
 
