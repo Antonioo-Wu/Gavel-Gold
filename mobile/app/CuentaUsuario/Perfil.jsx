@@ -4,8 +4,10 @@ import { useNavigation } from '@react-navigation/native';
 import BottomNav from '../../components/BottomNav';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_URL } from '../../config/api.js';
+import { Ionicons } from '@expo/vector-icons';
+import { BlurView } from 'expo-blur';
 
-import { PerfilStyles as styles, backgroundSource } from '../../styles/cuentaUsuario/Perfil.js';
+import { PerfilStyles as styles, backgroundSource, PerfilTheme } from '../../styles/cuentaUsuario/Perfil.js';
 
 export default function Perfil() {
   const navigation = useNavigation();
@@ -32,7 +34,7 @@ export default function Perfil() {
   const handleLogout = async () => {
     try {
       const token = await AsyncStorage.getItem('userToken');
-      
+
       if (token) {
         await fetch(`${API_URL}/auth/logout`, {
           method: 'POST',
@@ -47,32 +49,57 @@ export default function Perfil() {
     } finally {
       await AsyncStorage.removeItem('userToken');
       await AsyncStorage.removeItem('userData');
-      navigation.navigate('Splash'); 
+      navigation.navigate('Splash');
     }
   };
 
   const gridItems = [
-    { icon: '👤', label: 'Mis datos', onPress: () => navigation.navigate('DatosUsuario') },
-    { icon: '💳', label: 'Métodos de\npago', onPress: () => navigation.navigate('UsuarioMediosPago') },
-    { icon: '📈', label: 'Mis métricas', onPress: () => { } },
+    {
+      icon: <Ionicons name="person-outline" size={PerfilTheme.iconGrid.size} color={PerfilTheme.iconGrid.color} />,
+      label: 'Mis datos',
+      bgColor: PerfilTheme.gridColors.misDatos,
+      onPress: () => navigation.navigate('DatosUsuario')
+    },
+    {
+      icon: <Ionicons name="card-outline" size={PerfilTheme.iconGrid.size} color={PerfilTheme.iconGrid.color} />,
+      label: 'Métodos de\npago',
+      bgColor: PerfilTheme.gridColors.metodosPago,
+      onPress: () => navigation.navigate('UsuarioMediosPago')
+    },
+    {
+      icon: <Ionicons name="stats-chart-outline" size={PerfilTheme.iconGrid.size} color={PerfilTheme.iconGrid.color} />,
+      label: 'Mis métricas',
+      bgColor: PerfilTheme.gridColors.misMetricas,
+      onPress: () => { }
+    },
   ];
 
   const infoItems = [
-    { icon: '📄', label: 'Términos y Condiciones', onPress: () => navigation.navigate('TerminosyCondiciones') },
-    { icon: '🔒', label: 'Política de Privacidad', onPress: () => navigation.navigate('PoliticadePrivacidad') },
-    { icon: '👥', label: 'Sobre nosotros', onPress: () => navigation.navigate('SobreNosotros') },
+    {
+      icon: <Ionicons name="alert-circle-outline" size={PerfilTheme.iconInfo.size} color={PerfilTheme.iconInfo.color} />,
+      label: 'Términos y Condiciones',
+      onPress: () => navigation.navigate('TerminosyCondiciones')
+    },
+    {
+      icon: <Ionicons name="shield-checkmark-outline" size={PerfilTheme.iconInfo.size} color={PerfilTheme.iconInfo.color} />,
+      label: 'Política de Privacidad',
+      onPress: () => navigation.navigate('PoliticadePrivacidad')
+    },
+    {
+      icon: <Ionicons name="people-outline" size={PerfilTheme.iconInfo.size} color={PerfilTheme.iconInfo.color} />,
+      label: 'Sobre nosotros',
+      onPress: () => navigation.navigate('SobreNosotros')
+    },
   ];
 
   return (
     <ImageBackground source={backgroundSource} style={styles.background}>
-      
-      {/* Tarjeta Blanca Frontal */}
+
       <View style={styles.whiteCard}>
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContentContainer} >
-          
+
           <Text style={styles.title}>Mi Perfil</Text>
 
-          {/* Etiqueta de Categoría */}
           <View style={styles.categoryContainer}>
             <Text style={styles.categoryText}>Categoría:</Text>
             <View style={styles.categoryBadge}>
@@ -80,13 +107,16 @@ export default function Perfil() {
             </View>
           </View>
 
-          {/* Grilla de Opciones Rápidas */}
           <View style={styles.gridContainer}>
             {gridItems.map((item, index) => (
               <TouchableOpacity key={index} style={styles.gridItemWrapper} onPress={item.onPress}>
-                <View style={styles.gridIconContainer}>
-                  <Text style={styles.gridIcon}>{item.icon}</Text>
-                </View>
+                <BlurView
+                  intensity={PerfilTheme.blur.intensity}
+                  tint={PerfilTheme.blur.tint}
+                  style={[styles.gridIconContainer, { backgroundColor: item.bgColor }]}
+                >
+                  {item.icon}
+                </BlurView>
                 <Text style={styles.gridLabel}>{item.label}</Text>
               </TouchableOpacity>
             ))}
@@ -96,14 +126,15 @@ export default function Perfil() {
             <Text style={styles.subastasText}>Mis Subastas</Text>
           </TouchableOpacity>
 
-          {/* Lista de Información */}
           <View style={styles.infoCard}>
             <Text style={styles.infoTitle}>Más información</Text>
 
             {infoItems.map((item, index) => (
               <TouchableOpacity key={index} style={styles.infoItem} onPress={item.onPress}>
                 <View style={styles.infoItemLeft}>
-                  <Text style={styles.infoIcon}>{item.icon}</Text>
+                  <View style={styles.infoIconWrapper}>
+                    {item.icon}
+                  </View>
                   <Text style={styles.infoLabel}>{item.label}</Text>
                 </View>
                 <Text style={styles.arrowIcon}>›</Text>
@@ -111,8 +142,6 @@ export default function Perfil() {
             ))}
           </View>
 
-        
-         
           <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
             <Text style={styles.logoutText}>Cerrar Sesión</Text>
           </TouchableOpacity>
@@ -120,9 +149,8 @@ export default function Perfil() {
         </ScrollView>
       </View>
 
-      
       <BottomNav />
-      
+
     </ImageBackground>
   );
 }
