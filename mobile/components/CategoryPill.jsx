@@ -17,7 +17,7 @@ export default function CategoryPill({ category }) {
 
   const labelParaMostrar = categoryKey === 'comun'
     ? 'Común'
-    : categoryKey.chartAt(0).toUpperCase() + categoryKey.slice(1);
+    : categoryKey.charAt(0).toUpperCase() + categoryKey.slice(1);
 
   return (
     <View style={[styles.pill, { backgroundColor: styleConfig.bg }]}>
