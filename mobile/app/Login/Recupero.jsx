@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../components/FormCard';
 import CustomInput from '../../components/CustomInput';
 import ActionButton from '../../components/ActionButton';
+import RecuperoÉxito from './RecuperoExito';
 
 import { loginStyles as styles } from '../../styles/login/Login';
 
@@ -18,7 +19,6 @@ export default function Recupero() {
       return;
     }
     setIsLoading(true);
-    // Aquí iría tu lógica de recuperación
   };
 
   return (
@@ -34,7 +34,7 @@ export default function Recupero() {
           />
           <View style={styles.buttonsContainer}>
             <ActionButton text="Cancel" variant="outline" onPress={() => navigation.goBack()} />
-            <ActionButton text="Confirmar" variant="solid" onPress={handleRecupero} />
+            <ActionButton text="Confirmar" variant="solid" onPress={() => navigation.navigate('RecuperoExito')} />
           </View>
         </FormCard>
       </View>

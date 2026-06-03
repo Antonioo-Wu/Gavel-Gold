@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../../components/FormCard';
 import CustomInput from '../../../components/CustomInput';

@@ -31,11 +31,11 @@ export default function PoliticaPrivacidad() {
       <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>Política de Privacidad</Text>
 
-        <Text style={styles.introText}>
+        <Text style={styles.introText} style={styles.scrollContent}>
           En Gavel & Gold, la privacidad y seguridad de sus datos son nuestra prioridad. Esta política describe cómo recopilamos, utilizamos y protegemos su información:
         </Text>
 
-        <View style={styles.listContainer}>
+        <View style={styles.listContainer} style={styles.scrollContent}>
           {policies.map((policy, index) => (
             <View key={index} style={styles.listItem}>
               <Text style={styles.itemNumber}>{index + 1}. </Text>

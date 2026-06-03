@@ -1,4 +1,3 @@
-
 # Dependencies
 backend/node_modules/
 client/node_modules/
@@ -7,6 +6,9 @@ mobile/node_modules/
 # Build outputs
 backend/dist/
 client/build/
+
+# Ignore environment files
+package-lock.json
 
 # Logs
 *.log
@@ -25,3 +27,4 @@ mobile/.expo/
 
 # Api URL
 mobile/config/api.js
+node_modules
