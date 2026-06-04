@@ -15,7 +15,7 @@ router.post("/subastas", adminController.crearSubasta);
 router.post("/subastas/:id/agregarArticulo", adminController.agregarArticuloSubasta);
 
 router.put("/articulos/:id/precio-base", adminController.definirPrecioArticulo);
-router.put("/subastas/:id/comision", adminController.definirComisionSubasta);
+router.put("/articulos/:id/comision", adminController.definirComisionArticulo);
 
 router.post("/articulos/:id/cerrar", adminController.cerrarArticulo);
 router.post("/subastas/:id/cerrar", adminController.cerrarSubasta);

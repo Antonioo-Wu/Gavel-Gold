@@ -92,6 +92,31 @@ const articuloSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+
+    pujaMaxima: {
+      type: Number,
+      default: null,
+    },
+
+    incrementoMinimo: {
+      type: Number,
+      default: null,
+    },
+
+    porcentajeIncrementoMinimo: {
+      type: Number,
+      default: null,
+    },
+
+    montoMaximoPuja: {
+      type: Number,
+      default: null,
+    },
+
+    requiereConfirmacion: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
