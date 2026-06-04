@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text,Image, ImageBackground, Alert } from 'react-native';
+import { View, Text, Image, ImageBackground, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../components/FormCard';
 import CustomInput from '../../components/CustomInput';
 import ActionButton from '../../components/ActionButton';
-import RecuperoÉxito from './RecuperoExito';
 
 import { loginStyles as styles } from '../../styles/login/Login';
 
@@ -13,12 +12,29 @@ export default function Recupero() {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleRecupero = async () => {
+  const handleRecupero = () => {
     if (!email) {
       Alert.alert("Error", "El campo de email es obligatorio");
       return;
     }
+
+    // Validación de formato de email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      Alert.alert("Error", "Ingrese un email válido");
+      return;
+    }
+
     setIsLoading(true);
+
+    // Simulación: generar un código aleatorio de 6 dígitos
+    const codigo = Math.floor(100000 + Math.random() * 900000);
+
+
+    // Navegar a pantalla de éxito
+    navigation.navigate('RecuperoExito');
+
+    setIsLoading(false);
   };
 
   return (
@@ -36,7 +52,11 @@ export default function Recupero() {
           />
           <View style={styles.buttonsContainer}>
             <ActionButton text="Cancel" variant="outline" onPress={() => navigation.goBack()} />
-            <ActionButton text="Confirmar" variant="solid" onPress={() => navigation.navigate('RecuperoExito')} />
+            <ActionButton 
+              text={isLoading ? "Enviando..." : "Confirmar"} 
+              variant="solid" 
+              onPress={handleRecupero} 
+            />
           </View>
         </FormCard>
       </View>
