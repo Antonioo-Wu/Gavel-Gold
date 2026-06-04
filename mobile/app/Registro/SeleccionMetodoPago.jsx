@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../components/FormCard';
 import ActionButton from '../../components/ActionButton';
@@ -12,7 +12,7 @@ export default function SeleccionMetodoPago() {
   return (
     <View style={styles.containerDark}>
       <View style={styles.containerCenter}>
-                    <Image source={require('../../assets/logos/logotipo.png')} style={styles.logo} />
+          <Image source={require('../../assets/logos/logotipo.png')} style={styles.logo} />
         </View>
       <Text style={styles.title}>Seleccionar Método de Pago</Text>
       <FormCard>

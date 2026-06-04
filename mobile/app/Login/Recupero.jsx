@@ -4,7 +4,6 @@ import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../components/FormCard';
 import CustomInput from '../../components/CustomInput';
 import ActionButton from '../../components/ActionButton';
-
 import { loginStyles as styles } from '../../styles/login/Login';
 
 export default function Recupero() {

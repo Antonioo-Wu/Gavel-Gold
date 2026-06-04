@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, ImageBackground } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, ImageBackground, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import BottomNav from '../../components/BottomNav';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -97,8 +97,10 @@ export default function Perfil() {
 
       <View style={styles.whiteCard}>
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContentContainer} >
-
-          <Text style={styles.title}>Mi Perfil</Text>
+          <View style={styles.header}>
+                  <Image source={require('../../assets/logos/logotipo.png')} style={styles.logo} />
+                  <Text style={styles.headerTitle}>Mis Subastas</Text>
+          </View>
 
           <View style={styles.categoryContainer}>
             <Text style={styles.categoryText}>Categoría:</Text>

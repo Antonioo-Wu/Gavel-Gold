@@ -4,6 +4,7 @@ import { StyleSheet, Platform } from 'react-native';
 export const backgroundSource = require('../../assets/fondo_dorado.jpg');
 
 export const MetricasStyles = StyleSheet.create({
+  
   // Contenedor principal
   container: {
     flex: 1,
@@ -17,6 +18,7 @@ export const MetricasStyles = StyleSheet.create({
     color: '#F6F1E7', // Blanco tiza / Crema
     paddingHorizontal: 20,
     marginBottom: 4,
+    paddingLeft:10,
   },
   subtitle: {
     fontSize: 14,
@@ -62,5 +64,39 @@ export const MetricasStyles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#090909', // Negro fuerte para el número
-  }
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  logo: {
+    width: 40,
+    height: 50,
+    resizeMode: 'contain',
+    marginRight: 10,
+    marginLeft: 20,
+  },
+  headerTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#F6F1E7',
+  },
+  // --- Botón VOLVER DENTRO ---
+  
+    backButton: {
+        backgroundColor: '#090909',
+        paddingVertical: 14,
+        borderRadius: 8,
+        alignItems: 'center',
+        marginTop: 25,
+    },
+    backButtonText: {
+        color: '#FFFFFF',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    infoContainer: {
+        padding: 15, // Margen interno para que los textos no toquen el borde de la tarjeta blanca
+    },
 });

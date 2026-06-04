@@ -43,7 +43,7 @@ export const styles = StyleSheet.create({
     color: '#090909',
   },
   listContainer: {
-    paddingBottom: 100, // Espacio para el botón fijo y navbar
+    paddingBottom: 160, // Espacio extra para el botón fijo y navbar
   },
   // --- Estilos de la Tarjeta ---
   cardContainer: {
@@ -90,7 +90,7 @@ export const styles = StyleSheet.create({
   // --- Botón Flotante/Fijo ---
   createButtonContainer: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 90,
     width: '100%',
     alignSelf: 'center',
   },

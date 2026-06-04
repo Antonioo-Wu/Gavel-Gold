@@ -73,4 +73,14 @@ export const modalStyles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
   },
+  logo: {
+    width: 96,
+    height: 96,
+    marginBottom: 16,
+    resizeMode: 'contain',
+  },
+   containerCenter: {
+    padding: 10,
+    alignItems: 'center',
+  },
 });

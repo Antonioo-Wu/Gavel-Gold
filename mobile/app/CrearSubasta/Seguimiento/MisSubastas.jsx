@@ -5,6 +5,7 @@ import ItemCard from '../../../components/ItemCard';
 import { styles } from '../../../styles/misSubastas/MisSubastasStyles';
 import BottomNav from '../../../components/BottomNav';
 import { AntDesign } from '@expo/vector-icons';
+import CreacionBienPaso1 from '../Creacion/CreacionBienPaso1';
 // import { API_URL } from '../../config/api';
 
 export default function MisSubastas() {
@@ -79,7 +80,7 @@ export default function MisSubastas() {
 
       {/* Botón Flotante para crear */}
       <View style={styles.createButtonContainer}>
-        <TouchableOpacity style={styles.createButton} onPress={() => navigation.navigate('CrearBien')}>
+        <TouchableOpacity style={styles.createButton} onPress={() => navigation.navigate('CreacionBienPaso1')}>
           <Text style={styles.createButtonText}>Crear Subasta</Text>
         </TouchableOpacity>
       </View>

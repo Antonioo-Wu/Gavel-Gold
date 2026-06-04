@@ -167,5 +167,21 @@ export const PerfilStyles = StyleSheet.create({
     color: '#FFFFFF', 
     fontSize: 15,
     fontWeight: 'bold',
-  }
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  logo: {
+    width: 40,
+    height: 50,
+    resizeMode: 'contain',
+    marginRight: 10,
+  },
+  headerTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#F6F1E7',
+  },
 });

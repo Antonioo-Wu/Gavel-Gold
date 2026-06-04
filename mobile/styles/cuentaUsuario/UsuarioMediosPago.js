@@ -1,71 +1,135 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 
 export const UsuarioMediosPagoStyles = StyleSheet.create({
-    paymentCard: {
-        backgroundColor: '#f9f9f9',
-        borderWidth: 1,
-        borderColor: '#e0e0e0',
-        borderRadius: 8,
-        padding: 16,
-        marginBottom: 12,
+    backgroundImage: {
+        flex: 1,
+        resizeMode: 'cover',
     },
-    paymentHeader: {
+    mainContainer: {
+        flex: 1,
+        backgroundColor: 'transparent',
+        paddingTop: Platform.OS === 'ios' ? 50 : 30,
+    },
+    // --- Estilos Header FUERA de la tarjeta ---
+    headerOutside: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 20,
+        paddingHorizontal: 20,
+    },
+    logoHeader: {
+        width: 30,
+        height: 38,
+        resizeMode: 'contain',
+        marginRight: 10,
+    },
+    titleHeader: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#FFFFFF', // Blanco nítido sobre el oro
+    },
+    
+    // --- Wrapper del Scroll (Evita que la tarjeta quede estirada al fondo) ---
+    scrollWrapper: {
+        paddingHorizontal: 20,
+        paddingBottom: 40,
+    },
+    infoContainer: {
+        padding: 15,
+    },
+    listContainer: {
+        paddingBottom: 10,
+    },
+    
+    // --- Filas limpias de Métodos de Pago ---
+    paymentItem: {
+        paddingVertical: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: '#F0F0F0', // Separador sutil gris claro
+    },
+    paymentItemLast: {
+        paddingVertical: 15,
+    },
+    paymentHeaderRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: 8,
     },
-    paymentType: {
-        fontSize: 16,
+    paymentTypeTitle: {
+        fontSize: 15,
         fontWeight: 'bold',
-        color: '#333',
+        color: '#555555', // Gris oscuro elegante
     },
+    
+    // --- Badges Adaptados ---
     badge: {
-        paddingHorizontal: 8,
+        paddingHorizontal: 10,
         paddingVertical: 4,
-        borderRadius: 4,
+        borderRadius: 12,
     },
     badgeValidated: {
-        backgroundColor: '#e8f5e9',
+        backgroundColor: '#E8F5E9', // Fondo verde sutil
     },
     badgePending: {
-        backgroundColor: '#fff3e0',
+        backgroundColor: '#FFF3E0', // Fondo naranja sutil
     },
     badgeTextValidated: {
-        color: '#2e7d32',
-        fontSize: 12,
+        color: '#27AE60',
+        fontSize: 11,
         fontWeight: 'bold',
     },
     badgeTextPending: {
-        color: '#f57c00',
-        fontSize: 12,
+        color: '#E67E22',
+        fontSize: 11,
         fontWeight: 'bold',
+    },
+    
+    // --- Textos de Información ---
+    detailsContent: {
+        paddingLeft: 2,
     },
     paymentDetailText: {
         fontSize: 14,
-        color: '#666',
+        color: '#1A1A1A', // Negro nítido sobre la tarjeta blanca
         marginBottom: 4,
     },
-    emptyContainer: {
-        padding: 24,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
     emptyText: {
-        color: '#888',
-        fontSize: 16,
+        color: '#555555',
         textAlign: 'center',
-        marginBottom: 16,
+        marginVertical: 20,
+        fontSize: 15,
     },
+    loadingIndicator: {
+        marginTop: 30,
+        marginBottom: 30,
+    },
+    
+    // --- Botones de Acción Internos ---
     addButton: {
-        backgroundColor: '#D4AF37',
+        backgroundColor: '#090909', // Negro sólido
         paddingVertical: 14,
         borderRadius: 8,
         alignItems: 'center',
-        marginVertical: 16,
+        marginTop: 25,
+        marginBottom: 12,
     },
     addButtonText: {
-        color: 'white',
+        color: '#FFFFFF',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    backButton: {
+        backgroundColor: 'transparent',
+        paddingVertical: 14,
+        borderRadius: 8,
+        borderWidth: 1.5,
+        borderColor: '#090909', // Contorno negro
+        alignItems: 'center',
+    },
+    backButtonText: {
+        color: '#090909',
         fontSize: 16,
         fontWeight: 'bold',
     }
