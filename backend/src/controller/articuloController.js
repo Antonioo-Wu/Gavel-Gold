@@ -21,10 +21,10 @@ export const proponerArticulo = async (req, res) => {
     const { nombre, descripcion, declaracionPropiedad } = req.body;
     const files = req.files;
 
-    if (!nombre || !files || files.length < 6 || !declaracionPropiedad) {
+    if (!nombre || !files || files.length < 1 || !declaracionPropiedad) {
       return res.status(400).json({ 
         codigo: "CAMPOS_REQUERIDOS", 
-        mensaje: "Nombre, 6+ fotos y declaración requeridos" 
+        mensaje: "Nombre, al menos 1 foto y declaración requeridos" 
       });
     }
 

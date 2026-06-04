@@ -1,12 +1,19 @@
 import { v2 as cloudinary } from "cloudinary";
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+let configured = false;
+
+function ensureConfig() {
+  if (configured) return;
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+  configured = true;
+}
 
 export const uploadImage = async (filePath, options = {}) => {
+  ensureConfig();
   const result = await cloudinary.uploader.upload(filePath, {
     folder: "gavel-gold",
     ...options,
@@ -15,6 +22,7 @@ export const uploadImage = async (filePath, options = {}) => {
 };
 
 export const uploadImages = async (files, options = {}) => {
+  ensureConfig();
   const uploads = files.map((file) =>
     cloudinary.uploader.upload(file, {
       folder: "gavel-gold",
@@ -25,10 +33,12 @@ export const uploadImages = async (files, options = {}) => {
 };
 
 export const deleteImage = async (publicId) => {
+  ensureConfig();
   return cloudinary.uploader.destroy(publicId);
 };
 
 export const getPublicIdFromUrl = (url) => {
+  ensureConfig();
   const parts = url.split("/");
   const fileWithExtension = parts[parts.length - 1];
   const publicId = fileWithExtension.split(".")[0];
