@@ -212,7 +212,7 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: '#/components/schemas/CrearArticulo'
       responses:
@@ -527,12 +527,12 @@ paths:
         "200":
           description: Precio actualizado
 
-  /admin/subastas/{id}/comision:
+  /admin/articulos/{id}/comision:
     put:
       tags: [Administracion]
-      summary: Definir reglas de puja y comision de la subasta
+      summary: Definir reglas de puja y comision del articulo
       parameters:
-        - $ref: '#/components/parameters/idSubasta'
+        - $ref: '#/components/parameters/idArticulo'
       requestBody:
         required: true
         content:
@@ -547,7 +547,7 @@ paths:
                 requiereConfirmacion: { type: boolean }
       responses:
         "200":
-          description: Reglas de subasta actualizadas
+          description: Reglas de comision actualizadas
 
   /admin/articulos/{id}/cerrar:
     post:
@@ -695,15 +695,16 @@ components:
 
     CrearArticulo:
       type: object
-      required: [nombre, descripcion, fotos, declaracionPropiedad]
+      description: Se envia como multipart/form-data. El campo `fotos` debe repetirse con cada archivo (minimo 6).
       properties:
         nombre: { type: string }
         descripcion: { type: string }
+        declaracionPropiedad: { type: boolean }
         fotos:
           type: array
+          items: { type: string, format: binary }
           minItems: 6
-          items: { type: string, format: uri }
-        declaracionPropiedad: { type: boolean }
+          description: Archivos de imagen (JPEG, PNG, WebP, GIF). Max 5MB c/u.
 
     Articulo:
       type: object
@@ -719,6 +720,9 @@ components:
         comision: { type: number, nullable: true }
         pujaActual: { type: number }
         pujaMaxima: { type: number, nullable: true }
+        incrementoMinimo: { type: number, nullable: true }
+        porcentajeIncrementoMinimo: { type: number, nullable: true }
+        montoMaximoPuja: { type: number, nullable: true }
         requiereConfirmacion: { type: boolean }
 
     Subasta:
@@ -732,11 +736,6 @@ components:
         estado: { type: string, enum: [proximamente, abierta, cerrada] }
         moneda: { type: string, enum: [ARS, USD] }
         categoriaRequerida: { $ref: '#/components/schemas/CategoriaUsuario' }
-        incrementoMinimo: { type: number }
-        porcentajeIncrementoMinimo: { type: number }
-        montoMaximoPuja: { type: number, nullable: true }
-        requiereConfirmacion: { type: boolean }
-        comisionPorcentaje: { type: number }
 
     CrearSubasta:
       type: object
