@@ -81,7 +81,7 @@ export default function MisSubastas() {
       {/* Botón Flotante para crear */}
       <View style={styles.createButtonContainer}>
         <TouchableOpacity style={styles.createButton} onPress={() => navigation.navigate('CreacionBienPaso1')}>
-          <Text style={styles.createButtonText}>Crear Subasta</Text>
+          <Text style={styles.createButtonText}>Proponer Item</Text>
         </TouchableOpacity>
       </View>
 
