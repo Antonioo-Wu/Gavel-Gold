@@ -70,7 +70,7 @@ export default function Perfil() {
       icon: <Ionicons name="stats-chart-outline" size={PerfilTheme.iconGrid.size} color={PerfilTheme.iconGrid.color} />,
       label: 'Mis métricas',
       bgColor: PerfilTheme.gridColors.misMetricas,
-      onPress: () => { }
+      onPress: () => navigation.navigate('Metricas')
     }
   ]
   
