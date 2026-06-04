@@ -54,7 +54,7 @@ const articuloSchema = new mongoose.Schema(
     fotos: {
       type: [String],
       required: true,
-      minlength: 6,
+      minlength: 1,
     },
 
     declaracionPropiedad: {
@@ -91,6 +91,31 @@ const articuloSchema = new mongoose.Schema(
     disponible: {
       type: Boolean,
       default: true,
+    },
+
+    pujaMaxima: {
+      type: Number,
+      default: null,
+    },
+
+    incrementoMinimo: {
+      type: Number,
+      default: null,
+    },
+
+    porcentajeIncrementoMinimo: {
+      type: Number,
+      default: null,
+    },
+
+    montoMaximoPuja: {
+      type: Number,
+      default: null,
+    },
+
+    requiereConfirmacion: {
+      type: Boolean,
+      default: false,
     },
   },
   {

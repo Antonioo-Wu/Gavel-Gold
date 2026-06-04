@@ -268,7 +268,7 @@ export const definirPrecioArticulo = async (req, res) => {
   }
 };
 
-export const definirComisionSubasta = async (req, res) => {
+export const definirComisionArticulo = async (req, res) => {
   try {
     const { id } = req.params;
     const {
@@ -279,19 +279,19 @@ export const definirComisionSubasta = async (req, res) => {
       requiereConfirmacion,
     } = req.body;
 
-    const subasta = await Subasta.findById(id);
-    if (!subasta) {
-      return res.status(404).json({ codigo: "SUBASTA_NO_ENCONTRADA", mensaje: "Subasta no existe" });
+    const articulo = await Articulo.findById(id);
+    if (!articulo) {
+      return res.status(404).json({ codigo: "ARTICULO_NO_ENCONTRADO", mensaje: "Artículo no existe" });
     }
 
-    if (comisionPorcentaje != null) subasta.comisionPorcentaje = comisionPorcentaje;
-    if (incrementoMinimo != null) subasta.incrementoMinimo = incrementoMinimo;
-    if (porcentajeIncrementoMinimo != null) subasta.porcentajeIncrementoMinimo = porcentajeIncrementoMinimo;
-    if (montoMaximoPuja != null) subasta.montoMaximoPuja = montoMaximoPuja;
-    if (requiereConfirmacion != null) subasta.requiereConfirmacion = requiereConfirmacion;
+    if (comisionPorcentaje != null) articulo.comision = comisionPorcentaje;
+    if (incrementoMinimo != null) articulo.incrementoMinimo = incrementoMinimo;
+    if (porcentajeIncrementoMinimo != null) articulo.porcentajeIncrementoMinimo = porcentajeIncrementoMinimo;
+    if (montoMaximoPuja != null) articulo.montoMaximoPuja = montoMaximoPuja;
+    if (requiereConfirmacion != null) articulo.requiereConfirmacion = requiereConfirmacion;
 
-    await subasta.save();
-    res.json({ mensaje: "Reglas de subasta actualizadas", subasta });
+    await articulo.save();
+    res.json({ mensaje: "Reglas de comisión actualizadas", articulo });
   } catch (error) {
     res.status(500).json({ codigo: "ERROR_SERVIDOR", mensaje: error.message });
   }
