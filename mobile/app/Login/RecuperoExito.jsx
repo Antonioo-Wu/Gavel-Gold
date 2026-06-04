@@ -7,7 +7,7 @@ export default function RecuperoExito() {
 
   return (
     <FeedbackScreen
-      text={"Listo\nRecibirá un mail\ncon los pasos a\nseguir"}
+      text={"Listo Recibirá un mail con los pasos a seguir"}
       onPress={() => navigation.navigate('Login')}
     />
   );

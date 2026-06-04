@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import ItemCard from '../../../components/ItemCard';
 import { styles } from '../../../styles/misSubastas/MisSubastasStyles';
 import BottomNav from '../../../components/BottomNav';
+import { AntDesign } from '@expo/vector-icons';
 // import { API_URL } from '../../config/api';
 
 export default function MisSubastas() {
@@ -53,7 +54,7 @@ export default function MisSubastas() {
 
       {/* Buscador */}
       <View style={styles.searchContainer}>
-        <Text style={styles.searchIcon}>🔍</Text>
+        <Text style={styles.searchIcon}><AntDesign name="search" size={20} /></Text>
         <TextInput 
           style={styles.searchInput} 
           placeholder="Búsqueda" 

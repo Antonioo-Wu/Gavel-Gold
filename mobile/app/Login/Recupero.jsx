@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ImageBackground, Alert } from 'react-native';
+import { View, Text,Image, ImageBackground, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../components/FormCard';
 import CustomInput from '../../components/CustomInput';
@@ -23,8 +23,10 @@ export default function Recupero() {
 
   return (
     <ImageBackground source={require('../../assets/fondo_dorado.jpg')} style={styles.background}>
-      <View style={styles.container}>
+      <View style={styles.containerCenter}>
+        <Image source={require('../../assets/logos/logotipo.png')} style={styles.logo} />
         <Text style={styles.title}>Recupere su contraseña</Text>
+        
         <FormCard>
           <CustomInput 
             label="Email" 

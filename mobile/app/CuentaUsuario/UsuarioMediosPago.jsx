@@ -2,9 +2,11 @@ import React, { useState, useCallback } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { AntDesign } from '@expo/vector-icons';
 import { UsuarioMediosPagoStyles as styles } from '../../styles/cuentaUsuario/UsuarioMediosPago.js';
 import { API_URL } from '../../config/api.js';
+import BottomNav from '../../components/BottomNav.jsx';
+
 
 export default function UsuarioMediosPago() {
   const navigation = useNavigation();
@@ -95,9 +97,9 @@ export default function UsuarioMediosPago() {
 
   const getTipoLabel = (tipo) => {
     switch(tipo) {
-      case 'TARJETA': return '💳 Tarjeta de Crédito';
-      case 'CUENTA_BANCARIA': return '🏦 Cuenta Bancaria';
-      case 'CHEQUE': return '📄 Cheque';
+      case 'TARJETA': return 'Tarjeta de Crédito';
+      case 'CUENTA_BANCARIA': return 'Cuenta Bancaria';
+      case 'CHEQUE': return 'Cheque';
       default: return 'Método de pago';
     }
   };
@@ -141,7 +143,10 @@ export default function UsuarioMediosPago() {
             </TouchableOpacity>
           </View>
         )}
+        
       </ScrollView>
+      
     </View>
+    
   );
 }

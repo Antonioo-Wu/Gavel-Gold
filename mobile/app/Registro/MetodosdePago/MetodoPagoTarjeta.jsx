@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../../components/FormCard';
 import CustomInput from '../../../components/CustomInput';
@@ -71,10 +71,12 @@ export default function MetodoPagoTarjeta() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Método de Pago - Tarjeta</Text>
-      <FormCard>
-        <Text style={styles.header}>Ingrese sus datos</Text>
-        <CustomInput label="Número de tarjeta" placeholder="0000 0000 0000" keyboardType="numeric" value={numeroTarjeta} onChangeText={setNumeroTarjeta} />
+      <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        <Text style={styles.title}>Método de Pago</Text>
+        <Text style={styles.type}>Tarjeta de Crédito/Débito</Text>
+        <FormCard>
+          <Text style={styles.header}>Ingrese sus datos</Text>
+          <CustomInput label="Número de tarjeta" placeholder="0000 0000 0000" keyboardType="numeric" value={numeroTarjeta} onChangeText={setNumeroTarjeta} />
 
         <View style={styles.inputRowTarjeta}>
           <View style={styles.inputItem}><CustomInput label="Vencimiento" placeholder="MM" keyboardType="numeric" value={mes} onChangeText={setMes} /></View>
@@ -85,10 +87,11 @@ export default function MetodoPagoTarjeta() {
         <CustomInput label="País" placeholder="Ingrese el país" value={pais} onChangeText={setPais} />
 
         <View style={styles.buttons}>
-          <ActionButton text="Volver" variant="outline" onPress={() => navigation.navigate('SeleccionMetodoPago')} />
-          <ActionButton text={isLoading ? "Guardando..." : "Continuar"} variant="solid" onPress={handleGuardarTarjeta} />
+                  <ActionButton text="Volver" variant="outline" onPress={() => navigation.navigate('SeleccionMetodoPago')} />
+                  <ActionButton text={isLoading ? "Guardando..." : "Continuar"} variant="solid" onPress={() => navigation.navigate('SeleccionMetodoPago')} />
         </View>
       </FormCard>
+      </ScrollView>
     </View>
   );
 }

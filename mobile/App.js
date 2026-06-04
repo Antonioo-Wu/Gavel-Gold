@@ -23,8 +23,11 @@ import MensajeEspera from './app/Registro/MensajeEspera';
 import ValidacionCategoria from './app/Registro/ValidacionCategoria';
 import GenerarPassword from './app/Registro/GenerarPassword';
 import RegistroExito from './app/Registro/RegistroExito';
+
+// Perfil y Cuenta de Usuario
 import Perfil from './app/CuentaUsuario/Perfil';
 import DatosUsuario from './app/CuentaUsuario/DatosUsuario';
+import Metricas from './app/CuentaUsuario/Metricas';
 
 // Método de Pago
 import UsuarioMediosPago from './app/CuentaUsuario/UsuarioMediosPago';
@@ -78,6 +81,8 @@ export default function App() {
         
         <Stack.Screen name="Perfil" component={Perfil} />
         <Stack.Screen name="DatosUsuario" component={DatosUsuario} />
+        <Stack.Screen name="Metricas" component={Metricas} />
+
         <Stack.Screen name="Registro" component={Registro} />
         <Stack.Screen name="MensajeEspera" component={MensajeEspera} />
         <Stack.Screen name="ValidacionCategoria" component={ValidacionCategoria} />
@@ -89,6 +94,7 @@ export default function App() {
         <Stack.Screen name="MetodoPagoTarjeta" component={MetodoPagoTarjeta} />
         <Stack.Screen name="MetodoPagoCuentaBancaria" component={MetodoPagoCuentaBancaria} />
         <Stack.Screen name="MetodoPagoCheque" component={MetodoPagoCheque} />
+       
         
         <Stack.Screen name="TerminosCompra" component={TerminosCompra} />
         <Stack.Screen name="TerminosEnvio" component={TerminosEnvio} />

@@ -71,9 +71,9 @@ export default function Perfil() {
       label: 'Mis métricas',
       bgColor: PerfilTheme.gridColors.misMetricas,
       onPress: () => { }
-    },
-  ];
-
+    }
+  ]
+  
   const infoItems = [
     {
       icon: <Ionicons name="alert-circle-outline" size={PerfilTheme.iconInfo.size} color={PerfilTheme.iconInfo.color} />,

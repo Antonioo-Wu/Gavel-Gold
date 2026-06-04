@@ -11,7 +11,10 @@ export default function SeleccionMetodoPago() {
 
   return (
     <View style={styles.containerDark}>
-      <Text style={styles.title}>Creación de Cuenta</Text>
+      <View style={styles.containerCenter}>
+                    <Image source={require('../../assets/logos/logotipo.png')} style={styles.logo} />
+        </View>
+      <Text style={styles.title}>Seleccionar Método de Pago</Text>
       <FormCard>
         <Text style={styles.headerCentered}>Añadir un método de pago</Text>
 

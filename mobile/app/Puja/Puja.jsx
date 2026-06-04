@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Image, SafeAreaView } from 're
 import { styles } from '../../styles/puja/Puja';
 import PaymentModal from './MetodoPagoModulo';
 import BottomNav from '../../components/BottomNav';
-
+import { AntDesign } from '@expo/vector-icons';
 export default function PujaScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   // Estados de la vista
@@ -12,10 +12,10 @@ export default function PujaScreen() {
   
   // Lista de métodos de pago (futuro fetch al backend)
   const [paymentMethods, setPaymentMethods] = useState([
-    { id: 1, name: 'Visa ****1234', icon: '💳' },
-    { id: 2, name: 'BBVA ****3456', icon: '💲' },
-    { id: 3, name: 'Mastercard ****1531', icon: '💳' },
-    { id: 4, name: 'Galicia ****5611', icon: '💲' },
+    { id: 1, name: 'Visa ****1234', icon: <AntDesign name="creditcard" size={20} /> },
+    { id: 2, name: 'BBVA ****3456', icon: <AntDesign name="bank" size={20} /> },
+    { id: 3, name: 'Mastercard ****1531', icon: <AntDesign name="creditcard" size={20} /> },
+    { id: 4, name: 'Galicia ****5611', icon: <AntDesign name="bank" size={20} /> },
   ]);
 
   // Estado para el método seleccionado por defecto

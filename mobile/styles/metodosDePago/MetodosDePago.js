@@ -14,6 +14,13 @@ export const metodosDePagoStyles = StyleSheet.create({
     fontSize: 24, 
     fontWeight: 'bold' 
   },
+  type: { 
+    color: 'white', 
+    textAlign: 'center', 
+    marginBottom: 24, 
+    fontSize: 18, 
+    fontWeight: 'bold' 
+  },
   header: { 
     color: '#1A1A1A', 
     fontWeight: 'bold', 

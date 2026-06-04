@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../../components/FormCard';
 import CustomInput from '../../../components/CustomInput';
@@ -71,7 +71,9 @@ export default function MetodoPagoCuentaBancaria() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Método de Pago - Cuenta</Text>
+      <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
+            <Text style={styles.title}>Método de Pago</Text>
+            <Text style={styles.type}>Cheque Certificado</Text>
       <FormCard>
         <Text style={styles.header}>Ingrese sus datos</Text>
         <CustomInput label="Titular de la cuenta" placeholder="Nombre y apellido" value={titular} onChangeText={setTitular} />
@@ -81,10 +83,11 @@ export default function MetodoPagoCuentaBancaria() {
         <CustomInput label="Número de cuenta" placeholder="Número de cuenta" value={cuenta} onChangeText={setCuenta} />
 
         <View style={styles.buttons}>
-          <ActionButton text="Volver" variant="outline" onPress={() => navigation.navigate('SeleccionMetodoPago')} />
-          <ActionButton text={isLoading ? "Guardando..." : "Continuar"} variant="solid" onPress={handleGuardarCuenta} />
+                  <ActionButton text="Volver" variant="outline" onPress={() => navigation.navigate('SeleccionMetodoPago')} />
+                  <ActionButton text={isLoading ? "Guardando..." : "Continuar"} variant="solid" onPress={() => navigation.navigate('SeleccionMetodoPago')} />
         </View>
       </FormCard>
+      </ScrollView>
     </View>
   );
 }
