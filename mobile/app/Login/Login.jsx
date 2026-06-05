@@ -61,7 +61,7 @@ export default function Login() {
           <CustomInput label="Email" placeholder="ejemplo@correo.com" value={email} onChangeText={setEmail} />
           <CustomInput label="Password" placeholder="tu contraseña" value={password} onChangeText={setPassword} secureTextEntry />
 
-          <ActionButton text={isLoading ? "Conectando..." : "Ingresar"} variant="solid" onPress={handleLogin} />
+          <ActionButton text={isLoading ? "Conectando..." : "Ingresar"} variant="solid" onPress={handleLogin}  />
 
           <View style={styles.footer}>
             <TouchableOpacity onPress={() => navigation.navigate('Recupero')}>

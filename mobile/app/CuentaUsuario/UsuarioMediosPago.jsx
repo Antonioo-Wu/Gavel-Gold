@@ -162,14 +162,15 @@ export default function UsuarioMediosPago() {
                     <Text style={styles.addButtonText}>Añadir nuevo método</Text>
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-                    <Text style={styles.backButtonText}>Volver</Text>
-                  </TouchableOpacity>
+                  
                 </View>
               )}
 
             </View>
           </FormCard>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+                    <Text style={styles.backButtonText}>Volver</Text>
+          </TouchableOpacity>
         </ScrollView>
 
         <BottomNav />

@@ -51,10 +51,13 @@ import CreacionBienExito from './app/CrearSubasta/Creacion/CreacionBienExito';
 // Seguimiento de Subasta
 import DetallePropuesta from './app/CrearSubasta/Seguimiento/DetallePropuesta';
 import MisSubastas from './app/CrearSubasta/Seguimiento/MisSubastas';
+import DetalleRechazo from './app/CrearSubasta/Seguimiento/DetalleRechazo';
+import DetalleDeposito from './app/CrearSubasta/Seguimiento/DetalleDeposito'
 
 // Puja
 import MensajeExitoPuja from './app/Puja/MensajeExitoPuja';
 import SeguimientoPuja from './app/Puja/SeguimientoPuja';
+import MisPujas from './app/Puja/MisPujas';
 
 // Errores
 import ErrorConexion from './app/Errores/ErrorConexion';
@@ -78,7 +81,7 @@ export default function App() {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Recupero" component={Recupero} />
         <Stack.Screen name="RecuperoExito" component={RecuperoExito} />
-        
+
         <Stack.Screen name="Perfil" component={Perfil} />
         <Stack.Screen name="DatosUsuario" component={DatosUsuario} />
         <Stack.Screen name="Metricas" component={Metricas} />
@@ -87,15 +90,14 @@ export default function App() {
         <Stack.Screen name="MensajeEspera" component={MensajeEspera} />
         <Stack.Screen name="ValidacionCategoria" component={ValidacionCategoria} />
         <Stack.Screen name="GenerarPassword" component={GenerarPassword} />
-        <Stack.Screen name="RegistroExito" component={RegistroExito} />     
+        <Stack.Screen name="RegistroExito" component={RegistroExito} />
 
         <Stack.Screen name="UsuarioMediosPago" component={UsuarioMediosPago} />
         <Stack.Screen name="SeleccionMetodoPago" component={SeleccionMetodoPago} />
         <Stack.Screen name="MetodoPagoTarjeta" component={MetodoPagoTarjeta} />
         <Stack.Screen name="MetodoPagoCuentaBancaria" component={MetodoPagoCuentaBancaria} />
         <Stack.Screen name="MetodoPagoCheque" component={MetodoPagoCheque} />
-       
-        
+
         <Stack.Screen name="TerminosCompra" component={TerminosCompra} />
         <Stack.Screen name="TerminosEnvio" component={TerminosEnvio} />
         <Stack.Screen name="TerminosyCondiciones" component={TerminosyCondiciones} />
@@ -105,10 +107,12 @@ export default function App() {
         <Stack.Screen name="CreacionBienPaso1" component={CreacionBienPaso1} />
         <Stack.Screen name="CreacionBienPaso2" component={CreacionBienPaso2} />
         <Stack.Screen name="CreacionBienExito" component={CreacionBienExito} />
+
         <Stack.Screen name="DetallePropuesta" component={DetallePropuesta} />
         <Stack.Screen name="MisSubastas" component={MisSubastas} />
+        <Stack.Screen name="DetalleRechazo" component={DetalleRechazo} />
+        <Stack.Screen name="DetalleDeposito" component={DetalleDeposito} />
 
-       
         <Stack.Screen name="MensajeExitoPuja" component={MensajeExitoPuja} />
         <Stack.Screen name="SeguimientoPuja" component={SeguimientoPuja} />
 
@@ -122,7 +126,7 @@ export default function App() {
         <Stack.Screen name="LoadingPuja" component={LoadingPuja} />
         <Stack.Screen name="LoadingSubirArticulo" component={LoadingSubirArticulo} />
         <Stack.Screen name="LoadingCredenciales" component={LoadingCredenciales} />
-
+        <Stack.Screen name="MisPujas" component={MisPujas} />
       </Stack.Navigator>
     </NavigationContainer>
   );

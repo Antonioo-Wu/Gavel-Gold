@@ -43,7 +43,8 @@ export const styles = StyleSheet.create({
     color: '#090909',
   },
   listContainer: {
-    paddingBottom: 160, // Espacio extra para el botón fijo y navbar
+    // Reducimos el padding bottom porque los botones ya no flotan
+    paddingBottom: 100, // Espacio suficiente para que el BottomNav no tape los botones
   },
   // --- Estilos de la Tarjeta ---
   cardContainer: {
@@ -87,12 +88,11 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333333',
   },
-  // --- Botón Flotante/Fijo ---
-  createButtonContainer: {
-    position: 'absolute',
-    bottom: 90,
-    width: '100%',
-    alignSelf: 'center',
+  
+  // --- BOTONES AL FINAL DEL SCROLL ---
+  footerButtonsContainer: {
+    marginTop: 10,
+    paddingBottom: 20, // Aire adicional al final
   },
   createButton: {
     backgroundColor: '#F6F1E7',
@@ -100,10 +100,27 @@ export const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 15, // Separación con el botón de Volver
   },
   createButtonText: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#090909',
+  },
+   backButton: {
+    marginTop: 20,
+    backgroundColor: 'transparent', 
+    borderWidth: 1.5,               
+    borderColor: '#F6F1E7',         
+    borderRadius: 20,                
+    paddingVertical: 10,            
+    alignItems: 'center',
+    alignSelf: 'center',       
+    width: '60%',
+  },
+  backButtonText: {
+    color: '#F6F1E7',               
+    fontSize: 16,
+    fontWeight: 'bold',
   }
 });

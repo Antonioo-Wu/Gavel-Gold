@@ -39,7 +39,7 @@ export const UsuarioMediosPagoStyles = StyleSheet.create({
         padding: 15,
     },
     listContainer: {
-        paddingBottom: 10,
+        paddingBottom: 1,
     },
     
     // --- Filas limpias de Métodos de Pago ---
@@ -49,7 +49,7 @@ export const UsuarioMediosPagoStyles = StyleSheet.create({
         borderBottomColor: '#F0F0F0', // Separador sutil gris claro
     },
     paymentItemLast: {
-        paddingVertical: 15,
+        paddingVertical: 10,
     },
     paymentHeaderRow: {
         flexDirection: 'row',
@@ -120,17 +120,21 @@ export const UsuarioMediosPagoStyles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
     },
+    
     backButton: {
-        backgroundColor: 'transparent',
-        paddingVertical: 14,
-        borderRadius: 8,
-        borderWidth: 1.5,
-        borderColor: '#090909', // Contorno negro
-        alignItems: 'center',
-    },
-    backButtonText: {
-        color: '#090909',
-        fontSize: 16,
-        fontWeight: 'bold',
-    }
+    marginTop: 20,
+    backgroundColor: 'transparent', 
+    borderWidth: 1.5,               
+    borderColor: '#F6F1E7',         
+    borderRadius: 20,                
+    paddingVertical: 10,            
+    alignItems: 'center',
+    alignSelf: 'center',           
+    width: '80%',
+  },
+  backButtonText: {
+    color: '#F6F1E7',               // Texto del mismo color que el borde
+    fontSize: 16,
+    fontWeight: 'bold',
+  }
 });

@@ -19,7 +19,7 @@ export default function BottomNav() {
 
       <TouchableOpacity
         style={[styles.navButton, styles.active]}
-        onPress={() => navigation.navigate('ListadeSubastas')}
+        onPress={() => navigation.navigate('MisPujas')}
       >
         <Text style={styles.navIcon}><AntDesign name="shopping" size={20} /></Text>
         <Text style={styles.navLabel}>Subastas</Text>

@@ -81,7 +81,7 @@ export const CreacionBienStyles = StyleSheet.create({
   uploadBox: {
     width: '100%',
     height: 200,
-    backgroundColor: '#EFEFEF',
+    backgroundColor: '#F6F1E7',
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
@@ -115,5 +115,22 @@ export const CreacionBienStyles = StyleSheet.create({
   },
   checkboxItem: {
     marginRight: 10,
-  }
+  },
+  volverButtonWrapper: {
+    width: '100%',
+    outlineColor: '#F6F1E7',
+  },
+  createButton: {
+    backgroundColor: '#F6F1E7',
+    borderRadius: 25,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 15,
+  },
+  createButtonText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#090909',
+  },
 });

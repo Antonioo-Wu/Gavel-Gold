@@ -82,21 +82,25 @@ export const MetricasStyles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#F6F1E7',
   },
-  // --- Botón VOLVER DENTRO ---
-  
-    backButton: {
-        backgroundColor: '#090909',
-        paddingVertical: 14,
-        borderRadius: 8,
-        alignItems: 'center',
-        marginTop: 25,
-    },
-    backButtonText: {
-        color: '#FFFFFF',
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
     infoContainer: {
         padding: 15, // Margen interno para que los textos no toquen el borde de la tarjeta blanca
     },
+
+    // Botón de regreso
+    backButton: {
+    marginTop: 20,
+    backgroundColor: 'transparent', 
+    borderWidth: 1.5,               
+    borderColor: '#F6F1E7',         
+    borderRadius: 20,                
+    paddingVertical: 10,            
+    alignItems: 'center',
+    marginHorizontal: '10%',         
+    width: '80%',
+  },
+  backButtonText: {
+    color: '#F6F1E7',               
+    fontSize: 16,
+    fontWeight: 'bold',
+  }
 });

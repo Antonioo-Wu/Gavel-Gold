@@ -28,6 +28,7 @@ export default function Metricas() {
 
   return (
     <ImageBackground source={backgroundSource} style={styles.container}>
+      
       <View style={styles.header}>
         <Image source={require('../../assets/logos/logotipo.png')} style={styles.logo} />
         <Text style={styles.headerTitle}>Mis Subastas</Text>
@@ -62,15 +63,10 @@ export default function Metricas() {
           <Text style={styles.metricValue}>4</Text>
         </View>
 
-        </ScrollView>
-      
-       {/**@IOPATICH AYUDA */}
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-            <View>
-                <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-                    <Text style={styles.backButtonText}>Volver</Text>               
-                </TouchableOpacity>
-            </View>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+                <Text style={styles.backButtonText}>Volver</Text>
+        </TouchableOpacity>
+
         </ScrollView>
             
       <BottomNav />

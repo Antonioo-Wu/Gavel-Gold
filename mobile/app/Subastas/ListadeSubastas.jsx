@@ -1,22 +1,30 @@
-import React, { useState, useEffect } from 'react'; // Agregamos los hooks faltantes
-import { View, Text, TextInput, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import BottomNav from '../../components/BottomNav';
-import AuctionCard from '../../components/AuctionCard';
 import { API_URL } from '../../config/api';
 
-import { listaDeSubastasStyles as styles } from '../../styles/subastas/ListaDeSubastas';
-
-// Importamos los componentes de UI que armamos antes (Ajustar las rutas según tu proyecto)
+// Importamos las vistas de error/carga tal como lo pediste
 import LoadingCatalogo from '../Loadings/LoadingCatalogo'; 
 import GenericErrorScreen from '../../components/GenericErrorScreen'; 
 
+// Importamos los nuevos estilos
+import styles from '../../styles/subastas/ListaDeSubastas';
+
 export default function ListadeSubastas() {
+  const navigation = useNavigation();
+
+  // Estados de carga y error (Tu lógica)
   const [subastas, setSubastas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  
-  // Nuevo estado para manejar errores visuales en lugar de usar Alert.alert
   const [errorType, setErrorType] = useState(null); 
+  
+  // Estado para el filtro (Nueva UI)
+  const [searchQuery, setSearchQuery] = useState('');
 
+  // ==========================================
+  // FETCH AL BACKEND
+  // ==========================================
   useEffect(() => {
     const obtenerSubastas = async () => {
       try {
@@ -26,11 +34,9 @@ export default function ListadeSubastas() {
           const data = await response.json();
           setSubastas(data);
         } else {
-          // Si el servidor responde con error (ej. 404 o 500)
           setErrorType('SERVER_DOWN'); 
         }
       } catch (error) {
-        // Si el fetch falla por completo (ej. sin internet)
         setErrorType('WIFI_ERROR'); 
         console.error("Error al obtener subastas:", error);
       } finally {
@@ -42,10 +48,22 @@ export default function ListadeSubastas() {
   }, []);
 
   // ==========================================
-  // RENDERIZADO CONDICIONAL (La magia de React)
+  // LÓGICA DE FILTRADO
+  // ==========================================
+  const subastasFiltradas = subastas.filter(subasta => {
+    const titulo = subasta.titulo || '';
+    // Si la subasta no tiene 'tipo', buscamos por 'categoriaRequerida' que usabas en tu código
+    const categoria = subasta.categoriaRequerida || subasta.tipo || ''; 
+    
+    return titulo.toLowerCase().includes(searchQuery.toLowerCase()) ||
+           categoria.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
+  // ==========================================
+  // RENDERIZADO CONDICIONAL
   // ==========================================
 
-  // 1. Mostrar la pantalla de carga full-screen que diseñamos
+  // 1. Mostrar la pantalla de carga full-screen
   if (isLoading) {
     return <LoadingCatalogo />;
   }
@@ -71,38 +89,104 @@ export default function ListadeSubastas() {
     );
   }
 
-  // 4. Si todo salió bien, mostrar el catálogo normal
+  // 4. Si todo salió bien, mostrar el nuevo diseño corporativo
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Subastas</Text>
-      
-      <TextInput 
-        style={styles.search} 
-        placeholder="Búsqueda..." 
-        placeholderTextColor="#777" 
-      />
+    <View style={styles.mainWrapper}>
+      <View style={styles.container}>
+        
+        {/* Header Corporativo */}
+        <View style={styles.headerContainer}>
+          <Text style={styles.brandText}>Gavel & Gold</Text>
+          <Text style={styles.screenTitle}>Subastas Activas</Text>
+        </View>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {subastas.length === 0 ? (
-          <Text style={styles.emptyText}>No hay subastas disponibles en este momento.</Text>
-        ) : (
-          subastas.map((subasta) => (
-            <AuctionCard
-              key={subasta._id}
-              id={subasta._id}
-              title={subasta.titulo}
-              category={
-                subasta.categoriaRequerida 
-                  ? subasta.categoriaRequerida.charAt(0).toUpperCase() + subasta.categoriaRequerida.slice(1) 
-                  : 'Común'
-              }
-              estado={subasta.estado}
-              // Ojo acá: en el futuro esto debería venir de subasta.imagenUrl
-              image={require('../../assets/images/totoro_clock.jpg')} 
-            />
-          ))
-        )}
-      </ScrollView>
+        {/* Barra de Búsqueda Interactiva */}
+        <View style={styles.searchContainer}>
+          <Text style={styles.searchIcon}>🔍</Text>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Buscar subasta por nombre o categoría..."
+            placeholderTextColor="#666"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            autoCapitalize="none"
+          />
+          {searchQuery.length > 0 && (
+            <TouchableOpacity onPress={() => setSearchQuery('')}>
+              <Text style={{ color: '#E0BF66', marginRight: 4 }}>✕</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {/* Título de Sección */}
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionIcon}>📅</Text>
+          <Text style={styles.sectionTitle}>Próximas Subastas</Text>
+        </View>
+
+        {/* Listado de Subastas */}
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollListContent}>
+          {subastasFiltradas.length === 0 ? (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>No se encontraron subastas con ese criterio.</Text>
+            </View>
+          ) : (
+            subastasFiltradas.map((subasta) => {
+              // Lógica para mostrar la categoría correctamente (como tenías en tu código)
+              const categoriaDisplay = subasta.categoriaRequerida 
+                ? subasta.categoriaRequerida.charAt(0).toUpperCase() + subasta.categoriaRequerida.slice(1) 
+                : 'Común';
+
+              return (
+                <View key={subasta._id} style={styles.auctionCard}>
+                  
+                  <View style={styles.cardHeader}>
+                    <Text style={styles.auctionTitle}>{subasta.titulo}</Text>
+                    
+                    <View style={styles.statusBadgeRow}>
+                      <View style={[
+                        styles.statusDot, 
+                        { backgroundColor: subasta.estado === 'activa' ? '#4CD964' : '#FFCC00' }
+                      ]} />
+                      <Text style={[
+                        styles.statusText, 
+                        { color: subasta.estado === 'activa' ? '#4CD964' : '#FFCC00' }
+                      ]}>
+                        {subasta.estado === 'activa' ? 'Activa' : 'Próxima'}
+                      </Text>
+                      {/* Mostramos la categoría como texto secundario */}
+                      <Text style={styles.timeRemainingText}>Categoría: {categoriaDisplay}</Text>
+                    </View>
+                  </View>
+
+                  <Text style={styles.catalogPreviewTitle}>Vista previa del catálogo</Text>
+                  
+                  <View style={styles.previewImagesContainer}>
+                    {/* Mock de íconos hasta que el backend envíe fotos de los ítems */}
+                    {['📟', '🎥', '⏰'].map((icon, idx) => (
+                      <View key={idx} style={styles.previewItemBox}>
+                        <Text style={styles.previewIcon}>{icon}</Text>
+                      </View>
+                    ))}
+                  </View>
+
+                  <Text style={styles.itemCountText}>
+                    Contiene {subasta.articulos ? subasta.articulos.length : 'varios'} artículos de colección.
+                  </Text>
+
+                  <TouchableOpacity 
+                    style={styles.viewCatalogButton}
+                    onPress={() => navigation.navigate('SubastaDetalles', { id: subasta._id })}
+                  >
+                    <Text style={styles.viewCatalogButtonText}>Ver Catálogo</Text>
+                  </TouchableOpacity>
+
+                </View>
+              );
+            })
+          )}
+        </ScrollView>
+      </View>
 
       <BottomNav />
     </View>

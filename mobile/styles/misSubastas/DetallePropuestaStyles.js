@@ -1,152 +1,124 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-const { width } = Dimensions.get('window');
-
-export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#1A1814',
-    alignItems: 'center',
-    paddingTop: 40,
+export const detallePropuestaStyles = StyleSheet.create({
+  container: { 
+    flex: 1, 
+    backgroundColor: '#090909' 
   },
-  // --- Header ---
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
-    paddingHorizontal: 20,
+  scrollContent: { 
+    padding: 20, 
+    paddingBottom: 40 
+  },
+  header: { 
     marginBottom: 20,
+    marginTop: 20
   },
-  logo: {
-    width: 30,
-    height: 40,
-    resizeMode: 'contain',
-    marginRight: 10,
+  title: { 
+    color: '#E0BF66', 
+    fontSize: 24, 
+    fontWeight: 'bold' 
   },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#F6F1E7',
-  },
-  // --- Tarjeta Principal Blanca ---
-  card: {
-    backgroundColor: '#FFFFFF',
-    width: width * 0.85,
-    borderRadius: 16,
-    padding: 20,
+  itemInfoContainer: { 
+    flexDirection: 'row', 
+    marginBottom: 20, 
     alignItems: 'center',
-    marginBottom: 20,
+    backgroundColor: '#1E1B16',
+    padding: 12,
+    borderRadius: 10
   },
-  tagContainer: {
-    backgroundColor: '#7B61FF', // Violeta de "Pendiente de Aprobación"
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: 12,
-    alignSelf: 'flex-start',
-    marginBottom: 10,
+  itemImage: { 
+    width: 60, 
+    height: 60, 
+    borderRadius: 8, 
+    marginRight: 15 
   },
-  tagText: {
-    color: '#FFFFFF',
-    fontSize: 10,
-    fontWeight: 'bold',
+  itemName: { 
+    color: '#F6F1E7', 
+    fontSize: 18, 
+    fontWeight: 'bold' 
   },
-  itemInfoContainer: {
-    width: '100%',
-    alignItems: 'flex-start',
-    marginBottom: 15,
-  },
-  itemId: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#090909',
-  },
-  itemName: {
+  itemId: { 
+    color: '#aaa', 
     fontSize: 14,
-    color: '#666666',
+    marginTop: 4
   },
-  // --- Carrusel de Imagen ---
-  imageContainer: {
-    flexDirection: 'row',
+  cardPropuesta: { 
+    backgroundColor: '#1E1B16', 
+    padding: 20, 
+    borderRadius: 10, 
+    marginTop: 20, 
+    borderWidth: 1, 
+    borderColor: '#E0BF66' 
+  },
+  cardTitle: { 
+    color: '#E0BF66', 
+    fontSize: 18, 
+    fontWeight: 'bold', 
+    marginBottom: 20 
+  },
+  row: { 
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    marginBottom: 12 
+  },
+  label: { 
+    color: '#aaa', 
+    fontSize: 15 
+  },
+  value: { 
+    color: '#F6F1E7', 
+    fontSize: 15, 
+    fontWeight: 'bold' 
+  },
+  divider: { 
+    height: 1, 
+    backgroundColor: '#333', 
+    marginVertical: 15 
+  },
+  totalLabel: { 
+    color: '#E0BF66', 
+    fontSize: 18, 
+    fontWeight: 'bold' 
+  },
+  totalValue: { 
+    color: '#E0BF66', 
+    fontSize: 18, 
+    fontWeight: 'bold' 
+  },
+  noteText: { 
+    color: '#888', 
+    fontSize: 12, 
+    marginTop: 15, 
+    fontStyle: 'italic', 
+    textAlign: 'center',
+    lineHeight: 18
+  },
+  botonesContainer: { 
+    marginTop: 25,
+  },
+  btnAceptar: { 
+    backgroundColor: '#E0BF66', 
+    paddingVertical: 15, 
+    borderRadius: 8, 
     alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-    marginBottom: 20,
+    marginBottom: 15
   },
-  arrowButton: {
-    padding: 10,
+  btnAceptarText: { 
+    color: '#090909', 
+    fontSize: 16, 
+    fontWeight: 'bold' 
   },
-  arrowText: {
-    fontSize: 24,
-    color: '#090909',
+  btnRechazar: { 
+    backgroundColor: 'transparent', 
+    paddingVertical: 15, 
+    borderRadius: 8, 
+    alignItems: 'center', 
+    borderWidth: 1, 
+    borderColor: '#d32f2f' 
   },
-  itemImage: {
-    width: 120,
-    height: 120,
-    resizeMode: 'contain',
-  },
-  // --- Caja de Propuesta ---
-  proposalBox: {
-    backgroundColor: '#F6F1E7', // Color crema
-    width: '100%',
-    borderRadius: 12,
-    padding: 15,
-    marginBottom: 20,
-  },
-  proposalTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#090909',
-    marginBottom: 10,
-  },
-  proposalRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 5,
-  },
-  proposalLabel: {
-    fontSize: 14,
-    color: '#333333',
-  },
-  proposalValue: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#090909',
-  },
-  proposalPercentage: {
-    fontSize: 12,
-    color: '#666666',
-    marginLeft: 5,
-  },
-  // --- Botones de Acción ---
-  actionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    height: 45,
-    borderRadius: 8,
-    marginBottom: 10,
-  },
-  btnAccept: {
-    backgroundColor: '#27AE60', // Verde
-  },
-  btnReject: {
-    backgroundColor: '#EB5757', // Rojo
-  },
-  btnBack: {
-    backgroundColor: '#090909', // Negro
-    width: '50%',
-    marginTop: 10,
-  },
-  actionButtonText: {
-    color: '#FFFFFF',
-    fontSize: 13,
-    fontWeight: 'bold',
-    marginLeft: 8,
-  },
-  iconText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: 'bold',
+  btnRechazarText: { 
+    color: '#d32f2f', 
+    fontSize: 16, 
+    fontWeight: 'bold' 
   }
 });

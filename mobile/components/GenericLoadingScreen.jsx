@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, Image, ActivityIndicator, SafeAreaView } from 'react-native';
+import { View, Text, Image, ActivityIndicator } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from '../styles/components/LoadingStyles';
 
 // Ajustá esta ruta según dónde guarden el logo en la rama develop

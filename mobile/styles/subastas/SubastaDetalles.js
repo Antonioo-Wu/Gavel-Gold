@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-export const subastaDetallesStlyes = StyleSheet.create({
+const subastaDetallesStlyes = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1E1B16',
@@ -97,3 +97,6 @@ export const subastaDetallesStlyes = StyleSheet.create({
     marginTop: 10,
   }
 });
+
+export { subastaDetallesStlyes };
+export default subastaDetallesStlyes;

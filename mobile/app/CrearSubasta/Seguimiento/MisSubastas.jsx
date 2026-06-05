@@ -5,23 +5,19 @@ import ItemCard from '../../../components/ItemCard';
 import { styles } from '../../../styles/misSubastas/MisSubastasStyles';
 import BottomNav from '../../../components/BottomNav';
 import { AntDesign } from '@expo/vector-icons';
-import CreacionBienPaso1 from '../Creacion/CreacionBienPaso1';
+import ActionButton from '../../../components/ActionButton';
 // import { API_URL } from '../../config/api';
 
 export default function MisSubastas() {
   const navigation = useNavigation();
   const [articulos, setArticulos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Simulación de la llamada al backend
+  
   useEffect(() => {
     const fetchArticulos = async () => {
       try {
-        // Acá iría el fetch real: const response = await fetch(`${API_URL}/usuarios/me/articulos`);
-        
-        // Mock de datos para probar la UI mientras arman el endpoint
         const mockData = [
-          { id: '1', idCorto: '01', nombre: 'Airfryer COSORI', estado: 'Pendiente de Revisión', imagenUrl: 'https://via.placeholder.com/80' },
+          { id: '1', idCorto: '01', nombre: 'Airfryer COSORI', estado: 'Pendiente de Revisión', imagenUrl: 'https://your-server.com/uploads/airfryer.jpg' },
           { id: '2', idCorto: '02', nombre: 'Cartera City Bag Miu Miu', estado: 'En Subasta', imagenUrl: 'https://via.placeholder.com/80' },
           { id: '3', idCorto: '03', nombre: 'Sony Walkman', estado: 'Pendiente de Aprobación del Usuario', imagenUrl: 'https://via.placeholder.com/80' },
           { id: '4', idCorto: '04', nombre: 'Pokemon tamagotchi', estado: 'Aprobado', imagenUrl: 'https://via.placeholder.com/80' },
@@ -40,7 +36,6 @@ export default function MisSubastas() {
   }, []);
 
   const handlePressItem = (item) => {
-    // Al tocar una tarjeta, enviamos al usuario a la vista de detalle pasando el ID
     navigation.navigate('DetalleArticulo', { itemId: item.id });
   };
 
@@ -75,15 +70,20 @@ export default function MisSubastas() {
           renderItem={({ item }) => (
             <ItemCard item={item} onPress={() => handlePressItem(item)} />
           )}
+          /* ACÁ ESTÁ LA MAGIA: Estos botones scrollean junto con la lista y quedan al final */
+          ListFooterComponent={
+            <View style={styles.footerButtonsContainer}>
+              <TouchableOpacity style={styles.createButton} onPress={() => navigation.navigate('CreacionBienPaso1')}>
+                <Text style={styles.createButtonText}>Proponer Item</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+                              <Text style={styles.backButtonText}>Volver</Text>
+              </TouchableOpacity>
+            </View>
+          }
         />
       )}
-
-      {/* Botón Flotante para crear */}
-      <View style={styles.createButtonContainer}>
-        <TouchableOpacity style={styles.createButton} onPress={() => navigation.navigate('CreacionBienPaso1')}>
-          <Text style={styles.createButtonText}>Proponer Item</Text>
-        </TouchableOpacity>
-      </View>
 
       <BottomNav />
 

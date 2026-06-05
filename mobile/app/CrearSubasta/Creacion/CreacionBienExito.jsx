@@ -10,5 +10,6 @@ export default function CreacionBienExito() {
       text="\n\n¡Has\ningresado\ntu bien a\nsubastar!"
       onPress={() => navigation.navigate('ListadeSubastas')}
     />
+    
   );
 }
