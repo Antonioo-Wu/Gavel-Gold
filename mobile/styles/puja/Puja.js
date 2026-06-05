@@ -19,11 +19,20 @@ export const pujaStyles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#FFFFFF',
-    width: width * 0.85,
+    width: Dimensions.get('window').width * 0.85,
     borderRadius: 16,
     padding: 20,
     alignItems: 'center',
-    marginBottom: 20,
+  },
+  scrollCardWrapper: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 20,
+    paddingBottom: 100,
+  },
+  buttonDisabled: {
+    opacity: 0.7,
   },
 
   // --- HEADER DE LA TARJETA ---

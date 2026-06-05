@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, SafeAreaView, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, SafeAreaView, Alert, ScrollView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AntDesign } from '@expo/vector-icons';
+// 1. IMPORTAMOS LAS LIBRERÍAS CORRECTAS PARA LOS ÍCONOS
+import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { API_URL } from '../../config/api';
 
 import { pujaStyles as styles, PujaTheme } from '../../styles/puja/Puja';
@@ -16,25 +17,22 @@ import PopupPujaExitosa from './PopUps/PopupPujaExitosa';
 export default function PujaScreen() {
   const navigation = useNavigation();
   const route = useRoute();
-  // Recibimos IDs desde la navegación (con fallback para el mockup)
   const { subastaId = '1', articuloId = '1002' } = route.params || {};
 
   const [modalVisible, setModalVisible] = useState(false);
   const [bidAmount, setBidAmount] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Estados para los pop-ups
   const [showLimite, setShowLimite] = useState(false);
   const [showInsuficiente, setShowInsuficiente] = useState(false);
   const [showExito, setShowExito] = useState(false);
 
-  // Mock inicial para la vista
+  // 2. CORREGIMOS EL MOCKUP USANDO FontAwesome PARA LAS TARJETAS Y BANCOS
   const [paymentMethods, setPaymentMethods] = useState([
-    { id: 1, name: 'Visa ****1234', icon: <AntDesign name="creditcard" size={PujaTheme.iconSize} /> }
+    { id: 1, name: 'Visa ****1234', icon: <FontAwesome name="credit-card" size={PujaTheme.iconSize} /> }
   ]);
   const [selectedPayment, setSelectedPayment] = useState(paymentMethods[0]);
 
-  // CARGAR MEDIOS DE PAGO DEL USUARIO
   useEffect(() => {
     const cargarMediosPago = async () => {
       try {
@@ -50,17 +48,24 @@ export default function PujaScreen() {
         if (res.ok) {
           const data = await res.json();
           if (data.length > 0) {
-            // Mapeamos lo que devuelve el back al formato visual del modal
             const mappedMethods = data.map(m => {
               const detalle = typeof m.detalle === 'string' ? JSON.parse(m.detalle) : m.detalle;
               let name = m.tipo;
-              let iconName = 'creditcard';
+              let IconComponent = <FontAwesome name="credit-card" size={PujaTheme.iconSize} />;
 
-              if (m.tipo === 'TARJETA') name = `Tarjeta ****${detalle.numero ? detalle.numero.slice(-4) : 'XXXX'}`;
-              if (m.tipo === 'CUENTA_BANCARIA') { name = `Cuenta ${detalle.banco}`; iconName = 'bank'; }
-              if (m.tipo === 'CHEQUE') { name = `Cheque ${detalle.banco}`; iconName = 'filetext1'; }
+              if (m.tipo === 'TARJETA') {
+                name = `Tarjeta ****${detalle.numero ? detalle.numero.slice(-4) : 'XXXX'}`;
+              }
+              if (m.tipo === 'CUENTA_BANCARIA') { 
+                name = `Cuenta ${detalle.banco}`; 
+                IconComponent = <FontAwesome name="bank" size={PujaTheme.iconSize} />; 
+              }
+              if (m.tipo === 'CHEQUE') { 
+                name = `Cheque ${detalle.banco}`; 
+                IconComponent = <AntDesign name="filetext1" size={PujaTheme.iconSize} />; 
+              }
 
-              return { id: m._id || m.id, name, icon: <AntDesign name={iconName} size={PujaTheme.iconSize} /> };
+              return { id: m._id || m.id, name, icon: IconComponent };
             });
             setPaymentMethods(mappedMethods);
             setSelectedPayment(mappedMethods[0]);
@@ -73,7 +78,6 @@ export default function PujaScreen() {
     cargarMediosPago();
   }, []);
 
-  // LÓGICA DE ENVÍO DE LA PUJA AL BACKEND
   const handleRealizarPuja = async () => {
     if (!bidAmount || isNaN(bidAmount)) {
       Alert.alert("Atención", "Ingrese un monto numérico válido.");
@@ -102,7 +106,6 @@ export default function PujaScreen() {
       if (response.ok) {
         setShowExito(true);
       } else if (response.status === 409 || response.status === 400) {
-        // Analizamos el mensaje del backend para mostrar el popup correcto
         const data = await response.json();
         const msg = data.mensaje ? data.mensaje.toLowerCase() : '';
 
@@ -131,83 +134,82 @@ export default function PujaScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.card}>
+      {/* 3. CAMBIAMOS EL VIEW DE LA TARJETA POR UN SCROLLVIEW */}
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollCardWrapper}>
+        <View style={styles.card}>
 
-        {/* Header (Logo y Títulos) */}
-        <View style={styles.headerContainer}>
-          <Image source={require('../../assets/logos/logotipo.png')} style={styles.logo} />
-          <View style={styles.headerTextContainer}>
-            <View style={styles.tagOro}>
-              <Text style={styles.tagText}>Oro</Text>
+          <View style={styles.headerContainer}>
+            <Image source={require('../../assets/logos/logotipo.png')} style={styles.logo} />
+            <View style={styles.headerTextContainer}>
+              <View style={styles.tagOro}>
+                <Text style={styles.tagText}>Oro</Text>
+              </View>
+              <Text style={styles.itemId}>1002</Text>
+              <Text style={styles.itemName}>Cámara digital</Text>
             </View>
-            <Text style={styles.itemId}>1002</Text>
-            <Text style={styles.itemName}>Cámara digital</Text>
           </View>
-        </View>
 
-        {/* Imagen del Ítem */}
-        <View style={styles.imageContainer}>
-          <TouchableOpacity style={styles.arrowButton}>
-            <Text style={styles.arrowText}>←</Text>
-          </TouchableOpacity>
-          <Image source={require('../../assets/images/camera.jpg')} style={styles.itemImage} />
-          <TouchableOpacity style={styles.arrowButton}>
-            <Text style={styles.arrowText}>→</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.statusRow}>
-          <View style={styles.statusBadge}>
-            <Text style={styles.statusBadgeText}>Estado: Activa</Text>
+          <View style={styles.imageContainer}>
+            <TouchableOpacity style={styles.arrowButton}>
+              <Text style={styles.arrowText}>←</Text>
+            </TouchableOpacity>
+            <Image source={require('../../assets/images/camera.jpg')} style={styles.itemImage} />
+            <TouchableOpacity style={styles.arrowButton}>
+              <Text style={styles.arrowText}>→</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.detailsButton}>
-            <Text style={styles.detailsButtonText}>Ver detalles</Text>
-          </TouchableOpacity>
-        </View>
 
-        {/* Sección de Oferta */}
-        <Text style={styles.offerText}>Oferta Actual: $100.000</Text>
-        <View style={styles.inputContainer}>
-          <Text style={styles.currencySymbol}>$</Text>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Ingrese el monto de su puja"
-            placeholderTextColor={PujaTheme.placeholderColor}
-            keyboardType="numeric"
-            value={bidAmount}
-            onChangeText={setBidAmount}
-            editable={!isLoading}
-          />
-        </View>
-
-        <Text style={styles.limitsText}>
-          Tu puja válida debe ser entre:{'\n'}
-          Mínimo:  $101.000 (1%){'\n'}
-          Máximo: $120.000 (20% sobre base)
-        </Text>
-
-        <Text style={styles.paymentLabel}>Método de Pago</Text>
-        <TouchableOpacity style={styles.paymentSelector} onPress={() => setModalVisible(true)} disabled={isLoading}>
-          <View style={styles.paymentSelectorContent}>
-            <Text style={styles.paymentIcon}>{selectedPayment.icon}</Text>
-            <Text style={styles.paymentText}>{selectedPayment.name}</Text>
+          <View style={styles.statusRow}>
+            <View style={styles.statusBadge}>
+              <Text style={styles.statusBadgeText}>Estado: Activa</Text>
+            </View>
+            <TouchableOpacity style={styles.detailsButton}>
+              <Text style={styles.detailsButtonText}>Ver detalles</Text>
+            </TouchableOpacity>
           </View>
-          <Text style={styles.paymentIcon}>›</Text>
-        </TouchableOpacity>
 
-        <TouchableOpacity
-          style={[styles.submitButton, isLoading && { opacity: 0.7 }]}
-          onPress={handleRealizarPuja}
-          disabled={isLoading}
-        >
-          <Text style={styles.submitButtonText}>{isLoading ? "Procesando..." : "Realizar Puja"}</Text>
-        </TouchableOpacity>
+          <Text style={styles.offerText}>Oferta Actual: $100.000</Text>
+          <View style={styles.inputContainer}>
+            <Text style={styles.currencySymbol}>$</Text>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Ingrese el monto de su puja"
+              placeholderTextColor={PujaTheme.placeholderColor}
+              keyboardType="numeric"
+              value={bidAmount}
+              onChangeText={setBidAmount}
+              editable={!isLoading}
+            />
+          </View>
 
-      </View>
+          <Text style={styles.limitsText}>
+            Tu puja válida debe ser entre:{'\n'}
+            Mínimo:  $101.000 (1%){'\n'}
+            Máximo: $120.000 (20% sobre base)
+          </Text>
+
+          <Text style={styles.paymentLabel}>Método de Pago</Text>
+          <TouchableOpacity style={styles.paymentSelector} onPress={() => setModalVisible(true)} disabled={isLoading}>
+            <View style={styles.paymentSelectorContent}>
+              <Text style={styles.paymentIcon}>{selectedPayment.icon}</Text>
+              <Text style={styles.paymentText}>{selectedPayment.name}</Text>
+            </View>
+            <Text style={styles.paymentIcon}>›</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.submitButton, isLoading ? styles.buttonDisabled : null]}
+            onPress={handleRealizarPuja}
+            disabled={isLoading}
+          >
+            <Text style={styles.submitButtonText}>{isLoading ? "Procesando..." : "Realizar Puja"}</Text>
+          </TouchableOpacity>
+
+        </View>
+      </ScrollView>
 
       <BottomNav />
 
-      {/* POP-UPS Y MODALES */}
       <PaymentModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
@@ -216,22 +218,9 @@ export default function PujaScreen() {
         methodsData={paymentMethods}
       />
 
-      <PopupLimiteExcedido
-        visible={showLimite}
-        onClose={() => setShowLimite(false)}
-        maxAmount="120.000"
-      />
-
-      <PopupMontoInsuficiente
-        visible={showInsuficiente}
-        onClose={() => setShowInsuficiente(false)}
-        minAmount="101.000"
-      />
-
-      <PopupPujaExitosa
-        visible={showExito}
-        onClose={cerrarExitoYRedirigir}
-      />
+      <PopupLimiteExcedido visible={showLimite} onClose={() => setShowLimite(false)} maxAmount="120.000" />
+      <PopupMontoInsuficiente visible={showInsuficiente} onClose={() => setShowInsuficiente(false)} minAmount="101.000" />
+      <PopupPujaExitosa visible={showExito} onClose={cerrarExitoYRedirigir} />
 
     </SafeAreaView>
   );
