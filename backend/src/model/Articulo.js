@@ -28,9 +28,16 @@ const articuloSchema = new mongoose.Schema(
       default: null,
     },
 
+    comision: {
+      type: Number,
+      required: false,
+      min: 0,
+      default: null,
+    },
+
     estado: {
       type: String,
-      enum: ["pendiente", "aprobado", "rechazado", "disponible", "subastado", "retirado"],
+      enum: ["pendiente", "pendiente_aceptacion", "aprobado", "rechazado", "disponible", "subastado", "vendido", "cerrado", "retirado"],
       default: "pendiente",
     },
 
@@ -47,7 +54,7 @@ const articuloSchema = new mongoose.Schema(
     fotos: {
       type: [String],
       required: true,
-      minlength: 6,
+      minlength: 1,
     },
 
     declaracionPropiedad: {
@@ -84,6 +91,31 @@ const articuloSchema = new mongoose.Schema(
     disponible: {
       type: Boolean,
       default: true,
+    },
+
+    pujaMaxima: {
+      type: Number,
+      default: null,
+    },
+
+    incrementoMinimo: {
+      type: Number,
+      default: null,
+    },
+
+    porcentajeIncrementoMinimo: {
+      type: Number,
+      default: null,
+    },
+
+    montoMaximoPuja: {
+      type: Number,
+      default: null,
+    },
+
+    requiereConfirmacion: {
+      type: Boolean,
+      default: false,
     },
   },
   {
