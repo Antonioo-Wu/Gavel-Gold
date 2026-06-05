@@ -6,20 +6,26 @@ export const BottomNavTheme = {
 
 export const bottomNavStyles = StyleSheet.create({
     container: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        padding: 16,
-        backgroundColor: '#FFFFFF',
-        borderTopWidth: 1,
-        borderColor: '#333',
-        position: 'absolute',
-        bottom: 0,
-        width: '100%',
-        paddingTop: 10,
-        paddingBottom: Platform.OS === 'ios' ? 30 : 25,
-        borderBottomLeftRadius: 16,
-        borderBottomRightRadius: 16,
-    },
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    backgroundColor: '#ffffff', // O el color que tengas
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    paddingTop: 15,
+    paddingBottom: Platform.OS === 'ios' ? 30 : 50, 
+    
+    // LA MAGIA: Redondeamos solo las esquinas superiores del Navbar
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    
+    // Opcional: Podés agregarle una sombrita suave para que resalte más sobre el fondo
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -3 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 10, // Sombra para Android
+  },
     navButton: {
         alignItems: 'center',
         padding: 8,

@@ -38,7 +38,7 @@ export const PerfilStyles = StyleSheet.create({
   },
   scrollContentContainer: {
     paddingHorizontal: 20,
-    paddingBottom: 100, 
+    paddingBottom: 130,
   },
   title: {
     fontSize: 26,

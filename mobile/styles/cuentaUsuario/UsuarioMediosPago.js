@@ -40,7 +40,7 @@ export const UsuarioMediosPagoStyles = StyleSheet.create({
     // --- Wrapper del Scroll (Evita que la tarjeta quede estirada al fondo) ---
     scrollWrapper: {
         paddingHorizontal: 20,
-        paddingBottom: 40,
+        paddingBottom: 130,
     },
     infoContainer: {
         padding: 15,

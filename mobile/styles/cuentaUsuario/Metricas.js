@@ -1,10 +1,16 @@
 import { StyleSheet, Platform } from 'react-native';
 
-
 export const backgroundSource = require('../../assets/fondo_dorado.jpg');
 
+export const MetricasTheme = {
+  colors: {
+    primary: '#D4AF37',
+  },
+  indicatorSize: 'large',
+};
+
 export const MetricasStyles = StyleSheet.create({
-  
+
   // Contenedor principal
   container: {
     flex: 1,
@@ -18,7 +24,7 @@ export const MetricasStyles = StyleSheet.create({
     color: '#F6F1E7', // Blanco tiza / Crema
     paddingHorizontal: 20,
     marginBottom: 4,
-    paddingLeft:10,
+    paddingLeft: 10,
   },
   subtitle: {
     fontSize: 14,
@@ -30,7 +36,7 @@ export const MetricasStyles = StyleSheet.create({
   // Contenedor del Scroll (El truco para la grilla de 2 columnas)
   scrollContent: {
     paddingHorizontal: 20,
-    paddingBottom: 100, // Espacio para que el BottomNav no tape las últimas tarjetas
+    paddingBottom: 130,
     flexDirection: 'row', // Pone los elementos en fila
     flexWrap: 'wrap', // Si no entran, los baja a la siguiente línea
     justifyContent: 'space-between',
@@ -50,7 +56,7 @@ export const MetricasStyles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3, 
+    elevation: 3,
   },
   metricTitle: {
     fontSize: 12,
@@ -82,24 +88,24 @@ export const MetricasStyles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#F6F1E7',
   },
-    infoContainer: {
-        padding: 15, // Margen interno para que los textos no toquen el borde de la tarjeta blanca
-    },
+  infoContainer: {
+    padding: 15, // Margen interno para que los textos no toquen el borde de la tarjeta blanca
+  },
 
-    // Botón de regreso
-    backButton: {
+  // Botón de regreso
+  backButton: {
     marginTop: 20,
-    backgroundColor: 'transparent', 
-    borderWidth: 1.5,               
-    borderColor: '#F6F1E7',         
-    borderRadius: 20,                
-    paddingVertical: 10,            
+    backgroundColor: 'transparent',
+    borderWidth: 1.5,
+    borderColor: '#F6F1E7',
+    borderRadius: 20,
+    paddingVertical: 10,
     alignItems: 'center',
-    marginHorizontal: '10%',         
+    marginHorizontal: '10%',
     width: '80%',
   },
   backButtonText: {
-    color: '#F6F1E7',               
+    color: '#F6F1E7',
     fontSize: 16,
     fontWeight: 'bold',
   }

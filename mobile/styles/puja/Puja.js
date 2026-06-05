@@ -29,7 +29,7 @@ export const pujaStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingTop: 20,
-    paddingBottom: 100,
+    paddingBottom: 130,
   },
   buttonDisabled: {
     opacity: 0.7,

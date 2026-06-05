@@ -40,7 +40,7 @@ export const datosUsuarioStyles = StyleSheet.create({
     // --- NUEVO: Wrapper del Scroll ---
     scrollWrapper: {
         paddingHorizontal: 20, // Despega la tarjeta de los bordes laterales
-        paddingBottom: 40,     // Aire antes del BottomNav
+        paddingBottom: 130,
     },
 
     // --- Estilos INFO DENTRO de la tarjeta ---
