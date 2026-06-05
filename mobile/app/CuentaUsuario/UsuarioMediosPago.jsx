@@ -168,7 +168,7 @@ export default function UsuarioMediosPago() {
 
             </View>
           </FormCard>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Perfil')}>
                     <Text style={styles.backButtonText}>Volver</Text>
           </TouchableOpacity>
         </ScrollView>

@@ -53,7 +53,7 @@ export const PerfilStyles = StyleSheet.create({
   },
   categoryText: {
     fontSize: 14,
-    color: '#090909',
+    color: '#ffffff',
     marginRight: 8,
     fontWeight: '600',
   },
@@ -93,7 +93,7 @@ export const PerfilStyles = StyleSheet.create({
   },
   gridLabel: {
     fontSize: 12,
-    color: '#090909', 
+    color: '#ffffff', 
     textAlign: 'center',
     fontWeight: '600',
   },
