@@ -1,9 +1,9 @@
+import crypto from "crypto";
 import Usuario from "../model/Usuario.js";
 import Articulo from "../model/Articulo.js";
 import Subasta from "../model/Subasta.js";
 import Puja from "../model/Puja.js";
 import Multa from "../model/Multa.js";
-import { generateActivationToken } from "../middleware/authMiddleware.js";
 
 // ARTICULOS 
 
@@ -305,11 +305,13 @@ export const aprobarUsuario = async (req, res) => {
     const usuario = await Usuario.findById(id);
     if (!usuario) return res.status(404).json({ codigo: "USUARIO_NO_ENCONTRADO", mensaje: "Usuario no existe" });
 
+    const codigo = crypto.randomInt(100000, 999999).toString();
     usuario.estado = "aprobado";
+    usuario.codigoActivacion = codigo;
+    usuario.codigoActivacionExpira = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
     await usuario.save();
 
-    const activationToken = generateActivationToken(usuario);
-    res.json({ mensaje: "Usuario aprobado", usuario, activationToken });
+    res.json({ mensaje: "Usuario aprobado", usuario, codigoActivacion: codigo });
   } catch (error) {
     res.status(500).json({ codigo: "ERROR_SERVIDOR", mensaje: error.message });
   }

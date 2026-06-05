@@ -57,21 +57,3 @@ export const generateToken = (usuario) => {
     { expiresIn: "24h" }
   );
 };
-
-export const generateActivationToken = (usuario) => {
-  return jwt.sign(
-    { id: usuario._id, type: "activation" },
-    SECRET_KEY,
-    { expiresIn: "7d" }
-  );
-};
-
-export const generatePasswordResetToken = (usuario) => {
-  return jwt.sign(
-    { id: usuario._id, type: "password_reset" },
-    SECRET_KEY,
-    { expiresIn: "1h" }
-  );
-};
-
-export const getSecretKey = () => SECRET_KEY;
