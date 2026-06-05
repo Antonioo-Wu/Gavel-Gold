@@ -2,7 +2,8 @@ import React, { useState, useCallback } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, Alert, Image, ImageBackground } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { UsuarioMediosPagoStyles as styles } from '../../styles/cuentaUsuario/UsuarioMediosPago.js';
+// Importamos el theme
+import { UsuarioMediosPagoStyles as styles, UsuarioMediosPagoTheme } from '../../styles/cuentaUsuario/UsuarioMediosPago.js';
 import { API_URL } from '../../config/api.js';
 
 import FormCard from '../../components/FormCard.jsx';
@@ -12,7 +13,6 @@ export default function UsuarioMediosPago() {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(true);
 
-  // Datos de prueba (mock) que se muestran mientras se conecta al servidor
   const mockData = [
     {
       _id: 'mock_1',
@@ -40,7 +40,7 @@ export default function UsuarioMediosPago() {
     try {
       const token = await AsyncStorage.getItem('userToken');
       const userDataString = await AsyncStorage.getItem('userData');
-      
+
       if (!token || !userDataString) return;
 
       const usuario = JSON.parse(userDataString);
@@ -65,10 +65,11 @@ export default function UsuarioMediosPago() {
     }
   };
 
-  const renderDetalles = (tipo, detalleString) => {
+  const renderDetalles = (tipo, detalleData) => {
     try {
-      const detalle = JSON.parse(detalleString);
-      
+      // PREVENCIÓN DE CRASH: Si el backend manda String lo parseamos, si manda Objeto lo usamos directo.
+      const detalle = typeof detalleData === 'string' ? JSON.parse(detalleData) : detalleData;
+
       if (tipo === 'TARJETA') {
         const ultimosDigitos = detalle.numero ? detalle.numero.slice(-4) : 'XXXX';
         return (
@@ -77,8 +78,8 @@ export default function UsuarioMediosPago() {
             <Text style={styles.paymentDetailText}>Vencimiento: {detalle.vencimiento}</Text>
           </View>
         );
-      } 
-      
+      }
+
       if (tipo === 'CUENTA_BANCARIA') {
         return (
           <View style={styles.detailsContent}>
@@ -99,12 +100,13 @@ export default function UsuarioMediosPago() {
         );
       }
     } catch (error) {
-      return <Text style={styles.paymentDetailText}>{detalleString}</Text>;
+      // Si falla, mostramos el dato crudo
+      return <Text style={styles.paymentDetailText}>{String(detalleData)}</Text>;
     }
   };
 
   const getTipoLabel = (tipo) => {
-    switch(tipo) {
+    switch (tipo) {
       case 'TARJETA': return 'Tarjeta de Crédito';
       case 'CUENTA_BANCARIA': return 'Cuenta Bancaria';
       case 'CHEQUE': return 'Cheque';
@@ -115,20 +117,22 @@ export default function UsuarioMediosPago() {
   return (
     <ImageBackground source={require('../../assets/fondo_dorado.jpg')} style={styles.backgroundImage}>
       <View style={styles.mainContainer}>
-        
-        {/* 1. TÍTULO POR FUERA */}
+
         <View style={styles.headerOutside}>
           <Image source={require('../../assets/logos/logotipo.png')} style={styles.logoHeader} />
           <Text style={styles.titleHeader}>Métodos de Pago</Text>
         </View>
 
-        {/* 2. EL SCROLL ABRAZA A LA TARJETA BLANCA */}
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollWrapper}>
           <FormCard>
             <View style={styles.infoContainer}>
-              
+
               {isLoading ? (
-                <ActivityIndicator size="large" color="#D4AF37" style={styles.loadingIndicator} />
+                <ActivityIndicator
+                  size={UsuarioMediosPagoTheme.indicatorSize}
+                  color={UsuarioMediosPagoTheme.colors.primary}
+                  style={styles.loadingIndicator}
+                />
               ) : (
                 <View style={styles.listContainer}>
                   {mediosPago.length === 0 ? (
@@ -137,9 +141,8 @@ export default function UsuarioMediosPago() {
                     mediosPago.map((metodo, index) => {
                       const isLast = index === mediosPago.length - 1;
                       return (
-                        <View key={metodo._id} style={isLast ? styles.paymentItemLast : styles.paymentItem}>
-                          
-                          {/* Fila superior del método: Tipo y Estado */}
+                        <View key={metodo._id || index} style={isLast ? styles.paymentItemLast : styles.paymentItem}>
+
                           <View style={styles.paymentHeaderRow}>
                             <Text style={styles.paymentTypeTitle}>{getTipoLabel(metodo.tipo)}</Text>
                             <View style={[styles.badge, metodo.validado ? styles.badgeValidated : styles.badgePending]}>
@@ -148,8 +151,7 @@ export default function UsuarioMediosPago() {
                               </Text>
                             </View>
                           </View>
-                          
-                          {/* Datos descriptivos abajo */}
+
                           {renderDetalles(metodo.tipo, metodo.detalle)}
 
                         </View>
@@ -157,19 +159,17 @@ export default function UsuarioMediosPago() {
                     })
                   )}
 
-                  {/* 3. BOTONES INTEGRADOS ADENTRO */}
                   <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('SeleccionMetodoPago', { origen: 'UsuarioMediosPago' })}>
                     <Text style={styles.addButtonText}>Añadir nuevo método</Text>
                   </TouchableOpacity>
 
-                  
                 </View>
               )}
 
             </View>
           </FormCard>
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Perfil')}>
-                    <Text style={styles.backButtonText}>Volver</Text>
+            <Text style={styles.backButtonText}>Volver</Text>
           </TouchableOpacity>
         </ScrollView>
 

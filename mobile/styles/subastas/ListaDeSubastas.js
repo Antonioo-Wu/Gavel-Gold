@@ -1,5 +1,13 @@
 import { StyleSheet } from 'react-native';
 
+export const ListaDeSubastasTheme = {
+  colors: {
+    clearSearch: '#E0BF66',
+    activeDot: '#4CD964',
+    upcomingDot: '#FFCC00',
+  }
+};
+
 export const listaSubastasStyles = StyleSheet.create({
   mainWrapper: {
     flex: 1,
@@ -45,11 +53,33 @@ export const listaSubastasStyles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 6,
   },
-  sectionIcon: { marginRight: 8 },
-  sectionTitle: { color: '#fff', fontSize: 18, fontWeight: '700' },
-  scrollListContent: { paddingBottom: 100 },
-  emptyContainer: { padding: 20 },
-  emptyText: { color: '#666', textAlign: 'center' },
+  sectionIcon:
+  {
+    marginRight: 8
+
+  },
+  clearSearchIcon: {
+    marginRight: 4
+  },
+  sectionTitle: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '700'
+
+  },
+  scrollListContent: {
+    paddingBottom: 100
+
+  },
+  emptyContainer: {
+    padding: 20
+
+  },
+  emptyText: {
+    color: '#666',
+    textAlign: 'center'
+
+  },
   auctionCard: {
     backgroundColor: '#090909',
     borderRadius: 12,

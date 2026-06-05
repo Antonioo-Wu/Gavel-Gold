@@ -1,5 +1,13 @@
 import { StyleSheet } from 'react-native';
 
+export const CreacionBienTheme = {
+  colors: {
+    primary: '#D4AF37',
+    transparent: undefined,
+  },
+  indicatorSize: 'large',
+};
+
 export const CreacionBienStyles = StyleSheet.create({
   container: {
     flex: 1,

@@ -1,5 +1,12 @@
 import { StyleSheet, Platform } from 'react-native';
 
+export const DatosUsuarioTheme = {
+  colors: {
+    primary: '#D4AF37',
+  },
+  indicatorSize: 'large',
+};
+
 export const datosUsuarioStyles = StyleSheet.create({
     backgroundImage: {
         flex: 1,

@@ -8,7 +8,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Checkbox from 'expo-checkbox';
 import { API_URL } from '../../../config/api.js';
 
-import { CreacionBienStyles as styles } from '../../../styles/crearSubasta/CreacionBien.js';
+// Importamos los estilos y también el Theme para las propiedades visuales
+import { CreacionBienStyles as styles, CreacionBienTheme } from '../../../styles/crearSubasta/CreacionBien.js';
 
 export default function CreacionBienPaso2() {
   const navigation = useNavigation();
@@ -39,21 +40,33 @@ export default function CreacionBienPaso2() {
 
       const usuario = JSON.parse(userDataString);
 
-      const payload = {
-        nombre: articuloData.nombre,
-        descripcion: articuloData.descripcion,
-        // Como no se implementó la cámara aún, mandamos un array de strings (mock) para cumplir con la validación de Mongoose
-        fotos: ["https://foto-mockeada-1.jpg", "https://foto-mockeada-2.jpg"],
-        declaracionPropiedad: agreeToTerms
-      };
+      const formData = new FormData();
+      formData.append('nombre', articuloData.nombre);
+
+      const descripcionConPrecio = `${articuloData.descripcion}\n(Precio sugerido por usuario: ${articuloData.precioBase} ${articuloData.moneda})`;
+      formData.append('descripcion', descripcionConPrecio);
+
+      formData.append('declaracionPropiedad', String(agreeToTerms));
+
+      const mockPhotos = [
+        { uri: 'file://mock-path-1.jpg', name: 'foto1.jpg', type: 'image/jpeg' },
+        { uri: 'file://mock-path-2.jpg', name: 'foto2.jpg', type: 'image/jpeg' },
+        { uri: 'file://mock-path-3.jpg', name: 'foto3.jpg', type: 'image/jpeg' },
+        { uri: 'file://mock-path-4.jpg', name: 'foto4.jpg', type: 'image/jpeg' },
+        { uri: 'file://mock-path-5.jpg', name: 'foto5.jpg', type: 'image/jpeg' },
+        { uri: 'file://mock-path-6.jpg', name: 'foto6.jpg', type: 'image/jpeg' }
+      ];
+
+      mockPhotos.forEach(foto => {
+        formData.append('fotos', foto);
+      });
 
       const response = await fetch(`${API_URL}/usuarios/${usuario.id}/articulos`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(payload)
+        body: formData
       });
 
       const data = await response.json();
@@ -71,6 +84,7 @@ export default function CreacionBienPaso2() {
       setIsLoading(false);
     }
   };
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
@@ -85,7 +99,10 @@ export default function CreacionBienPaso2() {
 
           <View style={styles.checkboxContainer}>
             <Checkbox
-              style={styles.checkboxItem} value={agreeToTerms} onValueChange={setAgreeToTerms} color={agreeToTerms ? '#D4AF37' : undefined}
+              style={styles.checkboxItem}
+              value={agreeToTerms}
+              onValueChange={setAgreeToTerms}
+              color={agreeToTerms ? CreacionBienTheme.colors.primary : CreacionBienTheme.colors.transparent}
             />
             <Text style={styles.checkboxLabel}>Declaro que soy el propietario del bien a subastar.</Text>
             <Text style={styles.checkboxLabel}>Declaro el origen lícito del bien.</Text>
@@ -97,11 +114,15 @@ export default function CreacionBienPaso2() {
           </TouchableOpacity>
 
           {isLoading ? (
-             <ActivityIndicator size="large" color="#D4AF37" style={styles.loadingIndicator} />
+            <ActivityIndicator
+              size={CreacionBienTheme.indicatorSize}
+              color={CreacionBienTheme.colors.primary}
+              style={styles.loadingIndicator}
+            />
           ) : (
-             <ActionButton
-               text="¡Subastar!" variant="solid" onPress={handleSubastar}
-             />
+            <ActionButton
+              text="¡Subastar!" variant="solid" onPress={handleSubastar}
+            />
           )}
         </FormCard>
       </ScrollView>

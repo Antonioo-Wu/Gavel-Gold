@@ -1,12 +1,20 @@
 import { StyleSheet, Platform } from 'react-native';
 
-export const styles = StyleSheet.create({
+// 1. Extraemos los valores visuales de los íconos para el JSX
+export const MisPujasTheme = {
+  iconSize: 20,
+  iconColor: '#666666',
+  textColor: '#090909',
+  placeholderColor: '#666666',
+};
+
+export const misPujasStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1A1814', // Fondo oscuro Gavel & Gold
     paddingTop: Platform.OS === 'ios' ? 60 : 40,
   },
-  
+
   // --- Header ---
   header: {
     flexDirection: 'row',
@@ -137,7 +145,7 @@ export const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: '#EAEAEA', // Color de fondo por si tarda en cargar la imagen
   },
-  
+
   // --- Estados Vacíos ---
   emptyText: {
     color: '#888888',

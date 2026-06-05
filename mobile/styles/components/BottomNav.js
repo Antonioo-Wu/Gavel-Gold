@@ -1,5 +1,8 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 
+export const BottomNavTheme = {
+    iconSize: 20,
+};
 
 export const bottomNavStyles = StyleSheet.create({
     container: {
@@ -11,8 +14,9 @@ export const bottomNavStyles = StyleSheet.create({
         borderColor: '#333',
         position: 'absolute',
         bottom: 0,
-        left: 0,
-        right: 0,
+        width: '100%',
+        paddingTop: 10,
+        paddingBottom: Platform.OS === 'ios' ? 30 : 25,
         borderBottomLeftRadius: 16,
         borderBottomRightRadius: 16,
     },

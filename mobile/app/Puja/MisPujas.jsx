@@ -1,87 +1,107 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { AntDesign, Feather } from '@expo/vector-icons';
-import BottomNav from '../../components/BottomNav'; // Ajustá la ruta según tu proyecto
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import BottomNav from '../../components/BottomNav';
+import { API_URL } from '../../config/api';
 
-import { styles } from '../../styles/../styles/puja/MisPujas'; // Ajustá la ruta
+// Asumimos que creaste un Theme en tus estilos para los iconos
+import { misPujasStyles as styles, MisPujasTheme } from '../../styles/puja/MisPujas';
 
 export default function MisPujas() {
   const navigation = useNavigation();
   const [activeTab, setActiveTab] = useState('enCurso');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Mock de datos basado en tu diseño (subastas donde el usuario está pujando)
-  const mockSubastasEnCurso = [
+  // Estados inicializados con tus mockups
+  const [subastasEnCurso, setSubastasEnCurso] = useState([
     {
-      id: '1',
-      titulo: 'Subasta 1',
-      estado: 'En Curso',
-      cantidadItems: 10,
-      fechaFinalizacion: '13/05/2026 - 15:30',
-      imagenUrl: 'https://via.placeholder.com/100', // Reemplazar con imagen real
+      id: '1', titulo: 'Subasta 1', estado: 'En Curso', cantidadItems: 10,
+      fechaFinalizacion: '13/05/2026 - 15:30', imagenUrl: 'https://via.placeholder.com/100',
     },
     {
-      id: '2',
-      titulo: 'Subasta 2',
-      estado: 'En Curso',
-      cantidadItems: 5,
-      fechaFinalizacion: '14/05/2026 - 18:00',
-      imagenUrl: 'https://via.placeholder.com/100', // Reemplazar con imagen real
+      id: '2', titulo: 'Subasta 2', estado: 'En Curso', cantidadItems: 5,
+      fechaFinalizacion: '14/05/2026 - 18:00', imagenUrl: 'https://via.placeholder.com/100',
     }
-  ];
+  ]);
+  const [subastasFinalizadas, setSubastasFinalizadas] = useState([]);
 
-  const mockSubastasFinalizadas = [
-    // Acá irían las subastas que ya terminaron
-  ];
+  // CONEXIÓN CON EL BACKEND
+  useEffect(() => {
+    const cargarMisPujas = async () => {
+      try {
+        const token = await AsyncStorage.getItem('userToken');
+        const userDataString = await AsyncStorage.getItem('userData');
+        if (!token || !userDataString) return;
 
-  // Dependiendo de la pestaña activa, mostramos una lista u otra
-  const dataToShow = activeTab === 'enCurso' ? mockSubastasEnCurso : mockSubastasFinalizadas;
+        const usuario = JSON.parse(userDataString);
+
+        // 1. Traemos subastas activas
+        const resActivas = await fetch(`${API_URL}/usuarios/${usuario.id}/subastas-activas`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (resActivas.ok) {
+          const dataActivas = await resActivas.json();
+          if (dataActivas.length > 0) setSubastasEnCurso(dataActivas); // Reemplaza el mock si hay data
+        }
+
+        // 2. Traemos historial (finalizadas)
+        const resHistorial = await fetch(`${API_URL}/usuarios/${usuario.id}/historial-participacion`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (resHistorial.ok) {
+          const dataHistorial = await resHistorial.json();
+          if (dataHistorial.length > 0) setSubastasFinalizadas(dataHistorial);
+        }
+
+      } catch (error) {
+        console.error("Error cargando pujas del usuario", error);
+      }
+    };
+
+    cargarMisPujas();
+  }, []);
+
+  const dataToShow = activeTab === 'enCurso' ? subastasEnCurso : subastasFinalizadas;
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity 
+    <TouchableOpacity
       style={styles.cardContainer}
-      onPress={() => navigation.navigate('SubastaDetalles', { subastaId: item.id })}
+      onPress={() => navigation.navigate('SubastaDetalles', { subastaId: item.id || item.subastaId })}
     >
       <View style={styles.cardContent}>
         <Text style={styles.cardTitle}>{item.titulo}</Text>
-        
-        {/* Badge de Estado */}
         <View style={styles.badgeContainer}>
           <Text style={styles.badgeText}>{item.estado}</Text>
         </View>
-
-        <Text style={styles.cardInfoText}>{item.cantidadItems} items</Text>
-        <Text style={styles.cardInfoText}>Finaliza en {item.fechaFinalizacion}</Text>
+        {item.cantidadItems && <Text style={styles.cardInfoText}>{item.cantidadItems} items</Text>}
+        <Text style={styles.cardInfoText}>Finaliza: {item.fechaFinalizacion || item.fechaCierre}</Text>
       </View>
-
-      {/* Imagen a la derecha */}
-      <Image source={{ uri: item.imagenUrl }} style={styles.cardImage} />
+      <Image source={{ uri: item.imagenUrl || 'https://via.placeholder.com/100' }} style={styles.cardImage} />
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      
-      {/* Header */}
+
       <View style={styles.header}>
         <Image source={require('../../assets/logos/logotipo.png')} style={styles.logo} />
         <Text style={styles.headerTitle}>Subastas Activas</Text>
       </View>
 
-      {/* Tabs (Pestañas) */}
       <View style={styles.tabsContainer}>
-        <TouchableOpacity 
-          style={[styles.tab, activeTab === 'enCurso' && styles.activeTab]} 
+        <TouchableOpacity
+          style={[styles.tab, activeTab === 'enCurso' && styles.activeTab]}
           onPress={() => setActiveTab('enCurso')}
         >
           <Text style={[styles.tabText, activeTab === 'enCurso' && styles.activeTabText]}>
             Subastas en curso
           </Text>
         </TouchableOpacity>
-        
-        <TouchableOpacity 
-          style={[styles.tab, activeTab === 'finalizadas' && styles.activeTab]} 
+
+        <TouchableOpacity
+          style={[styles.tab, activeTab === 'finalizadas' && styles.activeTab]}
           onPress={() => setActiveTab('finalizadas')}
         >
           <Text style={[styles.tabText, activeTab === 'finalizadas' && styles.activeTabText]}>
@@ -90,27 +110,27 @@ export default function MisPujas() {
         </TouchableOpacity>
       </View>
 
-      {/* Buscador y Filtro */}
       <View style={styles.searchSection}>
         <View style={styles.searchContainer}>
-          <Text style={styles.searchIcon}><AntDesign name="search" size={20} color="#666" /></Text>
-          <TextInput 
-            style={styles.searchInput} 
-            placeholder="Búsqueda" 
-            placeholderTextColor="#666"
+          <Text style={styles.searchIcon}>
+            <AntDesign name="search" size={MisPujasTheme.iconSize} color={MisPujasTheme.iconColor} />
+          </Text>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Búsqueda"
+            placeholderTextColor={MisPujasTheme.placeholderColor}
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
         </View>
         <TouchableOpacity style={styles.filterButton}>
-          <Feather name="sliders" size={20} color="#090909" />
+          <Feather name="sliders" size={MisPujasTheme.iconSize} color={MisPujasTheme.textColor} />
         </TouchableOpacity>
       </View>
 
-      {/* Lista de Subastas */}
       <FlatList
         data={dataToShow}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id || item.subastaId}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
         renderItem={renderItem}
@@ -119,9 +139,7 @@ export default function MisPujas() {
         }
       />
 
-      {/* Navegación Inferior */}
       <BottomNav />
-      
     </View>
   );
 }

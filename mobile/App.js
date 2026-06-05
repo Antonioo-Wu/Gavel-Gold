@@ -58,6 +58,7 @@ import DetalleDeposito from './app/CrearSubasta/Seguimiento/DetalleDeposito'
 import MensajeExitoPuja from './app/Puja/MensajeExitoPuja';
 import SeguimientoPuja from './app/Puja/SeguimientoPuja';
 import MisPujas from './app/Puja/MisPujas';
+import PujaScreen from './app/Puja/Puja';
 
 // Errores
 import ErrorConexion from './app/Errores/ErrorConexion';
@@ -126,6 +127,7 @@ export default function App() {
         <Stack.Screen name="LoadingPuja" component={LoadingPuja} />
         <Stack.Screen name="LoadingSubirArticulo" component={LoadingSubirArticulo} />
         <Stack.Screen name="LoadingCredenciales" component={LoadingCredenciales} />
+        <Stack.Screen name="Pujar" component={PujaScreen} />
         <Stack.Screen name="MisPujas" component={MisPujas} />
       </Stack.Navigator>
     </NavigationContainer>

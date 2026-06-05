@@ -5,7 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import FormCard from '../../components/FormCard.jsx';
 import BottomNav from '../../components/BottomNav.jsx';
-import { datosUsuarioStyles as styles } from '../../styles/cuentaUsuario/DatosUsuario.js';
+// Importamos el Theme
+import { datosUsuarioStyles as styles, DatosUsuarioTheme } from '../../styles/cuentaUsuario/DatosUsuario.js';
 import { API_URL } from '../../config/api';
 
 export default function DatosUsuario() {
@@ -61,21 +62,23 @@ export default function DatosUsuario() {
     return (
         <ImageBackground source={require('../../assets/fondo_dorado.jpg')} style={styles.backgroundImage}>
             <View style={styles.mainContainer}>
-                
-                {/* 1. TÍTULO POR FUERA */}
+
                 <View style={styles.headerOutside}>
                     <Image source={require('../../assets/logos/logotipo.png')} style={styles.logoHeader} />
                     <Text style={styles.titleHeader}>Mis Datos</Text>
                 </View>
 
-                {/* 2. EL SCROLL ENVUELVE A LA TARJETA */}
-                <ScrollView 
-                    showsVerticalScrollIndicator={false} 
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
                     contentContainerStyle={styles.scrollWrapper}
                 >
                     <FormCard>
                         {isLoading ? (
-                            <ActivityIndicator size="large" color="#D4AF37" style={styles.loadingIndicator} />
+                            <ActivityIndicator
+                                size={DatosUsuarioTheme.indicatorSize}
+                                color={DatosUsuarioTheme.colors.primary}
+                                style={styles.loadingIndicator}
+                            />
                         ) : usuario ? (
                             <View style={styles.infoContainer}>
                                 <View style={styles.dataRow}>
@@ -115,7 +118,6 @@ export default function DatosUsuario() {
                                     </Text>
                                 </View>
 
-                                
                                 <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
                                     <Text style={styles.backButtonText}>Volver</Text>
                                 </TouchableOpacity>

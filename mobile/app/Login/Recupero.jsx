@@ -5,19 +5,19 @@ import FormCard from '../../components/FormCard';
 import CustomInput from '../../components/CustomInput';
 import ActionButton from '../../components/ActionButton';
 import { loginStyles as styles } from '../../styles/login/Login';
+import { API_URL } from '../../config/api';
 
 export default function Recupero() {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleRecupero = () => {
+  const handleRecupero = async () => {
     if (!email) {
       Alert.alert("Error", "El campo de email es obligatorio");
       return;
     }
 
-    // Validación de formato de email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       Alert.alert("Error", "Ingrese un email válido");
@@ -26,14 +26,25 @@ export default function Recupero() {
 
     setIsLoading(true);
 
-    // Simulación: generar un código aleatorio de 6 dígitos
-    const codigo = Math.floor(100000 + Math.random() * 900000);
+    try {
+      const response = await fetch(`${API_URL}/auth/recuperar-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
 
-
-    // Navegar a pantalla de éxito
-    navigation.navigate('RecuperoExito');
-
-    setIsLoading(false);
+      if (response.ok) {
+        navigation.navigate('RecuperoExito');
+      } else {
+        const data = await response.json();
+        Alert.alert("Error", data.mensaje || "No se pudo solicitar la recuperación.");
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Error de red", "No se pudo conectar con el servidor.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -41,20 +52,20 @@ export default function Recupero() {
       <View style={styles.containerCenter}>
         <Image source={require('../../assets/logos/logotipo.png')} style={styles.logo} />
         <Text style={styles.title}>Recupere su contraseña</Text>
-        
+
         <FormCard>
-          <CustomInput 
-            label="Email" 
-            placeholder="Ingrese su mail" 
+          <CustomInput
+            label="Email"
+            placeholder="Ingrese su mail"
             value={email}
             onChangeText={setEmail}
           />
           <View style={styles.buttonsContainer}>
             <ActionButton text="Cancel" variant="outline" onPress={() => navigation.goBack()} />
-            <ActionButton 
-              text={isLoading ? "Enviando..." : "Confirmar"} 
-              variant="solid" 
-              onPress={handleRecupero} 
+            <ActionButton
+              text={isLoading ? "Enviando..." : "Confirmar"}
+              variant="solid"
+              onPress={handleRecupero}
             />
           </View>
         </FormCard>

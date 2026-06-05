@@ -1,6 +1,17 @@
 import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
+export const ItemCardTheme = {
+  tagColors: {
+    'Pendiente de Revisión': '#666666',
+    'Pendiente de Aprobación del Usuario': '#7B61FF',
+    'Aprobado': '#27AE60',
+    'Rechazado': '#EB5757',
+    'En Subasta': '#2D9CDB',
+    'default': '#090909'
+  }
+};
+
+export const misSubastasStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1A1814', // Fondo oscuro Gavel & Gold
@@ -88,7 +99,7 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333333',
   },
-  
+
   // --- BOTONES AL FINAL DEL SCROLL ---
   footerButtonsContainer: {
     marginTop: 10,
@@ -107,19 +118,19 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#090909',
   },
-   backButton: {
+  backButton: {
     marginTop: 20,
-    backgroundColor: 'transparent', 
-    borderWidth: 1.5,               
-    borderColor: '#F6F1E7',         
-    borderRadius: 20,                
-    paddingVertical: 10,            
+    backgroundColor: 'transparent',
+    borderWidth: 1.5,
+    borderColor: '#F6F1E7',
+    borderRadius: 20,
+    paddingVertical: 10,
     alignItems: 'center',
-    alignSelf: 'center',       
+    alignSelf: 'center',
     width: '60%',
   },
   backButtonText: {
-    color: '#F6F1E7',               
+    color: '#F6F1E7',
     fontSize: 16,
     fontWeight: 'bold',
   }
