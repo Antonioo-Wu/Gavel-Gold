@@ -11,13 +11,28 @@ export const ItemCardTheme = {
   }
 };
 
+// NUEVO THEME PARA LIMPIAR EL JSX
+export const MisSubastasTheme = {
+  colors: {
+    spinner: '#E0BF66',
+    placeholder: '#666666',
+  },
+  iconSize: 20,
+  spinnerSize: 'large',
+};
+
 export const misSubastasStyles = StyleSheet.create({
-  container: {
+  // ELIMINAMOS 'container' Y CREAMOS ESTOS DOS:
+  mainWrapper: {
     flex: 1,
     backgroundColor: '#1A1814', // Fondo oscuro Gavel & Gold
-    paddingHorizontal: 20,
     paddingTop: 40,
   },
+  contentWrapper: {
+    flex: 1,
+    paddingHorizontal: 20, // Movemos el padding acá para que no afecte al BottomNav
+  },
+
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -54,8 +69,7 @@ export const misSubastasStyles = StyleSheet.create({
     color: '#090909',
   },
   listContainer: {
-    // Reducimos el padding bottom porque los botones ya no flotan
-    paddingBottom: 100, // Espacio suficiente para que el BottomNav no tape los botones
+    paddingBottom: 100,
   },
   // --- Estilos de la Tarjeta ---
   cardContainer: {
@@ -103,7 +117,7 @@ export const misSubastasStyles = StyleSheet.create({
   // --- BOTONES AL FINAL DEL SCROLL ---
   footerButtonsContainer: {
     marginTop: 10,
-    paddingBottom: 20, // Aire adicional al final
+    paddingBottom: 20,
   },
   createButton: {
     backgroundColor: '#F6F1E7',
@@ -111,7 +125,7 @@ export const misSubastasStyles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 15, // Separación con el botón de Volver
+    marginBottom: 15,
   },
   createButtonText: {
     fontSize: 18,

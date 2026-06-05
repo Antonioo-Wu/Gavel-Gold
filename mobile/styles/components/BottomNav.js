@@ -14,7 +14,8 @@ export const bottomNavStyles = StyleSheet.create({
     width: '100%',
     paddingTop: 15,
     paddingBottom: Platform.OS === 'ios' ? 30 : 50, 
-    
+    left: 0, 
+    right: 0,
     // LA MAGIA: Redondeamos solo las esquinas superiores del Navbar
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
