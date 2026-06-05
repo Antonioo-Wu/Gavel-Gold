@@ -158,7 +158,7 @@ export default function UsuarioMediosPago() {
                   )}
 
                   {/* 3. BOTONES INTEGRADOS ADENTRO */}
-                  <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('SeleccionMetodoPago')}>
+                  <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('SeleccionMetodoPago', { origen: 'UsuarioMediosPago' })}>
                     <Text style={styles.addButtonText}>Añadir nuevo método</Text>
                   </TouchableOpacity>
 

@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 export const seleccionMetodoStyles = StyleSheet.create({
   containerDark: {
     flex: 1,
-    backgroundColor: '#1E1B16', // Fondo oscuro característico
+    backgroundColor: '#1E1B16',
     padding: 24,
     justifyContent: 'center'
   },
@@ -30,20 +30,18 @@ export const seleccionMetodoStyles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#090909',
   },
-  
-  // --- Fila de botones de pago ---
   paymentRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    gap: 10, // Espacio entre los 3 botones
+    gap: 10,
     marginBottom: 24,
   },
   paymentBtn: {
-    backgroundColor: '#F6F1E7', // Color crema
+    backgroundColor: '#F6F1E7',
     paddingVertical: 14,
     paddingHorizontal: 5,
     borderRadius: 8,
-    flex: 1, // Para que los 3 ocupen el mismo ancho
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
@@ -55,12 +53,9 @@ export const seleccionMetodoStyles = StyleSheet.create({
     color: '#090909',
     textAlign: 'center',
   },
-
-  // --- Contenedor del Botón Volver ---
-  // --- Botón Volver con Borde ---
   backButton: {
     marginTop: 20,
-    backgroundColor: 'transparent', 
+    backgroundColor: 'black', 
     borderWidth: 1.5,               
     borderColor: '#F6F1E7',         
     borderRadius: 20,                
@@ -71,7 +66,7 @@ export const seleccionMetodoStyles = StyleSheet.create({
     width: '80%',
   },
   backButtonText: {
-    color: '#F6F1E7',               // Texto del mismo color que el borde
+    color: '#F6F1E7',
     fontSize: 16,
     fontWeight: 'bold',
   }

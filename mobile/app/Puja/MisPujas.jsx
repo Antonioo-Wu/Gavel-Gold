@@ -41,7 +41,7 @@ export default function MisPujas() {
   const renderItem = ({ item }) => (
     <TouchableOpacity 
       style={styles.cardContainer}
-      onPress={() => navigation.navigate('DetalleSubasta', { subastaId: item.id })}
+      onPress={() => navigation.navigate('SubastaDetalles', { subastaId: item.id })}
     >
       <View style={styles.cardContent}>
         <Text style={styles.cardTitle}>{item.titulo}</Text>
