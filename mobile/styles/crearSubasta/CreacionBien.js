@@ -13,91 +13,189 @@ export const CreacionBienStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#1E1B16',
   },
-  // --- MEJORA DEL SCROLL ---
+
   scrollContent: {
-    flexGrow: 1, // Esto obliga al scroll a expandirse y soluciona cortes
-    padding: 24,
-    paddingBottom: 150, // Más espacio libre al final para que BottomNav no lo tape
-    alignItems: 'center',
+    flexGrow: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 40,
+    paddingBottom: 120,
   },
+
   title: {
     textAlign: 'center',
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 24,
-    color: '#1A1A1A',
-    lineHeight: 30,
+    color: '#000',
+    marginBottom: 30,
+    lineHeight: 34,
   },
-  subtitle: {
-    textAlign: 'center',
-    fontSize: 13,
-    color: '#555',
-    marginBottom: 24,
+
+  tagContainer: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#333',
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    marginBottom: 25,
+  },
+
+  tagText: {
+    color: '#FFF',
+    fontSize: 16,
     fontWeight: '500',
   },
 
-  // --- GRILLA DE FOTOS ---
-  photosGrid: {
+  label: {
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#111',
+    marginBottom: 10,
+  },
+
+  amountContainer: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 10,
-    marginBottom: 30,
     justifyContent: 'center',
+    alignItems: 'flex-start',
+    marginBottom: 25,
   },
-  photoThumbnail: {
-    width: 80,
-    height: 80,
-    borderRadius: 8,
-    backgroundColor: '#EAEAEA',
+
+  currencySymbol: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    color: '#111',
+    marginTop: 8,
   },
-  addPhotoBtn: {
-    width: 80,
-    height: 80,
-    backgroundColor: '#F6F1E7',
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
+
+  amountInput: {
+    fontSize: 60,
+    fontWeight: 'bold',
+    color: '#111',
+    textAlign: 'center',
+    minWidth: 220,
+    paddingVertical: 0,
+  },
+
+  pickerContainer: {
+    width: 150,
+    borderWidth: 1,
+    borderColor: '#D8D8D8',
+    borderRadius: 12,
+    marginBottom: 25,
+    overflow: 'hidden',
+  },
+
+  picker: {
+    height: 50,
+  },
+
+  textarea: {
+    minHeight: 220,
+    backgroundColor: '#F1EEE5',
     borderWidth: 1,
     borderColor: '#D4AF37',
-    borderStyle: 'dashed', // Un bordecito punteado dorado queda lindo
-  },
-  uploadIcon: {
-    fontSize: 30,
-  },
-
-  // --- CHECKBOXES SEPARADOS ---
-  checkboxesWrapper: {
-    marginBottom: 10,
-    width: '100%',
-  },
-  checkboxRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start', // Para que el check quede arriba si el texto ocupa 2 renglones
-    marginBottom: 15,
-    paddingRight: 10,
-  },
-  checkboxItem: {
-    marginRight: 12,
-    marginTop: 2, // Pequeño ajuste para alinear con el texto
-  },
-  checkboxLabel: {
-    fontSize: 14,
-    color: '#333',
-    flex: 1,
-    lineHeight: 20,
+    borderRadius: 4,
+    padding: 12,
+    textAlignVertical: 'top',
+    fontSize: 16,
+    marginBottom: 30,
   },
 
-  termsLink: {
-    marginBottom: 24,
-    alignSelf: 'center',
+  createButton: {
+    backgroundColor: '#111',
+    borderRadius: 20,
+    height: 55,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
   },
-  termsLinkText: {
-    fontSize: 14,
-    color: '#555',
-    textDecorationLine: 'underline',
-    fontWeight: 'bold',
+
+  createButtonText: {
+    color: '#FFF',
+    fontSize: 18,
+    fontWeight: '500',
   },
-  loadingIndicator: {
-    marginVertical: 20,
-  },
+
+  volverButtonWrapper: {
+    marginTop: 5,
+  }
+  ,sectionTitle: {
+  fontSize: 18,
+  fontWeight: '600',
+  color: '#111',
+  marginBottom: 10,
+},
+
+tagInputContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginBottom: 15,
+},
+
+tagInput: {
+  flex: 1,
+  borderWidth: 1,
+  borderColor: '#DDD',
+  borderRadius: 10,
+  paddingHorizontal: 12,
+  height: 45,
+  backgroundColor: '#FFF',
+},
+
+addTagButton: {
+  width: 45,
+  height: 45,
+  backgroundColor: '#000',
+  borderRadius: 10,
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginLeft: 8,
+},
+
+addTagText: {
+  color: '#FFF',
+  fontSize: 24,
+  fontWeight: 'bold',
+},
+
+tagsContainer: {
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  marginBottom: 25,
+},
+
+tagChip: {
+  backgroundColor: '#333',
+  borderRadius: 20,
+  paddingHorizontal: 12,
+  paddingVertical: 8,
+  marginRight: 8,
+  marginBottom: 8,
+},
+
+tagChipText: {
+  color: '#FFF',
+  fontSize: 14,
+},
+photosGrid: {
+  alignItems: 'center',
+  marginBottom: 30,
+},
+
+photoThumbnail: {
+  width: 280,
+  height: 280,
+  borderRadius: 0,
+},
+
+addPhotoBtn: {
+  width: 280,
+  height: 280,
+  backgroundColor: '#EFEFEF',
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: 0,
+  borderWidth: 0,
+},
 });

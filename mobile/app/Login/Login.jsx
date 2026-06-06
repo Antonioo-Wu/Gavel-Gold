@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, ImageBackground, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, Image, ImageBackground, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../components/FormCard';
 import CustomInput from '../../components/CustomInput';
@@ -53,6 +53,8 @@ export default function Login() {
 
   return (
     <ImageBackground source={require('../../assets/fondo_dorado.jpg')} style={styles.background}>
+      
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.containerCenter}>
         <Image source={require('../../assets/logos/logotipo.png')} style={styles.logo} />
         <Text style={styles.title}>Inicio de Sesión</Text>
@@ -73,6 +75,8 @@ export default function Login() {
           </View>
         </FormCard>
       </View>
+
+      </ScrollView>
     </ImageBackground>
   );
 }

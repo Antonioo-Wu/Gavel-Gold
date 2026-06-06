@@ -15,6 +15,8 @@ export default function CreacionBienPaso1() {
   const [baseAmount, setBaseAmount] = useState('');
   const [currency, setCurrency] = useState('ARS');
   const [description, setDescription] = useState('');
+  const [tagInput, setTagInput] = useState('');
+  const [tags, setTags] = useState([]);
 
   const handleContinuar = () => {
     if (!itemName || !baseAmount || !description) {
@@ -27,9 +29,22 @@ export default function CreacionBienPaso1() {
       descripcion: description,
       precioBase: parseFloat(baseAmount),
       moneda: currency,
+      etiquetas: tags,
     };
 
     navigation.navigate('CreacionBienPaso2', { articuloData });
+  };
+    const agregarTag = () => {
+    const nuevaTag = tagInput.trim();
+
+    if (!nuevaTag) return;
+
+    setTags([...tags, nuevaTag]);
+    setTagInput('');
+  };
+
+  const eliminarTag = (tagAEliminar) => {
+    setTags(tags.filter(tag => tag !== tagAEliminar));
   };
 
   return (
@@ -45,11 +60,38 @@ export default function CreacionBienPaso1() {
             onChangeText={setItemName}
           />
 
-          <View style={styles.tagContainer}>
-            <Text style={styles.tagText}>✓ Etiqueta</Text>
+          <Text style={styles.sectionTitle}>Etiquetas</Text>
+
+          <View style={styles.tagInputContainer}>
+            <TextInput
+              style={styles.tagInput}
+              placeholder="Ej: Lujo"
+              value={tagInput}
+              onChangeText={setTagInput}
+            />
+
+            <TouchableOpacity
+              style={styles.addTagButton}
+              onPress={agregarTag}
+            >
+              <Text style={styles.addTagText}>+</Text>
+            </TouchableOpacity>
           </View>
 
-          <Text style={styles.label}>Ingrese su monto de valor base</Text>
+          <View style={styles.tagsContainer}>
+            {tags.map((tag, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.tagChip}
+                onPress={() => eliminarTag(tag)}
+              >
+                <Text style={styles.tagChipText}>
+                  {tag} ✕
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+              <Text style={styles.label}>Ingrese su monto de valor base</Text>
 
           <View style={styles.amountContainer}>
             <Text style={styles.currencySymbol}>$</Text>
@@ -83,7 +125,7 @@ export default function CreacionBienPaso1() {
           </TouchableOpacity>
 
           <View style={styles.volverButtonWrapper}>
-            <ActionButton text="Volver" variant="solid" onPress={() => navigation.goBack()} />
+            <ActionButton text="Volver atrás" variant="outline" onPress={() => navigation.goBack()} />
           </View>
         </FormCard>
       </ScrollView>

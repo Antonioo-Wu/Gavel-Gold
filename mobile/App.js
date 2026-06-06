@@ -14,7 +14,7 @@ import SubastaDetalles from './app/Subastas/SubastaDetalles';
 // Recupero de contraseña
 import Recupero from './app/Login/Recupero';
 import RecuperoExito from './app/Login/RecuperoExito';
-
+import RecuperoToken from './app/Login/RecuperoToken';
 
 
 // Creación de Cuenta
@@ -90,6 +90,7 @@ export default function App() {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Recupero" component={Recupero} />
         <Stack.Screen name="RecuperoExito" component={RecuperoExito} />
+        <Stack.Screen name="RecuperoToken"  component={RecuperoToken} />
 
         <Stack.Screen name="Perfil" component={Perfil} />
         <Stack.Screen name="DatosUsuario" component={DatosUsuario} />

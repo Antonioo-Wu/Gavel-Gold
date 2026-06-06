@@ -21,6 +21,7 @@ export const loginStyles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   logo: {
+    marginTop: 40,
     width: 96,
     height: 96,
     marginBottom: 16,
