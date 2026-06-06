@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, Alert } from 'react-native'; // Agregué Alert acá que faltaba importar
 import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../../components/FormCard';
 import CustomInput from '../../../components/CustomInput';
 import ActionButton from '../../../components/ActionButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_URL } from '../../../config/api';
+
+// 1. IMPORTAMOS EL DOCUMENT PICKER
+import * as DocumentPicker from 'expo-document-picker';
 
 import { metodosDePagoStyles as styles } from '../../../styles/metodosDePago/MetodosDePago';
 
@@ -20,10 +23,31 @@ export default function MetodoPagoCheque() {
   const [mes, setMes] = useState('');
   const [anio, setAnio] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  
+  // 2. ESTADO PARA EL COMPROBANTE
+  const [comprobante, setComprobante] = useState(null);
+
+  // 3. FUNCIÓN PARA ABRIR LOS ARCHIVOS DEL CELULAR
+  const handleSubirComprobante = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: 'application/pdf', // Magia pura: Solo deja seleccionar PDFs
+        copyToCacheDirectory: true,
+      });
+
+      // Si el usuario no canceló, guardamos el archivo en el estado
+      if (!result.canceled) {
+        setComprobante(result.assets[0]);
+      }
+    } catch (error) {
+      Alert.alert("Error", "Hubo un problema al intentar abrir los archivos.");
+    }
+  };
 
   const handleGuardarCheque = async () => {
-    if (!banco || !numeroCheque || !monto || !titular) {
-      Alert.alert("Error", "Por favor complete los campos obligatorios.");
+    // 4. VALIDAMOS QUE EL PDF ESTÉ CARGADO SÍ O SÍ
+    if (!banco || !numeroCheque || !monto || !titular || !comprobante) {
+      Alert.alert("Error", "Por favor complete los campos obligatorios y suba su comprobante.");
       return;
     }
 
@@ -41,9 +65,18 @@ export default function MetodoPagoCheque() {
       const usuario = JSON.parse(userDataString);
 
       const detalleEstructurado = JSON.stringify({
-        banco, numeroCheque, monto, moneda, vencimiento: `${dia}/${mes}/${anio}`, titular
+        banco, 
+        numeroCheque, 
+        monto, 
+        moneda, 
+        vencimiento: `${dia}/${mes}/${anio}`, 
+        titular,
+        comprobanteNombre: comprobante.name // Opcional: mandamos el nombre al back
       });
 
+      // NOTA SOBRE BACKEND: Como estás mandando application/json, el archivo físico NO viaja acá.
+      // Si el backend requiere que envíes el PDF físicamente (los bytes), vas a tener que cambiar
+      // esto a un 'FormData' (multipart/form-data) en lugar de JSON.
       const response = await fetch(`${API_URL}/usuarios/${usuario.id}/medios-pago`, {
         method: 'POST',
         headers: {
@@ -92,7 +125,13 @@ export default function MetodoPagoCheque() {
           </View>
 
           <CustomInput label="Titular" placeholder="Ingrese el titular" value={titular} onChangeText={setTitular} />
-          <ActionButton text="Subir Comprobante (PDF)" variant="outline" onPress={() => { }} />
+          
+          {/* 5. EL BOTÓN AHORA ABRE EL PICKER Y MUESTRA EL NOMBRE DEL PDF ELEGIDO */}
+          <ActionButton 
+            text={comprobante ? comprobante.name : "Subir Comprobante (PDF)"} 
+            variant="outline" 
+            onPress={handleSubirComprobante} 
+          />
 
           <View style={styles.buttons}>
             <ActionButton text="Volver" variant="outline" onPress={() => navigation.goBack()} />

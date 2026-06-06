@@ -30,9 +30,9 @@ export default function TerminosYCondiciones() {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <Text style={styles.title}>Términos y Condiciones de Uso</Text>
+        <Text style={styles.title}>Términos y Condiciones de la Aplicación</Text>
 
-        <Text style={styles.introText}>
+        <Text style={styles.introText} style={styles.scrollContent}>
           El acceso y uso de la plataforma Gavel & Gold está sujeto a los siguientes términos y condiciones. Al utilizar nuestra aplicación, usted acepta cumplir con estas normativas:
         </Text>
 

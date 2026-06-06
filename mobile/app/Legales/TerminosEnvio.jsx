@@ -39,11 +39,11 @@ export default function TerminosEnvio() {
       <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>Declaración Jurada y Términos de Envío</Text>
 
-        <Text style={styles.introText}>
+        <Text style={styles.introText} style={styles.scrollContent}>
           Al enviar esta solicitud, usted, el "Usuario Solicitante", declara y acepta lo siguiente:
         </Text>
 
-        <View style={styles.listContainer}>
+        <View style={styles.listContainer} style={styles.scrollContent}>
           {terms.map((term, index) => (
             <View key={index} style={styles.listItem}>
               <Text style={styles.itemNumber}>{index + 1}. </Text>
@@ -57,11 +57,11 @@ export default function TerminosEnvio() {
       </ScrollView>
 
       <View style={styles.footer}>
-        <ActionButton
-          text="Aceptar y Continuar"
-          variant="solid"
-          onPress={() => navigation.navigate('CreacionBienExito')}
-        />
+              <ActionButton
+                text="Volver"
+                variant="solid"
+                onPress={() => navigation.goBack()}
+              />
       </View>
     </View>
   );

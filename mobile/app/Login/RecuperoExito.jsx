@@ -8,7 +8,7 @@ export default function RecuperoExito() {
   return (
     <FeedbackScreen
       text={"Listo Recibirá un mail con los pasos a seguir"}
-      onPress={() => navigation.navigate('Login')}
+      onPress={() => navigation.navigate('RecuperoToken')}
     />
   );
 }

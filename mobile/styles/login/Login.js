@@ -17,10 +17,10 @@ export const loginStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // ESTO ES LA MAGIA: Le devuelve los márgenes laterales a tu tarjeta blanca
     paddingHorizontal: 24,
   },
   logo: {
+    marginTop: 40,
     width: 96,
     height: 96,
     marginBottom: 16,
@@ -43,4 +43,34 @@ export const loginStyles = StyleSheet.create({
     gap: 16,
     marginTop: 24,
   },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    paddingVertical: 40,
+  },
+  formWrapper: {
+    alignItems: 'center',
+    paddingHorizontal: 24,
+    width: '100%',
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#666666',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  requirementsContainer: {
+    marginBottom: 20,
+  },
+  requirementText: {
+    fontSize: 13,
+    color: '#333333',
+    lineHeight: 20,
+  },
+  formButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginTop: 10,
+  }
 });

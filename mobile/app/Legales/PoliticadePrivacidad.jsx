@@ -3,6 +3,7 @@ import { View, Text, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from '../../components/ActionButton';
 import { legajesStyles as styles } from '../../styles/legajes/Legales';
+import { API_URL } from '../../config/api.js';
 
 export default function PoliticaPrivacidad() {
   const navigation = useNavigation();

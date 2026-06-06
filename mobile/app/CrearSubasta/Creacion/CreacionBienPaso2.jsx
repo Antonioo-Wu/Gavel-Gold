@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Checkbox from 'expo-checkbox';
 import { API_URL } from '../../../config/api.js';
 
-import { CreacionBienStyles as styles, CreacionBienTheme } from '../../../styles/crearSubasta/CreacionBien.js';
+import { CreacionBienStyles as styles, CreacionBienTheme } from '../../../styles/crearSubasta/CreacionBien2.js';
 
 export default function CreacionBienPaso2() {
   const navigation = useNavigation();
@@ -56,11 +56,15 @@ export default function CreacionBienPaso2() {
     }
 
     // Validar Fotos
-    if (fotos.length === 0) {
-      Alert.alert("Fotos requeridas", "Por favor, saca al menos una foto del artículo.");
+    if (fotos.length < 6) {
+      Alert.alert(
+          "Fotos insuficientes",
+          "Debes cargar al menos 6 fotos del artículo."
+        );
       return;
     }
 
+    
     setIsLoading(true);
 
     try {
@@ -134,13 +138,24 @@ export default function CreacionBienPaso2() {
 
           {/* GALERÍA DE FOTOS CAPTURADAS */}
           <View style={styles.photosGrid}>
-            {fotos.map((foto, index) => (
-              <Image key={index} source={{ uri: foto.uri }} style={styles.photoThumbnail} />
-            ))}
-            
-            <TouchableOpacity style={styles.addPhotoBtn} onPress={handleTomarFoto}>
-              <Text style={styles.uploadIcon}>📷</Text>
+            <TouchableOpacity
+              style={styles.addPhotoBtn}
+              onPress={handleTomarFoto}
+            >
+              <Text style={styles.uploadIcon}>🖼️</Text>
             </TouchableOpacity>
+
+            {fotos.length > 0 && (
+              <View style={styles.photosPreviewContainer}>
+                {fotos.map((foto, index) => (
+                  <Image
+                    key={index}
+                    source={{ uri: foto.uri }}
+                    style={styles.photoThumbnail}
+                  />
+                ))}
+              </View>
+            )}
           </View>
 
           {/* CHECKBOXES SEPARADOS E INDEPENDIENTES */}
@@ -190,12 +205,12 @@ export default function CreacionBienPaso2() {
             />
           ) : (
             <ActionButton
-              text="¡Subastar!" variant="solid" onPress={handleSubastar}
+              text="¡Ingrese Item a Subastar!" variant="solid" onPress={handleSubastar}
             />
           )}
 
           {/* Botón para volver por si se equivocaron */}
-          <View style={{marginTop: 15}}>
+          <View style={styles.backButtonContainer}>
              <ActionButton text="Volver atrás" variant="outline" onPress={() => navigation.goBack()} />
           </View>
 
