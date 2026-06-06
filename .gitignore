@@ -2,7 +2,7 @@
 backend/node_modules/
 client/node_modules/
 mobile/node_modules/
-
+node_modules
 # Build outputs
 backend/dist/
 client/build/

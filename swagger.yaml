@@ -106,7 +106,7 @@ paths:
   /usuarios/activar:
     post:
       tags: [Autenticacion]
-      summary: Activar cuenta mediante token y password
+      summary: Activar cuenta mediante codigo y password
       security: []
       requestBody:
         required: true
@@ -114,15 +114,15 @@ paths:
           application/json:
             schema:
               type: object
-              required: [token, password]
+              required: [codigo, password]
               properties:
-                token: { type: string }
+                codigo: { type: string }
                 password: { type: string, format: password }
       responses:
         "200":
           description: Usuario activado correctamente
         "400":
-          description: Token invalido o expirado
+          description: Codigo invalido o expirado
 
   /usuarios/{id}:
     get:
