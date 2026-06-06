@@ -7,7 +7,7 @@ export default function CreacionBienExito() {
 
   return (
     <FeedbackScreen
-      text="\n\n¡Has\ningresado\ntu bien a\nsubastar!"
+      text="¡Has ingresado tu bien nsubastar!"
       onPress={() => navigation.navigate('ListadeSubastas')}
     />
     

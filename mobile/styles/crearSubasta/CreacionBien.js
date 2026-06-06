@@ -13,9 +13,11 @@ export const CreacionBienStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#1E1B16',
   },
+  // --- MEJORA DEL SCROLL ---
   scrollContent: {
+    flexGrow: 1, // Esto obliga al scroll a expandirse y soluciona cortes
     padding: 24,
-    paddingBottom: 100,
+    paddingBottom: 150, // Más espacio libre al final para que BottomNav no lo tape
     alignItems: 'center',
   },
   title: {
@@ -26,119 +28,76 @@ export const CreacionBienStyles = StyleSheet.create({
     color: '#1A1A1A',
     lineHeight: 30,
   },
-  tagContainer: {
-    backgroundColor: '#333',
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: 4,
-    marginBottom: 24,
-    alignSelf: 'flex-start',
-  },
-  tagText: {
-    color: 'white',
-    fontSize: 12,
-  },
-  label: {
-    color: '#555',
-    fontSize: 14,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  amountContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 16,
-    marginBottom: 24,
-  },
-  currencySymbol: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#1A1A1A',
-  },
-  amountInput: {
-    flex: 1,
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#1A1A1A',
-  },
-  pickerContainer: {
-    marginBottom: 24,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    backgroundColor: 'white',
-  },
-  picker: {
-    height: 50,
-  },
-  textarea: {
-    width: '100%',
-    height: 120,
-    padding: 12,
-    borderRadius: 8,
-    backgroundColor: '#F0F0F0',
-    marginBottom: 24,
-    textAlignVertical: 'top',
-  },
   subtitle: {
     textAlign: 'center',
-    fontSize: 12,
+    fontSize: 13,
     color: '#555',
     marginBottom: 24,
+    fontWeight: '500',
   },
-  uploadBox: {
-    width: '100%',
-    height: 200,
+
+  // --- GRILLA DE FOTOS ---
+  photosGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    marginBottom: 30,
+    justifyContent: 'center',
+  },
+  photoThumbnail: {
+    width: 80,
+    height: 80,
+    borderRadius: 8,
+    backgroundColor: '#EAEAEA',
+  },
+  addPhotoBtn: {
+    width: 80,
+    height: 80,
     backgroundColor: '#F6F1E7',
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: '#D4AF37',
+    borderStyle: 'dashed', // Un bordecito punteado dorado queda lindo
   },
   uploadIcon: {
-    fontSize: 48,
+    fontSize: 30,
   },
-  checkboxContainer: {
+
+  // --- CHECKBOXES SEPARADOS ---
+  checkboxesWrapper: {
+    marginBottom: 10,
+    width: '100%',
+  },
+  checkboxRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginBottom: 8,
+    alignItems: 'flex-start', // Para que el check quede arriba si el texto ocupa 2 renglones
+    marginBottom: 15,
+    paddingRight: 10,
+  },
+  checkboxItem: {
+    marginRight: 12,
+    marginTop: 2, // Pequeño ajuste para alinear con el texto
   },
   checkboxLabel: {
     fontSize: 14,
     color: '#333',
     flex: 1,
+    lineHeight: 20,
   },
+
   termsLink: {
-    paddingLeft: 24,
     marginBottom: 24,
+    alignSelf: 'center',
   },
   termsLinkText: {
     fontSize: 14,
     color: '#555',
     textDecorationLine: 'underline',
+    fontWeight: 'bold',
   },
   loadingIndicator: {
     marginVertical: 20,
-  },
-  checkboxItem: {
-    marginRight: 10,
-  },
-  volverButtonWrapper: {
-    width: '100%',
-    outlineColor: '#F6F1E7',
-  },
-  createButton: {
-    backgroundColor: '#F6F1E7',
-    borderRadius: 25,
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 15,
-  },
-  createButtonText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#090909',
   },
 });

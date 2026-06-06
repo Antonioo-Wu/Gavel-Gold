@@ -54,6 +54,13 @@ import MisSubastas from './app/CrearSubasta/Seguimiento/MisSubastas';
 import DetalleRechazo from './app/CrearSubasta/Seguimiento/DetalleRechazo';
 import DetalleDeposito from './app/CrearSubasta/Seguimiento/DetalleDeposito'
 
+// Ejemplos de Tipos de Seguimiento
+import SeguimientoWalkman from './app/CrearSubasta/Seguimiento/SeguimientoWalkman';
+import SeguimientoAirfryer from './app/CrearSubasta/Seguimiento/SeguimientoAirfryer';
+import SeguimientoCassette from './app/CrearSubasta/Seguimiento/SeguimientoCassette';
+import SeguimientoTamagotchi from './app/CrearSubasta/Seguimiento/SeguimientoTamagotchi';
+import SeguimientoMedialunas from './app/CrearSubasta/Seguimiento/SeguimientoMedialunas';
+
 // Puja
 import MensajeExitoPuja from './app/Puja/MensajeExitoPuja';
 import SeguimientoPuja from './app/Puja/SeguimientoPuja';
@@ -70,6 +77,7 @@ import LoadingCatalogo from './app/Loadings/LoadingCatalogo';
 import LoadingPuja from './app/Loadings/LoadingPuja';
 import LoadingSubirArticulo from './app/Loadings/LoadingSubirArticulo';
 import LoadingCredenciales from './app/Loadings/LoadingCredenciales';
+import ItemCard from './components/ItemCard';
 
 
 const Stack = createNativeStackNavigator();
@@ -113,6 +121,12 @@ export default function App() {
         <Stack.Screen name="MisSubastas" component={MisSubastas} />
         <Stack.Screen name="DetalleRechazo" component={DetalleRechazo} />
         <Stack.Screen name="DetalleDeposito" component={DetalleDeposito} />
+
+        <Stack.Screen name='SeguimientoWalkman' component={SeguimientoWalkman} />
+        <Stack.Screen name='SeguimientoAirfryer' component={SeguimientoAirfryer} />
+        <Stack.Screen name='SeguimientoCassette' component={SeguimientoCassette} /> 
+        <Stack.Screen name='SeguimientoTamagotchi' component={SeguimientoTamagotchi} />
+        <Stack.Screen name='SeguimientoMedialunas' component={SeguimientoMedialunas} />
 
         <Stack.Screen name="MensajeExitoPuja" component={MensajeExitoPuja} />
         <Stack.Screen name="SeguimientoPuja" component={SeguimientoPuja} />
