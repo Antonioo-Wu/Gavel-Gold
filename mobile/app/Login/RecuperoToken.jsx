@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  Image,
-  ImageBackground,
-  Alert,
-  ScrollView,
-  Platform
-} from 'react-native';
+import { View, Text, Image, ImageBackground, Alert, ScrollView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import FormCard from '../../components/FormCard';
@@ -20,13 +12,13 @@ import { API_URL } from '../../config/api';
 export default function RecuperoToken() {
   const navigation = useNavigation();
 
-  const [token, setToken] = useState('');
+  const [codigo, setCodigo] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleResetPassword = async () => {
-    if (!token || !password || !confirmPassword) {
+    if (!codigo || !password || !confirmPassword) {
       Alert.alert('Error', 'Todos los campos son obligatorios.');
       return;
     }
@@ -46,7 +38,7 @@ export default function RecuperoToken() {
       const response = await fetch(`${API_URL}/auth/resetear-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, password })
+        body: JSON.stringify({ codigo, password })
       });
 
       const data = await response.json();
@@ -56,7 +48,7 @@ export default function RecuperoToken() {
           { text: 'Aceptar', onPress: () => navigation.navigate('Login') }
         ]);
       } else {
-        Alert.alert('Error', data.mensaje || 'Token inválido o expirado.');
+        Alert.alert('Error', data.mensaje || 'Código inválido o expirado.');
       }
     } catch (error) {
       console.error(error);
@@ -71,15 +63,13 @@ export default function RecuperoToken() {
       source={require('../../assets/fondo_dorado.jpg')}
       style={styles.background}
     >
-      {/* MAGIA ACÁ: Le damos flexGrow, lo centramos y permitimos toques con el teclado abierto */}
-      <ScrollView 
-        contentContainerStyle={[styles.scrollContainer, { justifyContent: 'center', paddingVertical: 40 }]}
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        {/* Reemplazamos styles.containerCenter por estilos en línea sin el "flex: 1" */}
-        <View style={{ alignItems: 'center', paddingHorizontal: 24, width: '100%' }}>
-          
+        <View style={styles.formWrapper}>
+
           <Image
             source={require('../../assets/logos/logotipo.png')}
             style={styles.logo}
@@ -94,9 +84,9 @@ export default function RecuperoToken() {
 
             <CustomInput
               label="Código de recuperación"
-              placeholder="Ingrese el token recibido"
-              value={token}
-              onChangeText={setToken}
+              placeholder="Ingrese el código recibido"
+              value={codigo}
+              onChangeText={setCodigo}
             />
 
             <CustomInput
@@ -115,14 +105,14 @@ export default function RecuperoToken() {
               onChangeText={setConfirmPassword}
             />
 
-            <View style={{ marginBottom: 20 }}>
-              <Text>• Mínimo 8 caracteres</Text>
-              <Text>• Incluir mayúsculas y minúsculas</Text>
-              <Text>• Incluir al menos un número</Text>
-              <Text>• Incluir un carácter especial</Text>
+            <View style={styles.requirementsContainer}>
+              <Text style={styles.requirementText}>• Mínimo 8 caracteres</Text>
+              <Text style={styles.requirementText}>• Incluir mayúsculas y minúsculas</Text>
+              <Text style={styles.requirementText}>• Incluir al menos un número</Text>
+              <Text style={styles.requirementText}>• Incluir un carácter especial</Text>
             </View>
 
-            <View style={styles.buttonsContainer}>
+            <View style={styles.formButtonsContainer}>
               <ActionButton
                 text="Cancelar"
                 variant="outline"
