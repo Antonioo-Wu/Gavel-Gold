@@ -39,11 +39,11 @@ export default function TerminosCompra() {
       <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>Confirmación de Puja y Términos de Compra</Text>
 
-        <Text style={styles.introText}>
+        <Text style={styles.introText} style={styles.scrollContent}>
           Al registrar un medio de pago y/o participar activamente en cualquier subasta de <Text style={styles.bold}>Gavel & Gold</Text>, declara y acepta irrevocablemente lo siguiente:
         </Text>
 
-        <View style={styles.listContainer}>
+        <View style={styles.listContainer} style={styles.scrollContent}>
           {terms.map((term, index) => (
             <View key={index} style={styles.listItem}>
               <Text style={styles.itemNumber}>{index + 1}. </Text>

@@ -26,14 +26,21 @@ export const legajesStyles = StyleSheet.create({
   introText: {
     fontSize: 14,
     color: '#333',
-    marginBottom: 24,
+    marginBottom: 10,
     lineHeight: 21,
   },
   paragraph: {
     fontSize: 14,
     color: '#333',
-    marginBottom: 16,
+    marginBottom: 12,
     lineHeight: 21,
+  },
+  heroImage: {
+    width: '100%',
+    height: 220,
+    borderRadius: 16,
+    marginBottom: 24,
+    backgroundColor: '#FFF',
   },
   bold: {
     fontWeight: 'bold',
@@ -43,7 +50,7 @@ export const legajesStyles = StyleSheet.create({
   },
   listItem: {
     flexDirection: 'row',
-    marginBottom: 16,
+    marginBottom: 12,
   },
   itemNumber: {
     fontSize: 14,

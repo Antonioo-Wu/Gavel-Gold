@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ActionButton from '../../components/ActionButton';
 import { legajesStyles as styles } from '../../styles/legajes/Legales';
@@ -19,6 +19,13 @@ export default function SobreNosotros() {
         <Text style={styles.paragraph}>
           Nuestro sistema garantiza un entorno seguro, transparente y altamente competitivo. A través de un riguroso proceso de validación de usuarios y piezas, aseguramos que cada transacción cumpla con los más altos estándares de calidad y legalidad. Ya sea que busques adquirir tu próxima gran inversión o desees postular un bien preciado para que encuentre un nuevo hogar, Gavel & Gold te ofrece una plataforma integral, respaldo asegurado y asistencia continua en cada golpe de martillo.
         </Text>
+
+        <Image
+          source={require('../../assets/logos/logo.png')}
+          style={styles.heroImage}
+          resizeMode="contain"
+        />
+
       </ScrollView>
 
       <View style={styles.footer}>
