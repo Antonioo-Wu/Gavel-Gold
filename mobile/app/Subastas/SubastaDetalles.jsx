@@ -11,30 +11,26 @@ import { subastaDetallesStyles as styles } from '../../styles/subastas/SubastaDe
 export default function SubastaDetalles() {
   const route = useRoute();
   const navigation = useNavigation();
-  const { id } = route.params;
+  const { id, tituloSubasta } = route.params;
 
   const [articulos, setArticulos] = useState([]);
-  const [subasta, setSubasta] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isVerifying, setIsVerifying] = useState(false);
 
   useEffect(() => {
     const obtenerDatos = async () => {
       try {
-        const [resSubasta, resArticulos] = await Promise.all([
-          fetch(`${API_URL}/subastas/${id}`),
-          fetch(`${API_URL}/subastas/${id}/articulos`)
-        ]);
-        
-        const dataSubasta = await resSubasta.json();
-        const dataArticulos = await resArticulos.json();
+        const response = await fetch(`${API_URL}/subastas/${id}/articulos`);
 
-        if (resSubasta.ok && resArticulos.ok) {
-          setSubasta(dataSubasta);
+        if (response.ok) {
+          const dataArticulos = await response.json();
           setArticulos(dataArticulos);
+        } else {
+          Alert.alert("Error", "No se pudieron cargar los artículos.");
         }
       } catch (error) {
-        Alert.alert("Error", "No se pudo conectar al servidor.");
+        console.error("Fetch error:", error);
+        Alert.alert("Error de red", "No se pudo conectar al servidor.");
       } finally {
         setIsLoading(false);
       }
@@ -42,13 +38,49 @@ export default function SubastaDetalles() {
     obtenerDatos();
   }, [id]);
 
-  const handleParticipar = async () => { /* ... (Tu lógica igual) ... */ };
+  const handleParticipar = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+
+      if (!token) {
+        Alert.alert("Atención", "Debes iniciar sesión para participar en una subasta.");
+        navigation.navigate('Login');
+        return;
+      }
+
+      setIsVerifying(true);
+
+      const response = await fetch(`${API_URL}/subastas/${id}/participar`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        navigation.navigate('Pujar', { subastaId: id });
+      } else if (response.status === 401) {
+        Alert.alert("Sesión expirada", "Por favor, inicia sesión nuevamente.");
+        navigation.navigate('Login');
+      } else {
+        Alert.alert("Acceso Denegado", data.mensaje || "No cumples con los requisitos para esta subasta.");
+      }
+    } catch (error) {
+      console.error("Error participando:", error);
+      Alert.alert("Error de red", "Error validando el acceso con el servidor.");
+    } finally {
+      setIsVerifying(false);
+    }
+  };
 
   return (
     <View style={styles.mainWrapper}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         <View style={styles.container}>
-          
+
           <View style={styles.header}>
             <Image source={require('../../assets/logos/logotipo.png')} style={styles.logo} />
             <Text style={styles.headerTitle}>Subastas</Text>
@@ -61,8 +93,7 @@ export default function SubastaDetalles() {
             </View>
           ) : (
             <View>
-              {/* Título dinámico de la subasta */}
-              {subasta && <Text style={styles.catalogTitle}>{subasta.titulo}</Text>}
+              <Text style={styles.catalogTitle}>{tituloSubasta || "Catálogo de Artículos"}</Text>
 
               {articulos.length === 0 ? (
                 <View style={styles.centerContent}>
@@ -98,7 +129,7 @@ export default function SubastaDetalles() {
                     </Text>
                   </TouchableOpacity>
 
-                  <View style={{ marginBottom: 40 }}>
+                  <View style={styles.actionButtonContainer}>
                     <ActionButton text="Volver" variant="solid" onPress={() => navigation.goBack()} />
                   </View>
                 </View>

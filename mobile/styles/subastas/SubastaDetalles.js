@@ -19,7 +19,7 @@ export const subastaDetallesStyles = StyleSheet.create({
   },
   mainWrapper: {
     flex: 1,
-    backgroundColor: '#1E1B16', // Fondo principal oscuro de Gavel & Gold
+    backgroundColor: '#1E1B16',
   },
   container: {
     flex: 1,
@@ -39,7 +39,7 @@ export const subastaDetallesStyles = StyleSheet.create({
     marginLeft: 6,
   },
   scrollContent: {
-    paddingBottom: 100, // Espacio para que el BottomNav no tape el último elemento
+    paddingBottom: 100,
   },
   catalogTitle: {
     fontSize: 22,
@@ -65,14 +65,13 @@ export const subastaDetallesStyles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 20,
   },
-  // --- ESTILOS DE LA TARJETA DEL ARTÍCULO ---
   cardContainer: {
-    backgroundColor: '#090909', // Fondo de tarjeta bien oscuro
+    backgroundColor: '#090909',
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: '#333', // Borde sutil
+    borderColor: '#333',
   },
   imgContainer: {
     width: '100%',
@@ -85,7 +84,7 @@ export const subastaDetallesStyles = StyleSheet.create({
   img: {
     width: '100%',
     height: '100%',
-    resizeMode: 'cover', // 'cover' hace que llene la caja sin verse achatada
+    resizeMode: 'cover',
   },
   name: {
     color: '#FFF',
@@ -112,7 +111,7 @@ export const subastaDetallesStyles = StyleSheet.create({
     fontSize: 14,
   },
   price: {
-    color: '#FFD700', // Dorado más brillante para el precio
+    color: '#FFD700',
     fontSize: 20,
     fontWeight: 'bold',
   },
@@ -129,5 +128,8 @@ export const subastaDetallesStyles = StyleSheet.create({
     color: '#1A1A1A',
     fontWeight: 'bold',
     fontSize: 16,
+  },
+  actionButtonContainer: {
+    marginBottom: 40,
   }
 });
