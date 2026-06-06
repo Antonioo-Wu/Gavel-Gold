@@ -17,5 +17,6 @@ router.post("/usuarios/:id/articulos", authMiddleware, uploadImages, handleUploa
 router.get("/usuarios/:id/articulos/pendientes-aceptacion", authMiddleware, articuloController.obtenerArticulosPendientesAceptacion);
 router.post("/usuarios/:id/articulos/:articuloId/aceptar", authMiddleware, articuloController.aceptarCondicionesArticulo);
 router.post("/usuarios/:id/articulos/:articuloId/rechazar", authMiddleware, articuloController.rechazarCondicionesArticulo);
+router.patch("/usuarios/:id", authMiddleware, usuarioController.actualizarUsuario);
 
 export default router;

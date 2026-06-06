@@ -71,19 +71,7 @@ export const datosUsuarioStyles = StyleSheet.create({
         textAlign: 'right',
         flex: 1.5,
     },
-    // --- Botón VOLVER DENTRO ---
-    backButton: {
-        backgroundColor: '#090909',
-        paddingVertical: 14,
-        borderRadius: 8,
-        alignItems: 'center',
-        marginTop: 25,
-    },
-    backButtonText: {
-        color: '#FFFFFF',
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
+    
     // --- Otros ---
     loadingIndicator: {
         marginTop: 30,
@@ -103,4 +91,23 @@ export const datosUsuarioStyles = StyleSheet.create({
         color: '#E67E22',
         fontWeight: 'bold',
     },
+
+    // Botón de regreso
+  backButton: {
+    marginTop: 20,
+    marginBottom: 20,
+    backgroundColor: 'transparent',
+    borderWidth: 1.5,
+    borderColor: '#F6F1E7',
+    borderRadius: 20,
+    paddingVertical: 10,
+    alignItems: 'center',
+    marginHorizontal: '10%',
+    width: '80%',
+  },
+  backButtonText: {
+    color: '#F6F1E7',
+    fontSize: 16,
+    fontWeight: 'bold',
+  }
 });

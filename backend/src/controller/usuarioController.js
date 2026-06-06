@@ -3,6 +3,7 @@ import MedioPago from "../model/MedioPago.js";
 import Puja from "../model/Puja.js";
 import Subasta from "../model/Subasta.js";
 
+
 export const obtenerUsuario = async (req, res) => {
   try {
     const { id } = req.params;
@@ -209,6 +210,39 @@ export const obtenerHistorialParticipacion = async (req, res) => {
     }
 
     res.json(historial);
+  } catch (error) {
+    res.status(500).json({ 
+      codigo: "ERROR_SERVIDOR", 
+      mensaje: error.message 
+    });
+  }
+};
+
+
+export const actualizarUsuario = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // 1. Verificamos que el usuario solo pueda modificar su propio perfil
+    if (req.user?.rol !== "admin" && req.user?.id?.toString() !== id.toString()) {
+      return res.status(403).json({
+        codigo: "PERMISO_DENEGADO",
+        mensaje: "No puedes editar el perfil de otro usuario",
+      });
+    }
+
+    // 2. Extraemos los datos que el frontend nos está enviando para actualizar
+    const { nombre, apellido, domicilio, pais } = req.body;
+
+    // 3. Buscamos al usuario y lo actualizamos
+    const usuarioActualizado = await Usuario.findByIdAndUpdate(
+      id,
+      { nombre, apellido, domicilio, pais },
+      { returnDocument: "after", runValidators: true } // <-- ¡Este es el único cambio!
+    ).select("-password");
+
+    // 4. Devolvemos los datos nuevos al frontend
+    res.json(usuarioActualizado);
   } catch (error) {
     res.status(500).json({ 
       codigo: "ERROR_SERVIDOR", 

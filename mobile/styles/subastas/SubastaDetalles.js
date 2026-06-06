@@ -119,7 +119,7 @@ export const subastaDetallesStyles = StyleSheet.create({
   participateBtn: {
     backgroundColor: '#D4AF37',
     paddingVertical: 16,
-    borderRadius: 8,
+    borderRadius: 10,
     alignItems: 'center',
     marginTop: 10,
     marginBottom: 20,
