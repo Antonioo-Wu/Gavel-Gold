@@ -1,14 +1,12 @@
+import crypto from "crypto";
 import Usuario from "../model/Usuario.js";
 import bcrypt from "bcrypt";
-import {
-  generateActivationToken,
-  generatePasswordResetToken,
-  generateToken,
-  getSecretKey,
-} from "../middleware/authMiddleware.js";
+import { generateToken } from "../middleware/authMiddleware.js";
 import jwt from "jsonwebtoken";
 import RevokedToken from "../model/RevokedToken.js";
-import { sendActivationEmail, sendPasswordResetEmail } from "../service/mailService.js";
+import { sendCodeEmail } from "../service/mailService.js";
+
+const generarCodigo = () => crypto.randomInt(100000, 999999).toString();
 
 export const registroInicial = async (req, res) => {
   try {
@@ -44,11 +42,13 @@ export const registroInicial = async (req, res) => {
       categoria: "comun",
     });
 
+    const codigo = generarCodigo();
+    nuevoUsuario.codigoActivacion = codigo;
+    nuevoUsuario.codigoActivacionExpira = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
     const usuarioGuardado = await nuevoUsuario.save();
-    const activationToken = generateActivationToken(usuarioGuardado);
 
     try {
-      await sendActivationEmail({ to: usuarioGuardado.email, token: activationToken });
+      await sendCodeEmail({ to: usuarioGuardado.email, codigo, tipo: "activation" });
     } catch (mailError) {
       return res.status(500).json({
         codigo: "ERROR_EMAIL",
@@ -71,38 +71,32 @@ export const registroInicial = async (req, res) => {
 
 export const activarCuenta = async (req, res) => {
   try {
-    const { token, password } = req.body;
+    const { codigo, password } = req.body;
 
-    if (!token || !password) {
+    if (!codigo || !password) {
       return res.status(400).json({ 
         codigo: "CAMPOS_REQUERIDOS", 
-        mensaje: "Token y password requeridos" 
+        mensaje: "Codigo y password requeridos" 
       });
     }
 
-    // Validar token de activacion
-    try {
-      const secret = getSecretKey();
-      const payload = jwt.verify(token, secret);
-      if (payload.type !== "activation" || !payload.id) {
-        return res.status(400).json({ codigo: "TOKEN_INVALIDO", mensaje: "Token inválido" });
-      }
+    const usuario = await Usuario.findOne({
+      codigoActivacion: codigo,
+      codigoActivacionExpira: { $gt: new Date() },
+    });
 
-      const usuario = await Usuario.findById(payload.id);
-      if (!usuario || (usuario.estado !== "pendiente" && usuario.estado !== "aprobado")) {
-        return res.status(400).json({ codigo: "TOKEN_INVALIDO", mensaje: "Token inválido o usuario no habilitado" });
-      }
-
-      // Hash password
-      const passwordHash = await bcrypt.hash(password, 10);
-      usuario.password = passwordHash;
-      usuario.estado = "activo";
-      await usuario.save();
-
-      res.json({ mensaje: "Usuario activado correctamente" });
-    } catch (err) {
-      return res.status(400).json({ codigo: "TOKEN_INVALIDO", mensaje: "Token inválido o expirado" });
+    if (!usuario || (usuario.estado !== "pendiente" && usuario.estado !== "aprobado")) {
+      return res.status(400).json({ codigo: "CODIGO_INVALIDO", mensaje: "Código inválido o expirado" });
     }
+
+    const passwordHash = await bcrypt.hash(password, 10);
+    usuario.password = passwordHash;
+    usuario.estado = "activo";
+    usuario.codigoActivacion = undefined;
+    usuario.codigoActivacionExpira = undefined;
+    await usuario.save();
+
+    res.json({ mensaje: "Usuario activado correctamente" });
   } catch (error) {
     res.status(500).json({ 
       codigo: "ERROR_SERVIDOR", 
@@ -204,9 +198,13 @@ export const solicitarRecuperacionPassword = async (req, res) => {
       });
     }
 
-    const resetToken = generatePasswordResetToken(usuario);
+    const codigo = generarCodigo();
+    usuario.resetCode = codigo;
+    usuario.resetCodeExpires = new Date(Date.now() + 60 * 60 * 1000);
+    await usuario.save();
+
     try {
-      await sendPasswordResetEmail({ to: usuario.email, token: resetToken });
+      await sendCodeEmail({ to: usuario.email, codigo, tipo: "password_reset" });
     } catch (mailError) {
       return res.status(500).json({
         codigo: "ERROR_EMAIL",
@@ -228,40 +226,29 @@ export const solicitarRecuperacionPassword = async (req, res) => {
 
 export const resetearPassword = async (req, res) => {
   try {
-    const { token, password } = req.body;
-    if (!token || !password) {
+    const { codigo, password } = req.body;
+    if (!codigo || !password) {
       return res.status(400).json({
         codigo: "CAMPOS_REQUERIDOS",
-        mensaje: "Token y password requeridos",
+        mensaje: "Codigo y password requeridos",
       });
     }
 
-    let payload;
-    try {
-      payload = jwt.verify(token, getSecretKey());
-    } catch (_) {
-      return res.status(400).json({
-        codigo: "TOKEN_INVALIDO",
-        mensaje: "Token inválido o expirado",
-      });
-    }
+    const usuario = await Usuario.findOne({
+      resetCode: codigo,
+      resetCodeExpires: { $gt: new Date() },
+    });
 
-    if (payload.type !== "password_reset" || !payload.id) {
-      return res.status(400).json({
-        codigo: "TOKEN_INVALIDO",
-        mensaje: "Token inválido",
-      });
-    }
-
-    const usuario = await Usuario.findById(payload.id);
     if (!usuario) {
       return res.status(400).json({
-        codigo: "TOKEN_INVALIDO",
-        mensaje: "Token inválido",
+        codigo: "CODIGO_INVALIDO",
+        mensaje: "Código inválido o expirado",
       });
     }
 
     usuario.password = await bcrypt.hash(password, 10);
+    usuario.resetCode = undefined;
+    usuario.resetCodeExpires = undefined;
     await usuario.save();
 
     res.json({ mensaje: "Contraseña actualizada correctamente" });

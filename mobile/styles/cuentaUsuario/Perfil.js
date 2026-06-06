@@ -1,9 +1,27 @@
 import { StyleSheet, Platform, Dimensions } from 'react-native';
 
-// Obtenemos el ancho exacto de la pantalla del celular
 const { width } = Dimensions.get('window');
 
 export const backgroundSource = require('../../assets/fondo_dorado.jpg');
+export const PerfilTheme = {
+  blur: {
+    intensity: 60,
+    tint: 'dark',
+  },
+  iconGrid: {
+    size: 28,
+    color: '#ffffff',
+  },
+  iconInfo: {
+    size: 22,
+    color: '#333',
+  },
+  gridColors: {
+    misDatos: 'rgba(189, 158, 73, 0.4)',
+    metodosPago: 'rgba(97, 94, 87, 0.4)',
+    misMetricas: 'rgba(255, 187, 0, 0.4)',
+  }
+};
 
 export const PerfilStyles = StyleSheet.create({
   background: {
@@ -11,22 +29,21 @@ export const PerfilStyles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  // Contenedor general (solo ocupa la pantalla)
   mainContainer: {
     flex: 1,
-    paddingTop: Platform.OS === 'ios' ? 50 : 30, // Margen superior seguro
+    paddingTop: Platform.OS === 'ios' ? 50 : 30,
   },
-  // ESTE ES EL SECRETO: El contenido del scroll NO DEBE tener flex: 1
+  whiteCard: {
+    flex: 1,
+  },
   scrollContentContainer: {
     paddingHorizontal: 20,
-    paddingBottom: 100, // Deja espacio para que la navbar no lo pise
+    paddingBottom: 130,
   },
-  
-  // --- Textos ---
   title: {
     fontSize: 26,
     fontWeight: 'bold',
-    color: '#090909', // Si tu fondo es muy oscuro, cambialo a '#FFFFFF'
+    color: '#090909', 
     marginBottom: 8,
   },
   categoryContainer: {
@@ -36,12 +53,12 @@ export const PerfilStyles = StyleSheet.create({
   },
   categoryText: {
     fontSize: 14,
-    color: '#090909',
+    color: '#ffffff',
     marginRight: 8,
     fontWeight: '600',
   },
   categoryBadge: {
-    backgroundColor: '#E0BF66', // Dorado
+    backgroundColor: '#E0BF66', 
     paddingHorizontal: 12,
     paddingVertical: 4, 
     borderRadius: 12,
@@ -51,8 +68,6 @@ export const PerfilStyles = StyleSheet.create({
     fontSize: 12, 
     fontWeight: 'bold',
   },
-  
-  // --- Grilla de Íconos (Adaptable a cualquier pantalla) ---
   gridContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -60,35 +75,34 @@ export const PerfilStyles = StyleSheet.create({
   },
   gridItemWrapper: {
     alignItems: 'center',
-    // Divide el ancho disponible en 3, asegurando que nunca se aplasten
     width: (width - 40) / 3.2, 
   },
   gridIconContainer: {
-    backgroundColor: '#090909',
-    width: 50, 
-    height: 50, 
-    borderRadius: 14,
+    width: 65, 
+    height: 65, 
+    borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 8,
+    overflow: 'hidden', 
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)', 
   },
   gridIcon: {
     fontSize: 22,
   },
   gridLabel: {
     fontSize: 12,
-    color: '#090909', 
+    color: '#ffffff', 
     textAlign: 'center',
     fontWeight: '600',
   },
-
-  // --- Botón Mis Subastas ---
   subastasButton: {
     backgroundColor: '#090909',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 14, // Usa padding, no height fijo
+    paddingVertical: 14,
     borderRadius: 12,
     marginBottom: 24,
   },
@@ -97,8 +111,6 @@ export const PerfilStyles = StyleSheet.create({
     fontSize: 15,
     fontWeight: 'bold',
   },
-
-  // --- Lista de Información (Caja Blanca) ---
   infoCard: {
     backgroundColor: '#FFFFFF', 
     borderRadius: 16,
@@ -124,6 +136,11 @@ export const PerfilStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  infoIconWrapper: {
+    width: 24,
+    alignItems: 'center',
+    marginRight: 8,
+  },
   infoIcon: {
     fontSize: 20,
     marginRight: 12,
@@ -137,13 +154,11 @@ export const PerfilStyles = StyleSheet.create({
     fontSize: 18,
     color: '#A49A8A',
   },
-
-  // --- Botón Cerrar Sesión ---
   logoutButton: {
     backgroundColor: 'transparent',
     borderWidth: 1.5,
     borderColor: '#FFFFFF',
-    paddingVertical: 14, // Usa padding, no height fijo
+    paddingVertical: 14, 
     borderRadius: 12,
     alignItems: 'center',
     marginBottom: 10,
@@ -152,5 +167,21 @@ export const PerfilStyles = StyleSheet.create({
     color: '#FFFFFF', 
     fontSize: 15,
     fontWeight: 'bold',
-  }
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  logo: {
+    width: 40,
+    height: 50,
+    resizeMode: 'contain',
+    marginRight: 10,
+  },
+  headerTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#F6F1E7',
+  },
 });

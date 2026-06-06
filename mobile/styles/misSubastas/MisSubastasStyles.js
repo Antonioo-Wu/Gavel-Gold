@@ -1,12 +1,38 @@
 import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
-  container: {
+export const ItemCardTheme = {
+  tagColors: {
+    'Pendiente de Revisión': '#666666',
+    'Pendiente de Aprobación del Usuario': '#7B61FF',
+    'Aprobado': '#27AE60',
+    'Rechazado': '#EB5757',
+    'En Subasta': '#2D9CDB',
+    'default': '#090909'
+  }
+};
+
+// NUEVO THEME PARA LIMPIAR EL JSX
+export const MisSubastasTheme = {
+  colors: {
+    spinner: '#E0BF66',
+    placeholder: '#666666',
+  },
+  iconSize: 20,
+  spinnerSize: 'large',
+};
+
+export const misSubastasStyles = StyleSheet.create({
+  // ELIMINAMOS 'container' Y CREAMOS ESTOS DOS:
+  mainWrapper: {
     flex: 1,
     backgroundColor: '#1A1814', // Fondo oscuro Gavel & Gold
-    paddingHorizontal: 20,
     paddingTop: 40,
   },
+  contentWrapper: {
+    flex: 1,
+    paddingHorizontal: 20, // Movemos el padding acá para que no afecte al BottomNav
+  },
+
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -43,7 +69,7 @@ export const styles = StyleSheet.create({
     color: '#090909',
   },
   listContainer: {
-    paddingBottom: 100, // Espacio para el botón fijo y navbar
+    paddingBottom: 100,
   },
   // --- Estilos de la Tarjeta ---
   cardContainer: {
@@ -87,12 +113,11 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333333',
   },
-  // --- Botón Flotante/Fijo ---
-  createButtonContainer: {
-    position: 'absolute',
-    bottom: 20,
-    width: '100%',
-    alignSelf: 'center',
+
+  // --- BOTONES AL FINAL DEL SCROLL ---
+  footerButtonsContainer: {
+    marginTop: 10,
+    paddingBottom: 20,
   },
   createButton: {
     backgroundColor: '#F6F1E7',
@@ -100,10 +125,27 @@ export const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 15,
   },
   createButtonText: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#090909',
+  },
+  backButton: {
+    marginTop: 20,
+    backgroundColor: 'transparent',
+    borderWidth: 1.5,
+    borderColor: '#F6F1E7',
+    borderRadius: 20,
+    paddingVertical: 10,
+    alignItems: 'center',
+    alignSelf: 'center',
+    width: '60%',
+  },
+  backButtonText: {
+    color: '#F6F1E7',
+    fontSize: 16,
+    fontWeight: 'bold',
   }
 });

@@ -1,62 +1,95 @@
 import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
+export const timelineStyles = StyleSheet.create({
   timelineContainer: {
     paddingVertical: 10,
     paddingHorizontal: 5,
-    marginBottom: 20,
   },
-  stepWrapper: {
+  pasoWrapper: {
     flexDirection: 'row',
-    minHeight: 60, // Da espacio para que se dibuje la línea vertical
+    minHeight: 70,
+    position: 'relative',
   },
-  // --- Columna del Icono y Línea ---
-  iconColumn: {
-    width: 40,
-    alignItems: 'center',
-  },
-  iconContainer: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 2, // Asegura que el icono quede por encima de la línea
-  },
-  // La línea que conecta los nodos
-  verticalLine: {
+  lineaVertical: {
     position: 'absolute',
-    top: 24, // Empieza justo debajo del icono
-    bottom: 0, // Se estira hasta el final del contenedor
+    left: 17,
+    top: 30,
     width: 2,
-    backgroundColor: '#333333', // Color de línea inactiva por defecto
+    bottom: -10,
     zIndex: 1,
   },
-  verticalLineActive: {
-    backgroundColor: '#27AE60', // Línea verde si el paso está completado
+  lineaPendiente: {
+    backgroundColor: '#333',
   },
-  // --- Columna de Textos ---
-  textColumn: {
+  lineaCompletada: {
+    backgroundColor: '#E0BF66', 
+  },
+  circuloBase: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 2,
+    borderWidth: 2,
+  },
+  circuloPendiente: {
+    backgroundColor: '#1E1B16',
+    borderColor: '#333',
+  },
+  circuloActual: {
+    backgroundColor: '#1E1B16',
+    borderColor: '#E0BF66',
+  },
+  circuloCompletado: {
+    backgroundColor: '#E0BF66',
+    borderColor: '#E0BF66',
+  },
+  circuloError: {
+    backgroundColor: '#d32f2f',
+    borderColor: '#d32f2f',
+  },
+  iconoText: {
+    fontSize: 14,
+  },
+  infoPaso: {
     flex: 1,
-    paddingLeft: 10,
-    paddingBottom: 20, // Espacio antes del siguiente paso
+    marginLeft: 16,
+    justifyContent: 'flex-start',
+    paddingTop: 6,
   },
-  title: {
+  labelBase: {
     fontSize: 16,
+    fontWeight: '600',
+  },
+  textoPendiente: {
+    color: '#666',
+  },
+  textoActual: {
+    color: '#E0BF66',
+  },
+  textoCompletado: {
+    color: '#F6F1E7',
+  },
+  textoError: {
+    color: '#d32f2f',
     fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 4,
   },
-  titlePending: {
-    color: '#666666', // Título grisado si es un paso futuro
+  subtexto: {
+    color: '#aaa',
+    fontSize: 13,
+    marginTop: 4,
   },
-  subtitle: {
-    fontSize: 12,
-    color: '#A49A8A', // Color crema oscurecido
+  boxRechazo: {
+    backgroundColor: 'rgba(211, 47, 47, 0.1)',
+    borderLeftWidth: 3,
+    borderLeftColor: '#d32f2f',
+    padding: 8,
+    marginTop: 6,
+    borderRadius: 4,
   },
-  errorText: {
-    color: '#EB5757', // Texto rojo para errores/rechazos
-    fontWeight: 'bold',
-    marginTop: 2,
+  textoMotivoRechazo: {
+    color: '#ff8a80',
+    fontSize: 13,
   }
 });

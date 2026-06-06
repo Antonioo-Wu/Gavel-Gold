@@ -1,15 +1,34 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, Alert, Image, ImageBackground } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import { UsuarioMediosPagoStyles as styles } from '../../styles/cuentaUsuario/UsuarioMediosPago.js';
+// Importamos el theme
+import { UsuarioMediosPagoStyles as styles, UsuarioMediosPagoTheme } from '../../styles/cuentaUsuario/UsuarioMediosPago.js';
 import { API_URL } from '../../config/api.js';
+
+import FormCard from '../../components/FormCard.jsx';
+import BottomNav from '../../components/BottomNav.jsx';
 
 export default function UsuarioMediosPago() {
   const navigation = useNavigation();
-  const [mediosPago, setMediosPago] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const mockData = [
+    {
+      _id: 'mock_1',
+      tipo: 'TARJETA',
+      validado: true,
+      detalle: JSON.stringify({ numero: '1234567890121234', vencimiento: '12/25' })
+    },
+    {
+      _id: 'mock_2',
+      tipo: 'CUENTA_BANCARIA',
+      validado: false,
+      detalle: JSON.stringify({ banco: 'Santander', numeroCuenta: '456789123', titular: 'Juan Pérez' })
+    }
+  ];
+
+  const [mediosPago, setMediosPago] = useState(mockData);
 
   useFocusEffect(
     useCallback(() => {
@@ -18,16 +37,11 @@ export default function UsuarioMediosPago() {
   );
 
   const cargarMediosDePago = async () => {
-    setIsLoading(true);
     try {
       const token = await AsyncStorage.getItem('userToken');
       const userDataString = await AsyncStorage.getItem('userData');
-      
-      if (!token || !userDataString) {
-        Alert.alert("Error", "Debes iniciar sesión.");
-        navigation.navigate('Login');
-        return;
-      }
+
+      if (!token || !userDataString) return;
 
       const usuario = JSON.parse(userDataString);
 
@@ -41,38 +55,36 @@ export default function UsuarioMediosPago() {
 
       const data = await response.json();
 
-      if (response.ok) {
+      if (response.ok && data.length > 0) {
         setMediosPago(data);
-      } else {
-        Alert.alert("Error", data.mensaje || "No se pudieron cargar los métodos de pago.");
       }
     } catch (error) {
-      console.error(error);
-      Alert.alert("Error", "No se pudo conectar con el servidor.");
+      console.error("Error cargando métodos:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const renderDetalles = (tipo, detalleString) => {
+  const renderDetalles = (tipo, detalleData) => {
     try {
-      const detalle = JSON.parse(detalleString);
-      
+      // PREVENCIÓN DE CRASH: Si el backend manda String lo parseamos, si manda Objeto lo usamos directo.
+      const detalle = typeof detalleData === 'string' ? JSON.parse(detalleData) : detalleData;
+
       if (tipo === 'TARJETA') {
         const ultimosDigitos = detalle.numero ? detalle.numero.slice(-4) : 'XXXX';
         return (
-          <View>
+          <View style={styles.detailsContent}>
             <Text style={styles.paymentDetailText}>Terminada en: •••• {ultimosDigitos}</Text>
             <Text style={styles.paymentDetailText}>Vencimiento: {detalle.vencimiento}</Text>
           </View>
         );
-      } 
-      
+      }
+
       if (tipo === 'CUENTA_BANCARIA') {
         return (
-          <View>
+          <View style={styles.detailsContent}>
             <Text style={styles.paymentDetailText}>Banco: {detalle.banco}</Text>
-            <Text style={styles.paymentDetailText}>Cta: {detalle.numeroCuenta}</Text>
+            <Text style={styles.paymentDetailText}>Nº Cuenta: {detalle.numeroCuenta}</Text>
             <Text style={styles.paymentDetailText}>Titular: {detalle.titular}</Text>
           </View>
         );
@@ -80,68 +92,89 @@ export default function UsuarioMediosPago() {
 
       if (tipo === 'CHEQUE') {
         return (
-          <View>
+          <View style={styles.detailsContent}>
             <Text style={styles.paymentDetailText}>Banco: {detalle.banco}</Text>
-            <Text style={styles.paymentDetailText}>Monto: {detalle.moneda} {detalle.monto}</Text>
+            <Text style={styles.paymentDetailText}>Monto: {detalle.moneda || '$'} {detalle.monto}</Text>
             <Text style={styles.paymentDetailText}>Vence: {detalle.vencimiento}</Text>
           </View>
         );
       }
-
     } catch (error) {
-      return <Text style={styles.paymentDetailText}>{detalleString}</Text>;
+      // Si falla, mostramos el dato crudo
+      return <Text style={styles.paymentDetailText}>{String(detalleData)}</Text>;
     }
   };
 
   const getTipoLabel = (tipo) => {
-    switch(tipo) {
-      case 'TARJETA': return '💳 Tarjeta de Crédito';
-      case 'CUENTA_BANCARIA': return '🏦 Cuenta Bancaria';
-      case 'CHEQUE': return '📄 Cheque';
+    switch (tipo) {
+      case 'TARJETA': return 'Tarjeta de Crédito';
+      case 'CUENTA_BANCARIA': return 'Cuenta Bancaria';
+      case 'CHEQUE': return 'Cheque';
       default: return 'Método de pago';
     }
   };
 
   return (
-    <View style={styles.container}>
-      <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <Text style={styles.title}>Mis Métodos de Pago</Text>
-        
-        {isLoading ? (
-          <ActivityIndicator size="large" color="#D4AF37" style={{ marginTop: 40 }} />
-        ) : (
-          <View style={{ marginTop: 16 }}>
-            {mediosPago.length === 0 ? (
-              <View style={styles.emptyContainer}>
-                <Text style={styles.emptyText}>Aún no tienes métodos de pago registrados.</Text>
-              </View>
-            ) : (
-              mediosPago.map((metodo) => (
-                <View key={metodo._id} style={styles.paymentCard}>
-                  <View style={styles.paymentHeader}>
-                    <Text style={styles.paymentType}>{getTipoLabel(metodo.tipo)}</Text>
-                    
-                    <View style={[styles.badge, metodo.validado ? styles.badgeValidated : styles.badgePending]}>
-                      <Text style={metodo.validado ? styles.badgeTextValidated : styles.badgeTextPending}>
-                        {metodo.validado ? 'Validado' : 'Pendiente'}
-                      </Text>
-                    </View>
-                  </View>
-                  
-                  {renderDetalles(metodo.tipo, metodo.detalle)}
-                </View>
-              ))
-            )}
+    <ImageBackground source={require('../../assets/fondo_dorado.jpg')} style={styles.backgroundImage}>
+      <View style={styles.mainContainer}>
 
-            <TouchableOpacity 
-              style={styles.addButton} 
-              onPress={() => navigation.navigate('SeleccionMetodoPago')}
-            >
-              <Text style={styles.addButtonText}>+ Añadir nuevo método</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      </ScrollView>
-    </View>
+        <View style={styles.headerOutside}>
+          <Image source={require('../../assets/logos/logotipo.png')} style={styles.logoHeader} />
+          <Text style={styles.titleHeader}>Métodos de Pago</Text>
+        </View>
+
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollWrapper}>
+          <FormCard>
+            <View style={styles.infoContainer}>
+
+              {isLoading ? (
+                <ActivityIndicator
+                  size={UsuarioMediosPagoTheme.indicatorSize}
+                  color={UsuarioMediosPagoTheme.colors.primary}
+                  style={styles.loadingIndicator}
+                />
+              ) : (
+                <View style={styles.listContainer}>
+                  {mediosPago.length === 0 ? (
+                    <Text style={styles.emptyText}>Aún no tienes métodos de pago registrados.</Text>
+                  ) : (
+                    mediosPago.map((metodo, index) => {
+                      const isLast = index === mediosPago.length - 1;
+                      return (
+                        <View key={metodo._id || index} style={isLast ? styles.paymentItemLast : styles.paymentItem}>
+
+                          <View style={styles.paymentHeaderRow}>
+                            <Text style={styles.paymentTypeTitle}>{getTipoLabel(metodo.tipo)}</Text>
+                            <View style={[styles.badge, metodo.validado ? styles.badgeValidated : styles.badgePending]}>
+                              <Text style={metodo.validado ? styles.badgeTextValidated : styles.badgeTextPending}>
+                                {metodo.validado ? 'Validado' : 'Pendiente'}
+                              </Text>
+                            </View>
+                          </View>
+
+                          {renderDetalles(metodo.tipo, metodo.detalle)}
+
+                        </View>
+                      );
+                    })
+                  )}
+
+                  <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('SeleccionMetodoPago', { origen: 'UsuarioMediosPago' })}>
+                    <Text style={styles.addButtonText}>Añadir nuevo método</Text>
+                  </TouchableOpacity>
+
+                </View>
+              )}
+
+            </View>
+          </FormCard>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Perfil')}>
+            <Text style={styles.backButtonText}>Volver</Text>
+          </TouchableOpacity>
+        </ScrollView>
+
+        <BottomNav />
+      </View>
+    </ImageBackground>
   );
 }

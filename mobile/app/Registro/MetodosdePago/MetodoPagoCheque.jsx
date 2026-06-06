@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text} from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../../components/FormCard';
 import CustomInput from '../../../components/CustomInput';
@@ -31,7 +31,7 @@ export default function MetodoPagoCheque() {
     try {
       const token = await AsyncStorage.getItem('userToken');
       const userDataString = await AsyncStorage.getItem('userData');
-      
+
       if (!token || !userDataString) {
         Alert.alert("Error", "Debes iniciar sesión.");
         navigation.navigate('Login');
@@ -46,9 +46,9 @@ export default function MetodoPagoCheque() {
 
       const response = await fetch(`${API_URL}/usuarios/${usuario.id}/medios-pago`, {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` 
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           tipo: "CHEQUE",
@@ -73,30 +73,33 @@ export default function MetodoPagoCheque() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Método de Pago - Cheque</Text>
-      <FormCard>
-        <Text style={styles.header}>Ingrese sus datos</Text>
-        <Text style={styles.subtext}>Todos los campos son obligatorios.</Text>
+      <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        <Text style={styles.title}>Método de Pago</Text>
+        <Text style={styles.type}>Cheque Certificado</Text>
+        <FormCard>
+          <Text style={styles.header}>Ingrese sus datos</Text>
+          <Text style={styles.subtext}>Todos los campos son obligatorios.</Text>
 
-        <CustomInput label="Banco emisor" placeholder="Ingrese el banco emisor" value={banco} onChangeText={setBanco} />
-        <CustomInput label="Número de cheque" placeholder="Ingrese el número" keyboardType="numeric" value={numeroCheque} onChangeText={setNumeroCheque} />
-        <CustomInput label="Monto" placeholder="Ingrese el monto" keyboardType="numeric" value={monto} onChangeText={setMonto} />
-        <CustomInput label="Moneda" placeholder="ARS / USD" value={moneda} onChangeText={setMoneda} />
+          <CustomInput label="Banco emisor" placeholder="Ingrese el banco emisor" value={banco} onChangeText={setBanco} />
+          <CustomInput label="Número de cheque" placeholder="Ingrese el número" keyboardType="numeric" value={numeroCheque} onChangeText={setNumeroCheque} />
+          <CustomInput label="Monto" placeholder="Ingrese el monto" keyboardType="numeric" value={monto} onChangeText={setMonto} />
+          <CustomInput label="Moneda" placeholder="ARS / USD" value={moneda} onChangeText={setMoneda} />
 
-        <View style={styles.inputRowCheque}>
-          <View style={styles.inputItem}><CustomInput label="Vencimiento" placeholder="DD" value={dia} onChangeText={setDia} /></View>
-          <View style={styles.inputItem}><CustomInput label=" " placeholder="MM" value={mes} onChangeText={setMes} /></View>
-          <View style={styles.inputItem}><CustomInput label=" " placeholder="YYYY" value={anio} onChangeText={setAnio} /></View>
-        </View>
+          <View style={styles.inputRowCheque}>
+            <View style={styles.inputItem}><CustomInput label="Vencimiento" placeholder="DD" value={dia} onChangeText={setDia} /></View>
+            <View style={styles.inputItem}><CustomInput label=" " placeholder="MM" value={mes} onChangeText={setMes} /></View>
+            <View style={styles.inputItem}><CustomInput label=" " placeholder="YYYY" value={anio} onChangeText={setAnio} /></View>
+          </View>
 
-        <CustomInput label="Titular" placeholder="Ingrese el titular" value={titular} onChangeText={setTitular} />
-        <ActionButton text="Subir Comprobante (PDF)" variant="outline" onPress={() => { }} />
+          <CustomInput label="Titular" placeholder="Ingrese el titular" value={titular} onChangeText={setTitular} />
+          <ActionButton text="Subir Comprobante (PDF)" variant="outline" onPress={() => { }} />
 
-        <View style={styles.buttons}>
-          <ActionButton text="Volver" variant="outline" onPress={() => navigation.navigate('SeleccionMetodoPago')} />
-          <ActionButton text={isLoading ? "Guardando..." : "Continuar"} variant="solid" onPress={handleGuardarCheque} />
-        </View>
-      </FormCard>
+          <View style={styles.buttons}>
+            <ActionButton text="Volver" variant="outline" onPress={() => navigation.goBack()} />
+            <ActionButton text={isLoading ? "Guardando..." : "Continuar"} variant="solid" onPress={handleGuardarCheque} />
+          </View>
+        </FormCard>
+      </ScrollView>
     </View>
   );
 }

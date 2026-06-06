@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ImageBackground } from 'react-native';
+import { View, Text, Image, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../components/FormCard';
 import CustomInput from '../../components/CustomInput';
@@ -53,6 +53,9 @@ export default function GenerarPassword() {
   return (
     <ImageBackground source={require('../../assets/fondo_dorado.jpg')} style={styles.background}>
       <View style={styles.container}>
+        <View style={styles.containerCenter}>
+              <Image source={require('../../assets/logos/logotipo.png')} style={styles.logo} />
+        </View>
         <Text style={styles.title}>Creación de Cuenta</Text>
         <FormCard>
           <Text style={styles.subtitle}>Generar contraseña personal</Text>

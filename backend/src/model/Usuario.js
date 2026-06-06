@@ -68,6 +68,11 @@ const usuarioSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "MedioPago",
     }],
+
+    codigoActivacion: { type: String },
+    codigoActivacionExpira: { type: Date },
+    resetCode: { type: String },
+    resetCodeExpires: { type: Date },
 }, {
     timestamps: true,
     versionKey: false,

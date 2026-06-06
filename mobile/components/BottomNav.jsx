@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { bottomNavStyles as styles } from '../styles/components/BottomNav.js';
+import { bottomNavStyles as styles, BottomNavTheme } from '../styles/components/BottomNav.js';
+import { AntDesign } from '@expo/vector-icons';
 
 export default function BottomNav() {
   const navigation = useNavigation();
@@ -12,15 +13,15 @@ export default function BottomNav() {
         style={styles.navButton}
         onPress={() => navigation.navigate('ListadeSubastas')}
       >
-        <Text style={styles.navIcon}>🏠</Text>
+        <Text style={styles.navIcon}><AntDesign name="home" size={BottomNavTheme.iconSize} /></Text>
         <Text style={styles.navLabel}>Inicio</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={[styles.navButton, styles.active]}
-        onPress={() => navigation.navigate('ListadeSubastas')}
+        onPress={() => navigation.navigate('MisPujas')}
       >
-        <Text style={styles.navIcon}>🛍️</Text>
+        <Text style={styles.navIcon}><AntDesign name="shopping" size={BottomNavTheme.iconSize} /></Text>
         <Text style={styles.navLabel}>Subastas</Text>
       </TouchableOpacity>
 
@@ -28,7 +29,7 @@ export default function BottomNav() {
         style={styles.navButton}
         onPress={() => navigation.navigate('Perfil')}
       >
-        <Text style={styles.navIcon}>👤</Text>
+        <Text style={styles.navIcon}><AntDesign name="user" size={BottomNavTheme.iconSize} /></Text>
         <Text style={styles.navLabel}>Cuenta</Text>
       </TouchableOpacity>
     </View>

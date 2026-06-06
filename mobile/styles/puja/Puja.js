@@ -1,8 +1,15 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
-export const styles = StyleSheet.create({
+// 1. Extraemos los valores visuales en línea para el JSX
+export const PujaTheme = {
+  iconSize: 20,
+  placeholderColor: '#A49A8A',
+};
+
+// 2. Estilos principales de la pantalla de Puja
+export const pujaStyles = StyleSheet.create({
   // --- LAYOUT PRINCIPAL ---
   container: {
     flex: 1,
@@ -12,11 +19,20 @@ export const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#FFFFFF',
-    width: width * 0.85,
+    width: Dimensions.get('window').width * 0.85,
     borderRadius: 16,
     padding: 20,
     alignItems: 'center',
-    marginBottom: 20,
+  },
+  scrollCardWrapper: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 20,
+    paddingBottom: 130,
+  },
+  buttonDisabled: {
+    opacity: 0.7,
   },
 
   // --- HEADER DE LA TARJETA ---
@@ -209,11 +225,11 @@ export const styles = StyleSheet.create({
     fontSize: 10,
     color: '#090909',
     marginTop: 4,
-  },
+  }
+});
 
-  // ==========================================
-  // ESTILOS DEL MODAL (POP-UP MÉTODOS DE PAGO)
-  // ==========================================
+// 3. SEPARAMOS LOS ESTILOS DEL MODAL PARA QUE QUEDEN INDEPENDIENTES
+export const modalStyles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.6)', // Fondo oscuro semi-transparente

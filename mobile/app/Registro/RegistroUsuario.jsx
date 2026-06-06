@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SafeAreaView, ScrollView, Text, Alert, View } from 'react-native';
+import { SafeAreaView, ScrollView, Text, Image, Alert, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker'; // 👈 dropdown nativo
 import { useNavigation } from '@react-navigation/native';
 
@@ -54,6 +54,10 @@ export default function RegistroUsuario() {
   return (
     <SafeAreaView style={styles.containerDark}>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        <View style={styles.containerCenter}>
+          <Image source={require('../../assets/logos/logotipo.png')} style={styles.logo} />
+        </View>
+      
         <Text style={styles.title}>Cree su Cuenta</Text>
 
         <FormCard>
@@ -77,8 +81,9 @@ export default function RegistroUsuario() {
               <Picker.Item label="Brasil" value="Brasil" />
               <Picker.Item label="Chile" value="Chile" />
               <Picker.Item label="Uruguay" value="Uruguay" />
-              <Picker.Item label="México" value="México" />
-              <Picker.Item label="España" value="España" />
+              <Picker.Item label="Paraguay" value="Paraguay" />
+              <Picker.Item label="Bolivia" value="Bolivia" />
+              <Picker.Item label="Perú" value="Perú" />
               
             </Picker>
           </View>

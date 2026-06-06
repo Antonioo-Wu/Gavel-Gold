@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, Alert, Image, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { datosUsuarioStyles as styles } from '../../styles/cuentaUsuario/DatosUsuario.js';
+import FormCard from '../../components/FormCard.jsx';
+import BottomNav from '../../components/BottomNav.jsx';
+// Importamos el Theme
+import { datosUsuarioStyles as styles, DatosUsuarioTheme } from '../../styles/cuentaUsuario/DatosUsuario.js';
 import { API_URL } from '../../config/api';
 
 export default function DatosUsuario() {
@@ -57,68 +60,76 @@ export default function DatosUsuario() {
     };
 
     return (
-        <View style={styles.container}>
-            <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
-                <Text style={styles.title}>Mis Datos Personales</Text>
-                <Text style={styles.category}>Información registrada en Gavel Gold</Text>
+        <ImageBackground source={require('../../assets/fondo_dorado.jpg')} style={styles.backgroundImage}>
+            <View style={styles.mainContainer}>
 
-                {isLoading ? (
-                    <ActivityIndicator size="large" color="#D4AF37" style={styles.loadingIndicator} />
-                ) : usuario ? (
-                    <View>
-                        <View style={styles.dataCard}>
-                            <View style={styles.dataRow}>
-                                <Text style={styles.dataLabel}>Nombre</Text>
-                                <Text style={styles.dataValue}>{usuario.nombre}</Text>
+                <View style={styles.headerOutside}>
+                    <Image source={require('../../assets/logos/logotipo.png')} style={styles.logoHeader} />
+                    <Text style={styles.titleHeader}>Mis Datos</Text>
+                </View>
+
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={styles.scrollWrapper}
+                >
+                    <FormCard>
+                        {isLoading ? (
+                            <ActivityIndicator
+                                size={DatosUsuarioTheme.indicatorSize}
+                                color={DatosUsuarioTheme.colors.primary}
+                                style={styles.loadingIndicator}
+                            />
+                        ) : usuario ? (
+                            <View style={styles.infoContainer}>
+                                <View style={styles.dataRow}>
+                                    <Text style={styles.dataLabel}>Nombre</Text>
+                                    <Text style={styles.dataValue}>{usuario.nombre}</Text>
+                                </View>
+
+                                <View style={styles.dataRow}>
+                                    <Text style={styles.dataLabel}>Apellido</Text>
+                                    <Text style={styles.dataValue}>{usuario.apellido}</Text>
+                                </View>
+
+                                <View style={styles.dataRow}>
+                                    <Text style={styles.dataLabel}>Correo Electrónico</Text>
+                                    <Text style={styles.dataValue}>{usuario.email}</Text>
+                                </View>
+
+                                <View style={styles.dataRow}>
+                                    <Text style={styles.dataLabel}>Domicilio Legal</Text>
+                                    <Text style={styles.dataValue}>{usuario.domicilio || 'No especificado'}</Text>
+                                </View>
+
+                                <View style={styles.dataRow}>
+                                    <Text style={styles.dataLabel}>País de Origen</Text>
+                                    <Text style={styles.dataValue}>{usuario.pais || 'No especificado'}</Text>
+                                </View>
+
+                                <View style={styles.dataRow}>
+                                    <Text style={styles.dataLabel}>Categoría</Text>
+                                    <Text style={styles.dataValue}>{capitalizar(usuario.categoria)}</Text>
+                                </View>
+
+                                <View style={styles.dataRowLast}>
+                                    <Text style={styles.dataLabel}>Estado</Text>
+                                    <Text style={[styles.dataValue, usuario.estado === 'activo' ? styles.statusActive : styles.statusInactive]}>
+                                        {capitalizar(usuario.estado)}
+                                    </Text>
+                                </View>
+
+                                <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+                                    <Text style={styles.backButtonText}>Volver</Text>
+                                </TouchableOpacity>
                             </View>
+                        ) : (
+                            <Text style={styles.emptyText}>No se encontraron datos.</Text>
+                        )}
+                    </FormCard>
+                </ScrollView>
 
-                            <View style={styles.dataRow}>
-                                <Text style={styles.dataLabel}>Apellido</Text>
-                                <Text style={styles.dataValue}>{usuario.apellido}</Text>
-                            </View>
-
-                            <View style={styles.dataRow}>
-                                <Text style={styles.dataLabel}>Correo Electrónico</Text>
-                                <Text style={styles.dataValue}>{usuario.email}</Text>
-                            </View>
-
-                            <View style={styles.dataRow}>
-                                <Text style={styles.dataLabel}>Domicilio Legal</Text>
-                                <Text style={styles.dataValue}>{usuario.domicilio || 'No especificado'}</Text>
-                            </View>
-
-                            <View style={styles.dataRow}>
-                                <Text style={styles.dataLabel}>País de Origen</Text>
-                                <Text style={styles.dataValue}>{usuario.pais || 'No especificado'}</Text>
-                            </View>
-
-                            <View style={styles.dataRow}>
-                                <Text style={styles.dataLabel}>Categoría de Postor</Text>
-                                <Text style={[styles.dataValue, styles.dataValueCategory]}>
-                                    {capitalizar(usuario.categoria)}
-                                </Text>
-                            </View>
-
-                            <View style={[styles.dataRow, styles.dataRowLast]}>
-                                <Text style={styles.dataLabel}>Estado de Cuenta</Text>
-                                <Text style={[
-                                    styles.dataValue,
-                                    styles.statusTextBase,
-                                    usuario.estado === 'activo' ? styles.statusActive : styles.statusInactive
-                                ]}>
-                                    {capitalizar(usuario.estado)}
-                                </Text>
-                            </View>
-                        </View>
-
-                        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-                            <Text style={styles.backButtonText}>Volver al Perfil</Text>
-                        </TouchableOpacity>
-                    </View>
-                ) : (
-                    <Text style={styles.emptyText}>No se encontraron datos del usuario.</Text>
-                )}
-            </ScrollView>
-        </View>
+                <BottomNav />
+            </View>
+        </ImageBackground>
     );
 }

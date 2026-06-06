@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../../components/FormCard';
 import CustomInput from '../../../components/CustomInput';
@@ -71,20 +71,23 @@ export default function MetodoPagoCuentaBancaria() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Método de Pago - Cuenta</Text>
-      <FormCard>
-        <Text style={styles.header}>Ingrese sus datos</Text>
-        <CustomInput label="Titular de la cuenta" placeholder="Nombre y apellido" value={titular} onChangeText={setTitular} />
-        <CustomInput label="Número de documento" placeholder="DNI/CUIT" value={documento} onChangeText={setDocumento} />
-        <CustomInput label="País de origen" placeholder="País" value={pais} onChangeText={setPais} />
-        <CustomInput label="Banco" placeholder="Ingrese el banco" value={banco} onChangeText={setBanco} />
-        <CustomInput label="Número de cuenta" placeholder="Número de cuenta" value={cuenta} onChangeText={setCuenta} />
+      <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        <Text style={styles.title}>Método de Pago</Text>
+        <Text style={styles.type}>Cheque Certificado</Text>
+        <FormCard>
+          <Text style={styles.header}>Ingrese sus datos</Text>
+          <CustomInput label="Titular de la cuenta" placeholder="Nombre y apellido" value={titular} onChangeText={setTitular} />
+          <CustomInput label="Número de documento" placeholder="DNI/CUIT" value={documento} onChangeText={setDocumento} />
+          <CustomInput label="País de origen" placeholder="País" value={pais} onChangeText={setPais} />
+          <CustomInput label="Banco" placeholder="Ingrese el banco" value={banco} onChangeText={setBanco} />
+          <CustomInput label="Número de cuenta" placeholder="Número de cuenta" value={cuenta} onChangeText={setCuenta} />
 
-        <View style={styles.buttons}>
-          <ActionButton text="Volver" variant="outline" onPress={() => navigation.navigate('SeleccionMetodoPago')} />
-          <ActionButton text={isLoading ? "Guardando..." : "Continuar"} variant="solid" onPress={handleGuardarCuenta} />
-        </View>
-      </FormCard>
+          <View style={styles.buttons}>
+            <ActionButton text="Volver" variant="outline" onPress={() => navigation.goBack()} />
+            <ActionButton text={isLoading ? "Guardando..." : "Continuar"} variant="solid" onPress={handleGuardarCuenta} />
+          </View>
+        </FormCard>
+      </ScrollView>
     </View>
   );
 }

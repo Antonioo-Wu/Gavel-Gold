@@ -1,5 +1,10 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
+export const LoadingTheme = {
+  spinnerSize: 100,
+  spinnerColor: '#E0BF66',
+};
+
 const { height } = Dimensions.get('window');
 
 export const styles = StyleSheet.create({

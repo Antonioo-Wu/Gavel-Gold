@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FormCard from '../../../components/FormCard';
 import CustomInput from '../../../components/CustomInput';
@@ -29,7 +29,7 @@ export default function MetodoPagoTarjeta() {
     try {
       const token = await AsyncStorage.getItem('userToken');
       const userDataString = await AsyncStorage.getItem('userData');
-      
+
       if (!token || !userDataString) {
         Alert.alert("Error de sesión", "Por favor inicia sesión nuevamente.");
         navigation.navigate('Login');
@@ -44,7 +44,7 @@ export default function MetodoPagoTarjeta() {
 
       const response = await fetch(`${API_URL}/usuarios/${usuario.id}/medios-pago`, {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
@@ -71,24 +71,27 @@ export default function MetodoPagoTarjeta() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Método de Pago - Tarjeta</Text>
-      <FormCard>
-        <Text style={styles.header}>Ingrese sus datos</Text>
-        <CustomInput label="Número de tarjeta" placeholder="0000 0000 0000" keyboardType="numeric" value={numeroTarjeta} onChangeText={setNumeroTarjeta} />
+      <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        <Text style={styles.title}>Método de Pago</Text>
+        <Text style={styles.type}>Tarjeta de Crédito/Débito</Text>
+        <FormCard>
+          <Text style={styles.header}>Ingrese sus datos</Text>
+          <CustomInput label="Número de tarjeta" placeholder="0000 0000 0000" keyboardType="numeric" value={numeroTarjeta} onChangeText={setNumeroTarjeta} />
 
-        <View style={styles.inputRowTarjeta}>
-          <View style={styles.inputItem}><CustomInput label="Vencimiento" placeholder="MM" keyboardType="numeric" value={mes} onChangeText={setMes} /></View>
-          <View style={styles.inputItem}><CustomInput label=" " placeholder="YYYY" keyboardType="numeric" value={anio} onChangeText={setAnio} /></View>
-        </View>
+          <View style={styles.inputRowTarjeta}>
+            <View style={styles.inputItem}><CustomInput label="Vencimiento" placeholder="MM" keyboardType="numeric" value={mes} onChangeText={setMes} /></View>
+            <View style={styles.inputItem}><CustomInput label=" " placeholder="YYYY" keyboardType="numeric" value={anio} onChangeText={setAnio} /></View>
+          </View>
 
-        <CustomInput label="Código de seguridad" placeholder="CVI" keyboardType="numeric" value={cvi} onChangeText={setCvi} />
-        <CustomInput label="País" placeholder="Ingrese el país" value={pais} onChangeText={setPais} />
+          <CustomInput label="Código de seguridad" placeholder="CVI" keyboardType="numeric" value={cvi} onChangeText={setCvi} />
+          <CustomInput label="País" placeholder="Ingrese el país" value={pais} onChangeText={setPais} />
 
-        <View style={styles.buttons}>
-          <ActionButton text="Volver" variant="outline" onPress={() => navigation.navigate('SeleccionMetodoPago')} />
-          <ActionButton text={isLoading ? "Guardando..." : "Continuar"} variant="solid" onPress={handleGuardarTarjeta} />
-        </View>
-      </FormCard>
+          <View style={styles.buttons}>
+            <ActionButton text="Volver" variant="outline" onPress={() => navigation.goBack()} />
+            <ActionButton text={isLoading ? "Guardando..." : "Continuar"} variant="solid" onPress={handleGuardarTarjeta} />
+          </View>
+        </FormCard>
+      </ScrollView>
     </View>
   );
 }

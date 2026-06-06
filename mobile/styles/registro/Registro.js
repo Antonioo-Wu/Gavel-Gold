@@ -67,5 +67,15 @@ export const registroStyles = StyleSheet.create({
     borderRadius: 8,
     flex: 1,
     alignItems: 'center'
-  }
+  },
+  logo: {
+    width: 96,
+    height: 96,
+    marginBottom: 16,
+    resizeMode: 'contain',
+  },
+   containerCenter: {
+    padding: 10,
+    alignItems: 'center',
+  },
 });

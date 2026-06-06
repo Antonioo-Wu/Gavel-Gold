@@ -3,7 +3,8 @@ import { StyleSheet } from 'react-native';
 export const loginStyles = StyleSheet.create({
   background: {
     flex: 1,
-    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
   },
   title: {
     color: 'white',
@@ -13,8 +14,11 @@ export const loginStyles = StyleSheet.create({
     textAlign: 'center',
   },
   containerCenter: {
-    padding: 24,
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
+    // ESTO ES LA MAGIA: Le devuelve los márgenes laterales a tu tarjeta blanca
+    paddingHorizontal: 24,
   },
   logo: {
     width: 96,

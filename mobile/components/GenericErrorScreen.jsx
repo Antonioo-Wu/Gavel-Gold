@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, Image, SafeAreaView } from 'react-native';
+import { View, Text, Image } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { errorStyles as styles } from '../styles/components/ErrorStyles';
 
 // Importá el logo oficial de Gavel & Gold
