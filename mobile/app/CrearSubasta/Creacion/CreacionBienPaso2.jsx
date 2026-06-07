@@ -24,29 +24,53 @@ export default function CreacionBienPaso2() {
   const [fotos, setFotos] = useState([]); // Arreglo para guardar las fotos capturadas
   const [isLoading, setIsLoading] = useState(false);
 
-  // --- LÓGICA DE LA CÁMARA ---
-  const handleTomarFoto = async () => {
-    // 1. Pedir permiso al usuario con un Pop-up
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    
-    if (status !== 'granted') {
-      Alert.alert('Permiso denegado', 'Necesitamos acceso a la cámara para tomar las fotos.');
-      return;
-    }
-
-    // 2. Abrir la cámara
-    const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true, // Permite recortar la foto
-      aspect: [4, 3],
-      quality: 0.8, // Comprime un poco para no saturar el server
-    });
-
-    // 3. Guardar la foto en el estado si el usuario no canceló
-    if (!result.canceled) {
-      setFotos(prevFotos => [...prevFotos, result.assets[0]]);
-    }
-  };
+  const handleAgregarFoto = async () => {
+  Alert.alert(
+    "Agregar foto",
+    "¿Querés sacar una foto o elegir de la galería?",
+    [
+      {
+        text: "Cámara",
+        onPress: async () => {
+          const { status } = await ImagePicker.requestCameraPermissionsAsync();
+          if (status !== 'granted') {
+            Alert.alert('Permiso denegado', 'Necesitamos acceso a la cámara.');
+            return;
+          }
+          const result = await ImagePicker.launchCameraAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 0.8,
+          });
+          if (!result.canceled) {
+            setFotos(prev => [...prev, result.assets[0]]);
+          }
+        }
+      },
+      {
+        text: "Galería",
+        onPress: async () => {
+          const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+          if (status !== 'granted') {
+            Alert.alert('Permiso denegado', 'Necesitamos acceso a la galería.');
+            return;
+          }
+          const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 0.8,
+          });
+          if (!result.canceled) {
+            setFotos(prev => [...prev, result.assets[0]]);
+          }
+        }
+      },
+      { text: "Cancelar", style: "cancel" }
+    ]
+  );
+};
 
   const handleSubastar = async () => {
     // Validar Checkboxes
@@ -140,7 +164,7 @@ export default function CreacionBienPaso2() {
           <View style={styles.photosGrid}>
             <TouchableOpacity
               style={styles.addPhotoBtn}
-              onPress={handleTomarFoto}
+              onPress={handleAgregarFoto}
             >
               <Text style={styles.uploadIcon}>🖼️</Text>
             </TouchableOpacity>
