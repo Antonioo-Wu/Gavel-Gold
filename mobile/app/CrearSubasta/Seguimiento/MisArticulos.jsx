@@ -97,40 +97,39 @@ export default function MisArticulos() {
         </View>
 
         {/* Lista de Artículos */}
-        {isLoading ? (
-          <ActivityIndicator size={MisSubastasTheme.spinnerSize} color={MisSubastasTheme.colors.spinner} />
-        ) : articulos.length === 0 ? (
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ color: '#fff', fontSize: 16 }}>Aún no has propuesto ningún artículo.</Text>
-          </View>
-        ) : (
-          <FlatList
-            data={articulos}
-            keyExtractor={(item) => item.id.toString()}
-            contentContainerStyle={styles.listContainer}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <ItemCard item={item} onPress={() => handlePressItem(item)} />
-            )}
-            // 1. Esto se muestra en el centro cuando la lista está vacía
-            ListEmptyComponent={
+        <FlatList
+          data={articulos}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={styles.listContainer}
+          showsVerticalScrollIndicator={false}
+          ListHeaderComponent={
+            isLoading ? (
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingVertical: 50 }}>
+                <ActivityIndicator size={MisSubastasTheme.spinnerSize} color={MisSubastasTheme.colors.spinner} />
+              </View>
+            ) : null
+          }
+          renderItem={({ item }) => (
+            <ItemCard item={item} onPress={() => handlePressItem(item)} />
+          )}
+          ListEmptyComponent={
+            !isLoading ? (
               <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 50 }}>
                 <Text style={{ color: '#fff', fontSize: 16 }}>Aún no has propuesto ningún artículo.</Text>
               </View>
-            }
-            // 2. El footer se renderiza SIEMPRE, incluso si la lista está vacía
-            ListFooterComponent={
-              <View style={styles.footerButtonsContainer}>
-                <TouchableOpacity style={styles.createButton} onPress={() => navigation.navigate('CreacionBienPaso1')}>
-                  <Text style={styles.createButtonText}>Proponer Item</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-                  <Text style={styles.backButtonText}>Volver</Text>
-                </TouchableOpacity>
-              </View>
-            }
-          />
-        )}
+            ) : null
+          }
+          ListFooterComponent={
+            <View style={styles.footerButtonsContainer}>
+              <TouchableOpacity style={styles.createButton} onPress={() => navigation.navigate('CreacionBienPaso1')}>
+                <Text style={styles.createButtonText}>Proponer Item</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+                <Text style={styles.backButtonText}>Volver</Text>
+              </TouchableOpacity>
+            </View>
+          }
+        />
       </View>
 
       <BottomNav />
