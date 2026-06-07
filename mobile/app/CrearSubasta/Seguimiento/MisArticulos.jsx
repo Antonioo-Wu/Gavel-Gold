@@ -45,9 +45,9 @@ export default function MisArticulos() {
             nombre: item.nombre,
             estado: item.estado,
             // Tomamos la primera foto del array de Cloudinary, si existe
-            imagenUrl: item.fotos && item.fotos.length > 0 ? { uri: item.fotos[0] } : require('../../../assets/logos/logo.png'), 
+            imagenUrl: item.fotos && item.fotos.length > 0 ? { uri: item.fotos[0] } : require('../../../assets/logos/logo.png'),
           }));
-          
+
           setArticulos(articulosFormateados);
         } else {
           console.error("Error del back:", data.mensaje);
@@ -77,7 +77,7 @@ export default function MisArticulos() {
   return (
     <View style={styles.mainWrapper}>
       <View style={styles.contentWrapper}>
-        
+
         {/* Header */}
         <View style={styles.header}>
           <Image source={require('../../../assets/logos/logotipo.png')} style={styles.logo} />
@@ -112,12 +112,18 @@ export default function MisArticulos() {
             renderItem={({ item }) => (
               <ItemCard item={item} onPress={() => handlePressItem(item)} />
             )}
+            // 1. Esto se muestra en el centro cuando la lista está vacía
+            ListEmptyComponent={
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 50 }}>
+                <Text style={{ color: '#fff', fontSize: 16 }}>Aún no has propuesto ningún artículo.</Text>
+              </View>
+            }
+            // 2. El footer se renderiza SIEMPRE, incluso si la lista está vacía
             ListFooterComponent={
               <View style={styles.footerButtonsContainer}>
                 <TouchableOpacity style={styles.createButton} onPress={() => navigation.navigate('CreacionBienPaso1')}>
                   <Text style={styles.createButtonText}>Proponer Item</Text>
                 </TouchableOpacity>
-
                 <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
                   <Text style={styles.backButtonText}>Volver</Text>
                 </TouchableOpacity>
