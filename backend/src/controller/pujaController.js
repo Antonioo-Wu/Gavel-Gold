@@ -3,6 +3,7 @@ import Subasta from "../model/Subasta.js";
 import MedioPago from "../model/MedioPago.js";
 import Articulo from "../model/Articulo.js";
 import Venta from "../model/Venta.js";
+import Multa from "../model/Multa.js";
 
 export const realizarPuja = async (req, res) => {
   try {
@@ -66,6 +67,15 @@ export const realizarPuja = async (req, res) => {
       return res.status(409).json({ 
         codigo: "MEDIO_PAGO_INVALIDO", 
         mensaje: "Medio de pago no validado" 
+      });
+    }
+
+    // Verificar multas activas
+    const multasActivas = await Multa.find({ usuarioId, activa: true });
+    if (multasActivas.length > 0) {
+      return res.status(403).json({
+        codigo: "MULTA_ACTIVA",
+        mensaje: "No puedes pujar porque tienes multas activas"
       });
     }
 
