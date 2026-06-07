@@ -771,7 +771,9 @@ components:
         porcentajeIncrementoMinimo: { type: number, nullable: true }
         montoMaximoPuja: { type: number, nullable: true }
         requiereConfirmacion: { type: boolean }
-
+        motivoRechazo: { type: string, nullable: true }
+        subasta: { type: string, nullable: true, description: "ID de la subasta asignada" }
+        
     Subasta:
       type: object
       description: Representa los datos propios de la subasta. Los articulos asociados se consultan con /subastas/{id}/articulos.
