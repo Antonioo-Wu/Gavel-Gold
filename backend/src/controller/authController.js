@@ -21,7 +21,7 @@ export const registroInicial = async (req, res) => {
     }
 
     // Verificar si email existe
-    const usuarioExistente = await Usuario.findOne({ email });
+    const usuarioExistente = await Usuario.findOne({ email: email.toLowerCase() });
     if (usuarioExistente) {
       return res.status(400).json({
         codigo: "EMAIL_EXISTENTE",
@@ -33,7 +33,7 @@ export const registroInicial = async (req, res) => {
     const nuevoUsuario = new Usuario({
       nombre,
       apellido,
-      email,
+      email: email.toLowerCase(),
       pais,
       domicilio,
       documentoFrente,
@@ -129,7 +129,7 @@ export const login = async (req, res) => {
       });
     }
 
-    const usuario = await Usuario.findOne({ email });
+    const usuario = await Usuario.findOne({ email: email.toLowerCase() });
     if (!usuario) {
       return res.status(401).json({
         codigo: "CREDENCIALES_INVALIDAS",
