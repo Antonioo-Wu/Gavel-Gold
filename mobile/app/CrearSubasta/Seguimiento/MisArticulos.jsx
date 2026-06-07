@@ -8,7 +8,7 @@ import BottomNav from '../../../components/BottomNav';
 import { AntDesign } from '@expo/vector-icons';
 import { API_URL } from '../../../config/api'; // IMPORTANTE: Para la URL del fetch
 
-export default function MisSubastas() {
+export default function MisArticulos() {
   const navigation = useNavigation();
   const [articulos, setArticulos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -81,7 +81,7 @@ export default function MisSubastas() {
         {/* Header */}
         <View style={styles.header}>
           <Image source={require('../../../assets/logos/logotipo.png')} style={styles.logo} />
-          <Text style={styles.headerTitle}>Mis Subastas</Text>
+          <Text style={styles.headerTitle}>Mis Articulos</Text>
         </View>
 
         {/* Buscador */}

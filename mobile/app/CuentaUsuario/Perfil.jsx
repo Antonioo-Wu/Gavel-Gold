@@ -99,7 +99,7 @@ export default function Perfil() {
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContentContainer} >
           <View style={styles.header}>
                   <Image source={require('../../assets/logos/logotipo.png')} style={styles.logo} />
-                  <Text style={styles.headerTitle}>Mis Subastas</Text>
+                  <Text style={styles.headerTitle}>Mi Perfil</Text>
           </View>
 
           <View style={styles.categoryContainer}>
@@ -124,8 +124,8 @@ export default function Perfil() {
             ))}
           </View>
 
-          <TouchableOpacity style={styles.subastasButton} onPress={() => navigation.navigate('MisSubastas')}>
-            <Text style={styles.subastasText}>Mis Subastas</Text>
+          <TouchableOpacity style={styles.subastasButton} onPress={() => navigation.navigate('MisArticulos')}>
+            <Text style={styles.subastasText}>Mis Articulos</Text>
           </TouchableOpacity>
 
           <View style={styles.infoCard}>

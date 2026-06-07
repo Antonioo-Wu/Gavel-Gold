@@ -170,7 +170,7 @@ export default function SeguimientoArticulo() {
      return (
         <View style={styles.mainContainer}>
           <TouchableOpacity style={[styles.backButton, {marginTop: 40, marginLeft: 20}]} onPress={() => navigation.goBack()}>
-            <Text style={styles.backButtonText}>← Volver a Mis Subastas</Text>
+            <Text style={styles.backButtonText}>← Volver a Mis Articulos</Text>
           </TouchableOpacity>
           <View style={{ marginTop: 50, alignItems: 'center' }}>
             <Text style={{ color: '#fff', fontSize: 16 }}>⚠️ No se encontró el artículo.</Text>
@@ -185,7 +185,7 @@ export default function SeguimientoArticulo() {
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.backButtonText}>← Volver a Mis Subastas</Text>
+          <Text style={styles.backButtonText}>← Volver a Mis Articulos</Text>
         </TouchableOpacity>
 
         <Text style={styles.headerTitle}>Estado del Artículo</Text>

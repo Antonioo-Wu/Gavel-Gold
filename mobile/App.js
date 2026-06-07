@@ -50,7 +50,7 @@ import CreacionBienExito from './app/CrearSubasta/Creacion/CreacionBienExito';
 
 // Seguimiento de Subasta
 import DetallePropuesta from './app/CrearSubasta/Seguimiento/DetallePropuesta';
-import MisSubastas from './app/CrearSubasta/Seguimiento/MisSubastas';
+import MisArticulos from './app/CrearSubasta/Seguimiento/MisArticulos';
 import DetalleRechazo from './app/CrearSubasta/Seguimiento/DetalleRechazo';
 import DetalleDeposito from './app/CrearSubasta/Seguimiento/DetalleDeposito'
 import SeguimientoArticulo from './app/CrearSubasta/Seguimiento/SeguimientoArticulo';
@@ -120,7 +120,7 @@ export default function App() {
         <Stack.Screen name="CreacionBienExito" component={CreacionBienExito} />
 
         <Stack.Screen name="DetallePropuesta" component={DetallePropuesta} />
-        <Stack.Screen name="MisSubastas" component={MisSubastas} />
+        <Stack.Screen name="MisArticulos" component={MisArticulos} />
         <Stack.Screen name="DetalleRechazo" component={DetalleRechazo} />
         <Stack.Screen name="DetalleDeposito" component={DetalleDeposito} />
         <Stack.Screen name="SeguimientoArticulo" component={SeguimientoArticulo} />
