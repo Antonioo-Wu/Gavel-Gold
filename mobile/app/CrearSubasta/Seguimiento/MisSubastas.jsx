@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Para el JWT en el futuro
 import ItemCard from '../../../components/ItemCard';
 import { misSubastasStyles as styles, MisSubastasTheme } from '../../../styles/misSubastas/MisSubastasStyles';
 import BottomNav from '../../../components/BottomNav';
 import { AntDesign } from '@expo/vector-icons';
-import { API_URL } from '../../../config/api'; 
 
 export default function MisSubastas() {
   const navigation = useNavigation();
@@ -14,77 +12,51 @@ export default function MisSubastas() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchArticulos = async () => {
-      try {
-        // ==========================================
-        // 🚀 PREPARADO PARA EL BACKEND REAL
-        // ==========================================
-        // const token = await AsyncStorage.getItem('userToken');
-        // const response = await fetch(`${API_URL}/usuarios/mis-articulos`, {
-        //   headers: { Authorization: `Bearer ${token}` }
-        // });
-        // const data = await response.json();
-        
-        // ==========================================
-        // 📦 MOCK DATA PARA LA DEMO (Con Assets Locales)
-        // ==========================================
-        const mockData = [
-          { 
-            id: '1', 
-            idCorto: '01', 
-            nombre: 'Airfryer COSORI', 
-            estado: 'Pendiente de Revisión', 
-            imagenUrl: require('../../../assets/itemsSubasta/air_frier.png'),
-            pantallaDestino: 'SeguimientoAirfryer' 
-          },
-          { 
-            id: '2', 
-            idCorto: '02', 
-            nombre: 'Cassette Fleetwood Mac', 
-            estado: 'En Depósito', 
-            imagenUrl: require('../../../assets/itemsSubasta/rumours.jpg'),
-            pantallaDestino: 'SeguimientoCassette' 
-          },
-          { 
-            id: '3', 
-            idCorto: '03', 
-            nombre: 'Sony Walkman', 
-            estado: 'Pendiente de Aprobación', 
-            imagenUrl: require('../../../assets/itemsSubasta/walkman.png'),
-            pantallaDestino: 'SeguimientoWalkman' 
-          },
-          { 
-            id: '4', 
-            idCorto: '04', 
-            nombre: 'Pokemon Tamagotchi', 
-            estado: 'Aprobado', 
-            imagenUrl: require('../../../assets/itemsSubasta/tamagachi.png'),
-            pantallaDestino: 'SeguimientoTamagotchi' 
-          },
-          { 
-            id: '5', 
-            idCorto: '05', 
-            nombre: 'Medialunas viejas', 
-            estado: 'Rechazado', 
-            imagenUrl: require('../../../assets/itemsSubasta/medialuna.png'),
-            pantallaDestino: 'SeguimientoMedialunas' 
-          },
-        ];
+    const cargarArticulosSimulados = () => {
+      // 📦 MOCK DATA OPTIMIZADA PARA LA DEMO DINÁMICA
+      const mockData = [
+        { 
+          id: '1', 
+          nombre: 'Airfryer COSORI', 
+          estado: 'pendiente', // Simula inspección
+          imagenUrl: require('../../../assets/itemsSubasta/air_frier.png'),
+        },
+        { 
+          id: '2', 
+          nombre: 'Cassette Fleetwood Mac', 
+          estado: 'aprobado', // Simula depósito
+          imagenUrl: require('../../../assets/itemsSubasta/rumours.jpg'),
+        },
+        { 
+          id: '3', 
+          nombre: 'Sony Walkman', 
+          estado: 'pendiente_aceptacion', // Simula propuesta comercial
+          imagenUrl: require('../../../assets/itemsSubasta/walkman.png'),
+        },
+        { 
+          id: '4', 
+          nombre: 'Pokemon Tamagotchi', 
+          estado: 'subastado', // Simula asignado a evento
+          imagenUrl: require('../../../assets/itemsSubasta/tamagachi.png'),
+        },
+        { 
+          id: '5', 
+          nombre: 'Medialunas viejas', 
+          estado: 'rechazado', // Simula rechazo administrativo
+          imagenUrl: require('../../../assets/itemsSubasta/medialuna.png'),
+        },
+      ];
 
-        setArticulos(mockData);
-      } catch (error) {
-        console.error("Error al obtener los artículos:", error);
-      } finally {
-        setIsLoading(false);
-      }
+      setArticulos(mockData);
+      setIsLoading(false);
     };
 
-    fetchArticulos();
+    cargarArticulosSimulados();
   }, []);
 
   const handlePressItem = (item) => {
-    // Ruteo dinámico real: Enviamos siempre al Tracker Dinámico
-    navigation.navigate('SeguimientoArticulo', { itemId: item.id || item._id });
+    // Mandamos el ID simulado hacia la pantalla única de seguimiento
+    navigation.navigate('SeguimientoArticulo', { itemId: item.id });
   };
 
   return (
