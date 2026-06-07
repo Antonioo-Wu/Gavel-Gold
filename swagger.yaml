@@ -538,6 +538,18 @@ paths:
         "201":
           description: Subasta creada
 
+  /admin/subastas/{id}/abrir:
+    post:
+      tags: [Administracion]
+      summary: Abrir una subasta para comenzar a recibir pujas
+      parameters:
+        - $ref: '#/components/parameters/idSubasta'
+      responses:
+        "200":
+          description: Subasta abierta exitosamente
+        "404":
+          description: Subasta no encontrada
+
   /admin/subastas/{id}/agregarArticulo:
     post:
       tags: [Administracion]
