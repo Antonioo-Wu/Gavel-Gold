@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, ScrollView, Alert } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import FormCard from '../../../components/FormCard';
 import CustomInput from '../../../components/CustomInput';
 import ActionButton from '../../../components/ActionButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_URL } from '../../../config/api';
-
 import { metodosDePagoStyles as styles } from '../../../styles/metodosDePago/MetodosDePago';
-
 
 export default function MetodoPagoCuentaBancaria() {
   const navigation = useNavigation();
+  const route = useRoute();
+  const { origen } = route.params || {};
   const [titular, setTitular] = useState('');
   const [documento, setDocumento] = useState('');
   const [pais, setPais] = useState('');
@@ -21,7 +21,7 @@ export default function MetodoPagoCuentaBancaria() {
 
   const handleGuardarCuenta = async () => {
     if (!titular || !banco || !cuenta) {
-      Alert.alert("Por favor completa los campos obligatorios.");
+      Alert.alert("Error", "Por favor completa los campos obligatorios.");
       return;
     }
 
@@ -50,7 +50,7 @@ export default function MetodoPagoCuentaBancaria() {
         },
         body: JSON.stringify({
           tipo: "CUENTA_BANCARIA",
-          detalle: detalleEstructured
+          detalle: detalleEstructurado
         })
       });
 
@@ -58,7 +58,11 @@ export default function MetodoPagoCuentaBancaria() {
 
       if (response.ok) {
         Alert.alert("Éxito", "Medio de pago asociado correctamente.");
-        navigation.navigate('RegistroExito');
+        if (origen === 'UsuarioMediosPago') {
+          navigation.navigate('UsuarioMediosPago');
+        } else {
+          navigation.navigate('RegistroExito');
+        }
       } else {
         Alert.alert("Error", data.mensaje || "No se pudo guardar el medio de pago.");
       }
@@ -73,7 +77,7 @@ export default function MetodoPagoCuentaBancaria() {
     <View style={styles.container}>
       <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>Método de Pago</Text>
-        <Text style={styles.type}>Cheque Certificado</Text>
+        <Text style={styles.type}>Cuenta Bancaria Vínculada</Text>
         <FormCard>
           <Text style={styles.header}>Ingrese sus datos</Text>
           <CustomInput label="Titular de la cuenta" placeholder="Nombre y apellido" value={titular} onChangeText={setTitular} />

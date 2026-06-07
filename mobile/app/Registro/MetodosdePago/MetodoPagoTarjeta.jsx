@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, ScrollView, Alert } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import FormCard from '../../../components/FormCard';
 import CustomInput from '../../../components/CustomInput';
 import ActionButton from '../../../components/ActionButton';
@@ -12,6 +12,8 @@ import { metodosDePagoStyles as styles } from '../../../styles/metodosDePago/Met
 
 export default function MetodoPagoTarjeta() {
   const navigation = useNavigation();
+  const route = useRoute();
+  const { origen } = route.params || {};
   const [numeroTarjeta, setNumeroTarjeta] = useState('');
   const [mes, setMes] = useState('');
   const [anio, setAnio] = useState('');
@@ -58,7 +60,11 @@ export default function MetodoPagoTarjeta() {
 
       if (response.ok) {
         Alert.alert("Éxito", "Tarjeta guardada exitosamente.");
-        navigation.navigate('RegistroExito');
+        if (origen === 'UsuarioMediosPago') {
+          navigation.navigate('UsuarioMediosPago');
+        } else {
+          navigation.navigate('RegistroExito');
+        }
       } else {
         Alert.alert("Error", data.mensaje || "Error al procesar la tarjeta.");
       }

@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, Alert } from 'react-native'; // Agregué Alert acá que faltaba importar
-import { useNavigation } from '@react-navigation/native';
+import { View, Text, ScrollView, Alert } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import FormCard from '../../../components/FormCard';
 import CustomInput from '../../../components/CustomInput';
 import ActionButton from '../../../components/ActionButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_URL } from '../../../config/api';
 
-// 1. IMPORTAMOS EL DOCUMENT PICKER
 import * as DocumentPicker from 'expo-document-picker';
 
 import { metodosDePagoStyles as styles } from '../../../styles/metodosDePago/MetodosDePago';
 
 export default function MetodoPagoCheque() {
   const navigation = useNavigation();
+  const route = useRoute();
+  const { origen } = route.params || {};
   const [banco, setBanco] = useState('');
   const [numeroCheque, setNumeroCheque] = useState('');
   const [monto, setMonto] = useState('');
@@ -23,19 +24,15 @@ export default function MetodoPagoCheque() {
   const [mes, setMes] = useState('');
   const [anio, setAnio] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  
-  // 2. ESTADO PARA EL COMPROBANTE
   const [comprobante, setComprobante] = useState(null);
 
-  // 3. FUNCIÓN PARA ABRIR LOS ARCHIVOS DEL CELULAR
   const handleSubirComprobante = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
-        type: 'application/pdf', // Magia pura: Solo deja seleccionar PDFs
+        type: 'application/pdf',
         copyToCacheDirectory: true,
       });
 
-      // Si el usuario no canceló, guardamos el archivo en el estado
       if (!result.canceled) {
         setComprobante(result.assets[0]);
       }
@@ -45,7 +42,6 @@ export default function MetodoPagoCheque() {
   };
 
   const handleGuardarCheque = async () => {
-    // 4. VALIDAMOS QUE EL PDF ESTÉ CARGADO SÍ O SÍ
     if (!banco || !numeroCheque || !monto || !titular || !comprobante) {
       Alert.alert("Error", "Por favor complete los campos obligatorios y suba su comprobante.");
       return;
@@ -65,18 +61,15 @@ export default function MetodoPagoCheque() {
       const usuario = JSON.parse(userDataString);
 
       const detalleEstructurado = JSON.stringify({
-        banco, 
-        numeroCheque, 
-        monto, 
-        moneda, 
-        vencimiento: `${dia}/${mes}/${anio}`, 
+        banco,
+        numeroCheque,
+        monto,
+        moneda,
+        vencimiento: `${dia}/${mes}/${anio}`,
         titular,
-        comprobanteNombre: comprobante.name // Opcional: mandamos el nombre al back
+        comprobanteNombre: comprobante.name
       });
 
-      // NOTA SOBRE BACKEND: Como estás mandando application/json, el archivo físico NO viaja acá.
-      // Si el backend requiere que envíes el PDF físicamente (los bytes), vas a tener que cambiar
-      // esto a un 'FormData' (multipart/form-data) en lugar de JSON.
       const response = await fetch(`${API_URL}/usuarios/${usuario.id}/medios-pago`, {
         method: 'POST',
         headers: {
@@ -93,7 +86,11 @@ export default function MetodoPagoCheque() {
 
       if (response.ok) {
         Alert.alert("Éxito", "Cheque registrado correctamente.");
-        navigation.navigate('RegistroExito');
+        if (origen === 'UsuarioMediosPago') {
+          navigation.navigate('UsuarioMediosPago');
+        } else {
+          navigation.navigate('RegistroExito');
+        }
       } else {
         Alert.alert("Error", data.mensaje || "Error al guardar el cheque.");
       }
@@ -125,12 +122,11 @@ export default function MetodoPagoCheque() {
           </View>
 
           <CustomInput label="Titular" placeholder="Ingrese el titular" value={titular} onChangeText={setTitular} />
-          
-          {/* 5. EL BOTÓN AHORA ABRE EL PICKER Y MUESTRA EL NOMBRE DEL PDF ELEGIDO */}
-          <ActionButton 
-            text={comprobante ? comprobante.name : "Subir Comprobante (PDF)"} 
-            variant="outline" 
-            onPress={handleSubirComprobante} 
+
+          <ActionButton
+            text={comprobante ? comprobante.name : "Subir Comprobante (PDF)"}
+            variant="outline"
+            onPress={handleSubirComprobante}
           />
 
           <View style={styles.buttons}>
