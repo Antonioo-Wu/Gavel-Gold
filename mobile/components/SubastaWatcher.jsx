@@ -1,11 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_URL } from '../config/api';
 import { useNotification } from './NotificationProvider';
 
 export const SubastaWatcher = () => {
     const { setWinInfo } = useNotification();
-    const notifiedIds = useRef(new Set());
 
     useEffect(() => {
         const interval = setInterval(async () => {
@@ -23,19 +22,23 @@ export const SubastaWatcher = () => {
                 if (res.ok) {
                     const historial = await res.json();
 
+                    const storedNotified = await AsyncStorage.getItem('@notified_auctions');
+                    const notifiedSet = new Set(JSON.parse(storedNotified || '[]'));
+
                     const subastaRecienGanada = historial.find(
-                        (participacion) => participacion.ganador === true && !notifiedIds.current.has(participacion.articuloId)
+                        (participacion) => participacion.ganador === true && !notifiedSet.has(participacion.articuloId)
                     );
 
                     if (subastaRecienGanada) {
-                        notifiedIds.current.add(subastaRecienGanada.articuloId);
+                        notifiedSet.add(subastaRecienGanada.articuloId);
+                        await AsyncStorage.setItem('@notified_auctions', JSON.stringify([...notifiedSet]));
                         setWinInfo(subastaRecienGanada);
                     }
                 }
             } catch (err) {
                 console.error("Error en el Watcher de subastas:", err);
             }
-        }, 5000);
+        }, 10000);
 
         return () => clearInterval(interval);
     }, []);
