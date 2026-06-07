@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { Picker } from '@react-native-picker/picker';
 import FormCard from '../../../components/FormCard';
 import CustomInput from '../../../components/CustomInput';
 import ActionButton from '../../../components/ActionButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_URL } from '../../../config/api';
-
 import * as DocumentPicker from 'expo-document-picker';
-
 import { metodosDePagoStyles as styles } from '../../../styles/metodosDePago/MetodosDePago';
 
 export default function MetodoPagoCheque() {
@@ -26,6 +25,7 @@ export default function MetodoPagoCheque() {
   const [isLoading, setIsLoading] = useState(false);
   const [comprobante, setComprobante] = useState(null);
 
+  // ESTA ES LA FUNCIÓN QUE TE TIRABA ERROR PORQUE NO EXISTÍA
   const handleSubirComprobante = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
@@ -113,12 +113,18 @@ export default function MetodoPagoCheque() {
           <CustomInput label="Banco emisor" placeholder="Ingrese el banco emisor" value={banco} onChangeText={setBanco} />
           <CustomInput label="Número de cheque" placeholder="Ingrese el número" keyboardType="numeric" value={numeroCheque} onChangeText={setNumeroCheque} />
           <CustomInput label="Monto" placeholder="Ingrese el monto" keyboardType="numeric" value={monto} onChangeText={setMonto} />
-          <CustomInput label="Moneda" placeholder="ARS / USD" value={moneda} onChangeText={setMoneda} />
+          <Text style={styles.label}>Moneda</Text>
+          <View style={styles.pickerContainer}>
+            <Picker selectedValue={moneda} onValueChange={setMoneda}>
+              <Picker.Item label="ARS" value="ARS" />
+              <Picker.Item label="USD" value="USD" />
+            </Picker>
+          </View>
 
           <View style={styles.inputRowCheque}>
-            <View style={styles.inputItem}><CustomInput label="Vencimiento" placeholder="DD" value={dia} onChangeText={setDia} /></View>
-            <View style={styles.inputItem}><CustomInput label=" " placeholder="MM" value={mes} onChangeText={setMes} /></View>
-            <View style={styles.inputItem}><CustomInput label=" " placeholder="YYYY" value={anio} onChangeText={setAnio} /></View>
+            <View style={styles.inputItem}><CustomInput label="Vencimiento" keyboardType="numeric" placeholder="DD" value={dia} onChangeText={setDia} /></View>
+            <View style={styles.inputItem}><CustomInput label=" " keyboardType="numeric" placeholder="MM" value={mes} onChangeText={setMes} /></View>
+            <View style={styles.inputItem}><CustomInput label=" " keyboardType="numeric" placeholder="YYYY" value={anio} onChangeText={setAnio} /></View>
           </View>
 
           <CustomInput label="Titular" placeholder="Ingrese el titular" value={titular} onChangeText={setTitular} />
