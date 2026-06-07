@@ -188,7 +188,27 @@ paths:
           description: Medio agregado
         "400":
           $ref: '#/components/responses/ErrorValidacion'
-
+  
+  /usuarios/{id}/medios-pago/{medioPagoId}:
+    delete:
+      tags: [Usuarios]
+      summary: Eliminar un medio de pago del usuario
+      parameters:
+        - $ref: '#/components/parameters/idUsuario'
+        - name: medioPagoId
+          in: path
+          required: true
+          description: El ID del medio de pago a eliminar
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Medio de pago eliminado correctamente
+        "403":
+          $ref: '#/components/responses/Prohibido'
+        "404":
+          $ref: '#/components/responses/NoEncontrado'
+          
   /usuarios/{id}/subastas-activas:
     get:
       tags: [Usuarios]

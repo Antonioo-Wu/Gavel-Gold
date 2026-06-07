@@ -83,13 +83,8 @@ export default function MisSubastas() {
   }, []);
 
   const handlePressItem = (item) => {
-    // Ruteo dinámico: navega a la pantalla específica de cada ítem de demostración
-    if (item.pantallaDestino) {
-      navigation.navigate(item.pantallaDestino, { itemId: item.id });
-    } else {
-      // Fallback de seguridad
-      navigation.navigate('DetalleArticulo', { itemId: item.id });
-    }
+    // Ruteo dinámico real: Enviamos siempre al Tracker Dinámico
+    navigation.navigate('SeguimientoArticulo', { itemId: item.id || item._id });
   };
 
   return (

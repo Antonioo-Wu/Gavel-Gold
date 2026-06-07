@@ -53,6 +53,7 @@ import DetallePropuesta from './app/CrearSubasta/Seguimiento/DetallePropuesta';
 import MisSubastas from './app/CrearSubasta/Seguimiento/MisSubastas';
 import DetalleRechazo from './app/CrearSubasta/Seguimiento/DetalleRechazo';
 import DetalleDeposito from './app/CrearSubasta/Seguimiento/DetalleDeposito'
+import SeguimientoArticulo from './app/CrearSubasta/Seguimiento/SeguimientoArticulo';
 
 // Ejemplos de Tipos de Seguimiento
 import SeguimientoWalkman from './app/CrearSubasta/Seguimiento/SeguimientoWalkman';
@@ -122,6 +123,7 @@ export default function App() {
         <Stack.Screen name="MisSubastas" component={MisSubastas} />
         <Stack.Screen name="DetalleRechazo" component={DetalleRechazo} />
         <Stack.Screen name="DetalleDeposito" component={DetalleDeposito} />
+        <Stack.Screen name="SeguimientoArticulo" component={SeguimientoArticulo} />
 
         <Stack.Screen name='SeguimientoWalkman' component={SeguimientoWalkman} />
         <Stack.Screen name='SeguimientoAirfryer' component={SeguimientoAirfryer} />

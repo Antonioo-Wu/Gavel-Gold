@@ -250,3 +250,28 @@ export const actualizarUsuario = async (req, res) => {
     });
   }
 };
+
+export const eliminarMedioPago = async (req, res) => {
+  try {
+    const { id, medioPagoId } = req.params; // El ID del usuario y el ID del medio de pago
+
+    // Validar permisos
+    if (req.user?.rol !== "admin" && req.user?.id?.toString() !== id.toString()) {
+      return res.status(403).json({ codigo: "PERMISO_DENEGADO", mensaje: "No autorizado" });
+    }
+
+    // Eliminar el documento de la colección MedioPago
+    const resultado = await MedioPago.findByIdAndDelete(medioPagoId);
+    
+    if (!resultado) {
+      return res.status(404).json({ mensaje: "Medio de pago no encontrado" });
+    }
+
+    // Opcional: Eliminar la referencia del array en el modelo Usuario
+    await Usuario.findByIdAndUpdate(id, { $pull: { mediosPago: medioPagoId } });
+
+    res.json({ mensaje: "Medio de pago eliminado correctamente" });
+  } catch (error) {
+    res.status(500).json({ codigo: "ERROR_SERVIDOR", mensaje: error.message });
+  }
+};

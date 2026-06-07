@@ -18,5 +18,5 @@ router.get("/usuarios/:id/articulos/pendientes-aceptacion", authMiddleware, arti
 router.post("/usuarios/:id/articulos/:articuloId/aceptar", authMiddleware, articuloController.aceptarCondicionesArticulo);
 router.post("/usuarios/:id/articulos/:articuloId/rechazar", authMiddleware, articuloController.rechazarCondicionesArticulo);
 router.patch("/usuarios/:id", authMiddleware, usuarioController.actualizarUsuario);
-
+router.delete("/usuarios/:id/medios-pago/:medioPagoId", authMiddleware, usuarioController.eliminarMedioPago);
 export default router;
