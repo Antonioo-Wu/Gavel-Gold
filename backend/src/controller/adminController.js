@@ -15,9 +15,9 @@ export const obtenerArticulosPendientes = async (req, res) => {
 
     res.json(articulos);
   } catch (error) {
-    res.status(500).json({ 
-      codigo: "ERROR_SERVIDOR", 
-      mensaje: error.message 
+    res.status(500).json({
+      codigo: "ERROR_SERVIDOR",
+      mensaje: error.message
     });
   }
 };
@@ -28,38 +28,38 @@ export const aprobarArticulo = async (req, res) => {
     const { precioBase, comision } = req.body;
 
     if (precioBase == null || comision == null) {
-      return res.status(400).json({ 
-        codigo: "CAMPOS_REQUERIDOS", 
-        mensaje: "precioBase y comision son requeridos" 
+      return res.status(400).json({
+        codigo: "CAMPOS_REQUERIDOS",
+        mensaje: "precioBase y comision son requeridos"
       });
     }
 
     if (precioBase < 0.01) {
-      return res.status(400).json({ 
-        codigo: "PRECIO_INVALIDO", 
-        mensaje: "Precio base debe ser mayor a 0" 
+      return res.status(400).json({
+        codigo: "PRECIO_INVALIDO",
+        mensaje: "Precio base debe ser mayor a 0"
       });
     }
 
     if (comision < 0) {
-      return res.status(400).json({ 
-        codigo: "COMISION_INVALIDA", 
-        mensaje: "Comisión debe ser mayor o igual a 0" 
+      return res.status(400).json({
+        codigo: "COMISION_INVALIDA",
+        mensaje: "Comisión debe ser mayor o igual a 0"
       });
     }
 
     const articulo = await Articulo.findById(id);
     if (!articulo) {
-      return res.status(404).json({ 
-        codigo: "ARTICULO_NO_ENCONTRADO", 
-        mensaje: "Artículo no existe" 
+      return res.status(404).json({
+        codigo: "ARTICULO_NO_ENCONTRADO",
+        mensaje: "Artículo no existe"
       });
     }
 
     if (articulo.estado !== "pendiente") {
-      return res.status(400).json({ 
-        codigo: "ARTICULO_YA_PROCESADO", 
-        mensaje: `Artículo ya está en estado: ${articulo.estado}` 
+      return res.status(400).json({
+        codigo: "ARTICULO_YA_PROCESADO",
+        mensaje: `Artículo ya está en estado: ${articulo.estado}`
       });
     }
 
@@ -69,14 +69,14 @@ export const aprobarArticulo = async (req, res) => {
     articulo.motivoRechazo = null;
     await articulo.save();
 
-    res.json({ 
+    res.json({
       mensaje: "Condiciones enviadas al usuario para aceptación",
-      articulo 
+      articulo
     });
   } catch (error) {
-    res.status(500).json({ 
-      codigo: "ERROR_SERVIDOR", 
-      mensaje: error.message 
+    res.status(500).json({
+      codigo: "ERROR_SERVIDOR",
+      mensaje: error.message
     });
   }
 };
@@ -87,24 +87,24 @@ export const rechazarArticulo = async (req, res) => {
     const { motivo } = req.body;
 
     if (!motivo) {
-      return res.status(400).json({ 
-        codigo: "MOTIVO_REQUERIDO", 
-        mensaje: "Motivo del rechazo requerido" 
+      return res.status(400).json({
+        codigo: "MOTIVO_REQUERIDO",
+        mensaje: "Motivo del rechazo requerido"
       });
     }
 
     const articulo = await Articulo.findById(id);
     if (!articulo) {
-      return res.status(404).json({ 
-        codigo: "ARTICULO_NO_ENCONTRADO", 
-        mensaje: "Artículo no existe" 
+      return res.status(404).json({
+        codigo: "ARTICULO_NO_ENCONTRADO",
+        mensaje: "Artículo no existe"
       });
     }
 
     if (articulo.estado !== "pendiente") {
-      return res.status(400).json({ 
-        codigo: "ARTICULO_YA_PROCESADO", 
-        mensaje: `Artículo ya está en estado: ${articulo.estado}` 
+      return res.status(400).json({
+        codigo: "ARTICULO_YA_PROCESADO",
+        mensaje: `Artículo ya está en estado: ${articulo.estado}`
       });
     }
 
@@ -112,14 +112,14 @@ export const rechazarArticulo = async (req, res) => {
     articulo.motivoRechazo = motivo;
     await articulo.save();
 
-    res.json({ 
+    res.json({
       mensaje: "Artículo rechazado",
-      articulo 
+      articulo
     });
   } catch (error) {
-    res.status(500).json({ 
-      codigo: "ERROR_SERVIDOR", 
-      mensaje: error.message 
+    res.status(500).json({
+      codigo: "ERROR_SERVIDOR",
+      mensaje: error.message
     });
   }
 };
@@ -131,9 +131,9 @@ export const crearSubasta = async (req, res) => {
     const { titulo, fechaInicio, fechaFin, categoriaRequerida, moneda } = req.body;
 
     if (!titulo || !fechaInicio || !fechaFin || !categoriaRequerida) {
-      return res.status(400).json({ 
-        codigo: "CAMPOS_REQUERIDOS", 
-        mensaje: "Todos los campos son requeridos" 
+      return res.status(400).json({
+        codigo: "CAMPOS_REQUERIDOS",
+        mensaje: "Todos los campos son requeridos"
       });
     }
 
@@ -142,9 +142,9 @@ export const crearSubasta = async (req, res) => {
     const fin = new Date(fechaFin);
 
     if (fin <= inicio) {
-      return res.status(400).json({ 
-        codigo: "FECHAS_INVALIDAS", 
-        mensaje: "Fecha fin debe ser posterior a fecha inicio" 
+      return res.status(400).json({
+        codigo: "FECHAS_INVALIDAS",
+        mensaje: "Fecha fin debe ser posterior a fecha inicio"
       });
     }
 
@@ -159,15 +159,40 @@ export const crearSubasta = async (req, res) => {
     });
 
     const subastaGuardada = await nuevaSubasta.save();
-    res.status(201).json({ 
+    res.status(201).json({
       mensaje: "Subasta creada",
-      subasta: subastaGuardada 
+      subasta: subastaGuardada
     });
   } catch (error) {
-    res.status(500).json({ 
-      codigo: "ERROR_SERVIDOR", 
-      mensaje: error.message 
+    res.status(500).json({
+      codigo: "ERROR_SERVIDOR",
+      mensaje: error.message
     });
+  }
+};
+
+export const abrirSubasta = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const subasta = await Subasta.findById(id);
+
+    if (!subasta) {
+      return res.status(404).json({ codigo: 'SUBASTA_NO_ENCONTRADA', mensaje: 'Subasta no existe' });
+    }
+
+    if (subasta.estado !== 'proximamente') {
+      return res.status(400).json({
+        codigo: 'ESTADO_INVALIDO',
+        mensaje: `La subasta ya está en estado: ${subasta.estado}`
+      });
+    }
+
+    subasta.estado = 'abierta';
+    await subasta.save();
+
+    res.json({ mensaje: 'Subasta abierta correctamente, ya se aceptan pujas', subasta });
+  } catch (error) {
+    res.status(500).json({ codigo: 'ERROR_SERVIDOR', mensaje: error.message });
   }
 };
 
@@ -177,69 +202,69 @@ export const agregarArticuloSubasta = async (req, res) => {
     const { articuloId, precioBase } = req.body;
 
     if (!articuloId || !precioBase) {
-      return res.status(400).json({ 
-        codigo: "CAMPOS_REQUERIDOS", 
-        mensaje: "articuloId y precioBase requeridos" 
+      return res.status(400).json({
+        codigo: "CAMPOS_REQUERIDOS",
+        mensaje: "articuloId y precioBase requeridos"
       });
     }
 
     if (precioBase < 0.01) {
-      return res.status(400).json({ 
-        codigo: "PRECIO_INVALIDO", 
-        mensaje: "Precio base debe ser mayor a 0" 
+      return res.status(400).json({
+        codigo: "PRECIO_INVALIDO",
+        mensaje: "Precio base debe ser mayor a 0"
       });
     }
 
     const subasta = await Subasta.findById(id);
     if (!subasta) {
-      return res.status(404).json({ 
-        codigo: "SUBASTA_NO_ENCONTRADA", 
-        mensaje: "Subasta no existe" 
+      return res.status(404).json({
+        codigo: "SUBASTA_NO_ENCONTRADA",
+        mensaje: "Subasta no existe"
       });
     }
 
     const articulo = await Articulo.findById(articuloId);
     if (!articulo) {
-      return res.status(404).json({ 
-        codigo: "ARTICULO_NO_ENCONTRADO", 
-        mensaje: "Artículo no existe" 
+      return res.status(404).json({
+        codigo: "ARTICULO_NO_ENCONTRADO",
+        mensaje: "Artículo no existe"
       });
     }
 
     // Verificar que articulo este aprobado
     if (articulo.estado !== "aprobado") {
-      return res.status(400).json({ 
-        codigo: "ARTICULO_NO_APROBADO", 
-        mensaje: `Artículo debe estar aprobado, estado actual: ${articulo.estado}` 
+      return res.status(400).json({
+        codigo: "ARTICULO_NO_APROBADO",
+        mensaje: `Artículo debe estar aprobado, estado actual: ${articulo.estado}`
       });
     }
 
     // Verificar que articulo no este ya en una subasta
     if (articulo.subasta) {
-      return res.status(400).json({ 
-        codigo: "ARTICULO_EN_SUBASTA", 
-        mensaje: "Artículo ya está en otra subasta" 
+      return res.status(400).json({
+        codigo: "ARTICULO_EN_SUBASTA",
+        mensaje: "Artículo ya está en otra subasta"
       });
     }
 
     // Actualizar articulo
     articulo.precioBase = precioBase;
     articulo.subasta = id;
-    articulo.estado = "subastado";
+    articulo.estado = "disponible";
     await articulo.save();
 
     // Agregar a subasta
     subasta.articulos.push(articuloId);
     await subasta.save();
 
-    res.status(201).json({ 
+    res.status(201).json({
       mensaje: "Artículo agregado exitosamente",
-      articulo 
+      articulo
     });
   } catch (error) {
-    res.status(500).json({ 
-      codigo: "ERROR_SERVIDOR", 
-      mensaje: error.message 
+    res.status(500).json({
+      codigo: "ERROR_SERVIDOR",
+      mensaje: error.message
     });
   }
 };
