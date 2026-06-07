@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, FlatList, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, FlatList, TouchableOpacity, Image, ActivityIndicator, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // IMPORTANTE: Para obtener el usuario
 import ItemCard from '../../../components/ItemCard';
 import { misSubastasStyles as styles, MisSubastasTheme } from '../../../styles/misSubastas/MisSubastasStyles';
 import BottomNav from '../../../components/BottomNav';
 import { AntDesign } from '@expo/vector-icons';
+import { API_URL } from '../../../config/api'; // IMPORTANTE: Para la URL del fetch
 
 export default function MisSubastas() {
   const navigation = useNavigation();
@@ -12,50 +14,63 @@ export default function MisSubastas() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const cargarArticulosSimulados = () => {
-      // 📦 MOCK DATA OPTIMIZADA PARA LA DEMO DINÁMICA
-      const mockData = [
-        { 
-          id: '1', 
-          nombre: 'Airfryer COSORI', 
-          estado: 'pendiente', // Simula inspección
-          imagenUrl: require('../../../assets/itemsSubasta/air_frier.png'),
-        },
-        { 
-          id: '2', 
-          nombre: 'Cassette Fleetwood Mac', 
-          estado: 'aprobado', // Simula depósito
-          imagenUrl: require('../../../assets/itemsSubasta/rumours.jpg'),
-        },
-        { 
-          id: '3', 
-          nombre: 'Sony Walkman', 
-          estado: 'pendiente_aceptacion', // Simula propuesta comercial
-          imagenUrl: require('../../../assets/itemsSubasta/walkman.png'),
-        },
-        { 
-          id: '4', 
-          nombre: 'Pokemon Tamagotchi', 
-          estado: 'subastado', // Simula asignado a evento
-          imagenUrl: require('../../../assets/itemsSubasta/tamagachi.png'),
-        },
-        { 
-          id: '5', 
-          nombre: 'Medialunas viejas', 
-          estado: 'rechazado', // Simula rechazo administrativo
-          imagenUrl: require('../../../assets/itemsSubasta/medialuna.png'),
-        },
-      ];
+    const fetchMisArticulos = async () => {
+      try {
+        const token = await AsyncStorage.getItem('userToken');
+        const userDataString = await AsyncStorage.getItem('userData');
 
-      setArticulos(mockData);
-      setIsLoading(false);
+        if (!token || !userDataString) {
+          Alert.alert("Atención", "Debes iniciar sesión para ver tus subastas.");
+          navigation.navigate('Login');
+          return;
+        }
+
+        const usuario = JSON.parse(userDataString);
+
+        // Llamada real al backend para buscar TUS artículos
+        const response = await fetch(`${API_URL}/usuarios/${usuario.id}/articulos`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Mapeamos los datos reales para que ItemCard los entienda igual que los mocks
+          const articulosFormateados = data.map(item => ({
+            id: item.id || item._id, // En MongoDB viene como _id
+            nombre: item.nombre,
+            estado: item.estado,
+            // Tomamos la primera foto del array de Cloudinary, si existe
+            imagenUrl: item.fotos && item.fotos.length > 0 ? { uri: item.fotos[0] } : require('../../../assets/logos/logo.png'), 
+          }));
+          
+          setArticulos(articulosFormateados);
+        } else {
+          console.error("Error del back:", data.mensaje);
+        }
+      } catch (error) {
+        console.error("Error de red:", error);
+        Alert.alert("Error", "No se pudo conectar con el servidor.");
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    cargarArticulosSimulados();
-  }, []);
+    // Usamos focus para que, si el usuario crea un item y vuelve a esta pantalla, se refresque automáticamente
+    const unsubscribe = navigation.addListener('focus', () => {
+      setIsLoading(true);
+      fetchMisArticulos();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   const handlePressItem = (item) => {
-    // Mandamos el ID simulado hacia la pantalla única de seguimiento
+    // Mandamos el ID REAL hacia la pantalla única de seguimiento
     navigation.navigate('SeguimientoArticulo', { itemId: item.id });
   };
 
@@ -84,10 +99,14 @@ export default function MisSubastas() {
         {/* Lista de Artículos */}
         {isLoading ? (
           <ActivityIndicator size={MisSubastasTheme.spinnerSize} color={MisSubastasTheme.colors.spinner} />
+        ) : articulos.length === 0 ? (
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={{ color: '#fff', fontSize: 16 }}>Aún no has propuesto ningún artículo.</Text>
+          </View>
         ) : (
           <FlatList
             data={articulos}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.id.toString()}
             contentContainerStyle={styles.listContainer}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
