@@ -107,6 +107,7 @@ export const pujaStyles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 8,
     borderRadius: 8,
+    marginLeft: 10,
   },
   statusBadgeText: {
     color: '#090909',

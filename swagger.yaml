@@ -938,6 +938,7 @@ components:
       properties:
         subastaId: { type: string }
         titulo: { type: string }
+        nombreArticulo: { type: string }
         fechaCierre: { type: string, format: date-time }
         miOfertaMax: { type: number }
         ganador: { type: boolean }

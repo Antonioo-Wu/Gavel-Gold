@@ -15,13 +15,12 @@ export default function SubastaDetalles() {
 
   const [articulos, setArticulos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isVerifying, setIsVerifying] = useState(false);
+  const [articuloSeleccionadoId, setArticuloSeleccionadoId] = useState(null);
 
   useEffect(() => {
     const obtenerDatos = async () => {
       try {
         const response = await fetch(`${API_URL}/subastas/${id}/articulos`);
-
         if (response.ok) {
           const dataArticulos = await response.json();
           setArticulos(dataArticulos);
@@ -38,17 +37,16 @@ export default function SubastaDetalles() {
     obtenerDatos();
   }, [id]);
 
-  const handleParticipar = async () => {
+  const handleParticiparPorArticulo = async (articuloId) => {
     try {
       const token = await AsyncStorage.getItem('userToken');
-
       if (!token) {
-        Alert.alert("Atención", "Debes iniciar sesión para participar en una subasta.");
+        Alert.alert("Atención", "Debes iniciar sesión para participar.");
         navigation.navigate('Login');
         return;
       }
 
-      setIsVerifying(true);
+      setArticuloSeleccionadoId(articuloId);
 
       const response = await fetch(`${API_URL}/subastas/${id}/participar`, {
         method: 'POST',
@@ -61,18 +59,18 @@ export default function SubastaDetalles() {
       const data = await response.json();
 
       if (response.ok) {
-        navigation.navigate('Pujar', { subastaId: id });
+        navigation.navigate('Pujar', { subastaId: id, articuloId: articuloId });
       } else if (response.status === 401) {
         Alert.alert("Sesión expirada", "Por favor, inicia sesión nuevamente.");
         navigation.navigate('Login');
       } else {
-        Alert.alert("Acceso Denegado", data.mensaje || "No cumples con los requisitos para esta subasta.");
+        Alert.alert("Acceso Denegado", data.mensaje || "No cumples con los requisitos.");
       }
     } catch (error) {
       console.error("Error participando:", error);
-      Alert.alert("Error de red", "Error validando el acceso con el servidor.");
+      Alert.alert("Error de red", "Error validando el acceso.");
     } finally {
-      setIsVerifying(false);
+      setArticuloSeleccionadoId(null);
     }
   };
 
@@ -102,32 +100,44 @@ export default function SubastaDetalles() {
                 </View>
               ) : (
                 <View>
-                  {articulos.map((articulo) => (
-                    <View key={articulo._id || articulo.id} style={styles.cardContainer}>
-                      <View style={styles.imgContainer}>
-                        <Image
-                          source={
-                            articulo.fotos && articulo.fotos.length > 0
-                              ? { uri: articulo.fotos[0] }
-                              : require('../../assets/images/totoro_clock.jpg')
-                          }
-                          style={styles.img}
-                        />
-                      </View>
-                      <Text style={styles.name}>{articulo.nombre}</Text>
-                      <Text style={styles.desc}>{articulo.descripcion}</Text>
-                      <View style={styles.priceRow}>
-                        <Text style={styles.priceLabel}>Precio Base:</Text>
-                        <Text style={styles.price}>${articulo.precioBase}</Text>
-                      </View>
-                    </View>
-                  ))}
+                  {articulos.map((articulo) => {
+                    const currentId = articulo._id || articulo.id;
+                    const estaCargandoEste = articuloSeleccionadoId === currentId;
+                    const tienePuja = articulo.pujaActual && articulo.pujaActual > 0;
+                    const montoMostrar = tienePuja ? articulo.pujaActual : articulo.precioBase;
 
-                  <TouchableOpacity style={styles.participateBtn} onPress={handleParticipar} disabled={isVerifying}>
-                    <Text style={styles.btnText}>
-                      {isVerifying ? "Verificando..." : "Entrar a la Subasta"}
-                    </Text>
-                  </TouchableOpacity>
+                    return (
+                      <View key={currentId} style={styles.cardContainer}>
+                        <View style={styles.imgContainer}>
+                          <Image
+                            source={
+                              articulo.fotos && articulo.fotos.length > 0
+                                ? { uri: articulo.fotos[0] }
+                                : require('../../assets/images/totoro_clock.jpg')
+                            }
+                            style={styles.img}
+                          />
+                        </View>
+                        <Text style={styles.name}>{articulo.nombre}</Text>
+                        <Text style={styles.desc}>{articulo.descripcion}</Text>
+
+                        <View style={styles.priceRow}>
+                          <Text style={styles.priceLabel}>{tienePuja ? "Oferta Actual:" : "Precio Base:"}</Text>
+                          <Text style={styles.price}>${montoMostrar?.toLocaleString('es-AR')}</Text>
+                        </View>
+
+                        <TouchableOpacity
+                          style={styles.participateBtn}
+                          onPress={() => handleParticiparPorArticulo(currentId)}
+                          disabled={articuloSeleccionadoId !== null}
+                        >
+                          <Text style={styles.btnText}>
+                            {estaCargandoEste ? "Verificando..." : "Pujar por este Artículo"}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    );
+                  })}
 
                   <View style={styles.actionButtonContainer}>
                     <ActionButton text="Volver" variant="solid" onPress={() => navigation.goBack()} />

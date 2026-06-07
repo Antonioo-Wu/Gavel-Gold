@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import { NotificationProvider } from './components/NotificationProvider';
+import { SubastaWatcher } from './components/SubastaWatcher';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
@@ -85,68 +87,72 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Recupero" component={Recupero} />
-        <Stack.Screen name="RecuperoExito" component={RecuperoExito} />
-        <Stack.Screen name="RecuperoToken"  component={RecuperoToken} />
+    <NotificationProvider>
+      <SubastaWatcher />
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Recupero" component={Recupero} />
+          <Stack.Screen name="RecuperoExito" component={RecuperoExito} />
+          <Stack.Screen name="RecuperoToken" component={RecuperoToken} />
 
-        <Stack.Screen name="Perfil" component={Perfil} />
-        <Stack.Screen name="DatosUsuario" component={DatosUsuario} />
-        <Stack.Screen name="Metricas" component={Metricas} />
+          <Stack.Screen name="Perfil" component={Perfil} />
+          <Stack.Screen name="DatosUsuario" component={DatosUsuario} />
+          <Stack.Screen name="Metricas" component={Metricas} />
 
-        <Stack.Screen name="Registro" component={Registro} />
-        <Stack.Screen name="MensajeEspera" component={MensajeEspera} />
-        <Stack.Screen name="ValidacionCategoria" component={ValidacionCategoria} />
-        <Stack.Screen name="GenerarPassword" component={GenerarPassword} />
-        <Stack.Screen name="RegistroExito" component={RegistroExito} />
+          <Stack.Screen name="Registro" component={Registro} />
+          <Stack.Screen name="MensajeEspera" component={MensajeEspera} />
+          <Stack.Screen name="ValidacionCategoria" component={ValidacionCategoria} />
+          <Stack.Screen name="GenerarPassword" component={GenerarPassword} />
+          <Stack.Screen name="RegistroExito" component={RegistroExito} />
 
-        <Stack.Screen name="UsuarioMediosPago" component={UsuarioMediosPago} />
-        <Stack.Screen name="SeleccionMetodoPago" component={SeleccionMetodoPago} />
-        <Stack.Screen name="MetodoPagoTarjeta" component={MetodoPagoTarjeta} />
-        <Stack.Screen name="MetodoPagoCuentaBancaria" component={MetodoPagoCuentaBancaria} />
-        <Stack.Screen name="MetodoPagoCheque" component={MetodoPagoCheque} />
+          <Stack.Screen name="UsuarioMediosPago" component={UsuarioMediosPago} />
+          <Stack.Screen name="SeleccionMetodoPago" component={SeleccionMetodoPago} />
+          <Stack.Screen name="MetodoPagoTarjeta" component={MetodoPagoTarjeta} />
+          <Stack.Screen name="MetodoPagoCuentaBancaria" component={MetodoPagoCuentaBancaria} />
+          <Stack.Screen name="MetodoPagoCheque" component={MetodoPagoCheque} />
 
-        <Stack.Screen name="TerminosCompra" component={TerminosCompra} />
-        <Stack.Screen name="TerminosEnvio" component={TerminosEnvio} />
-        <Stack.Screen name="TerminosyCondiciones" component={TerminosyCondiciones} />
-        <Stack.Screen name="PoliticadePrivacidad" component={PoliticadePrivacidad} />
-        <Stack.Screen name="SobreNosotros" component={SobreNosotros} />
+          <Stack.Screen name="TerminosCompra" component={TerminosCompra} />
+          <Stack.Screen name="TerminosEnvio" component={TerminosEnvio} />
+          <Stack.Screen name="TerminosyCondiciones" component={TerminosyCondiciones} />
+          <Stack.Screen name="PoliticadePrivacidad" component={PoliticadePrivacidad} />
+          <Stack.Screen name="SobreNosotros" component={SobreNosotros} />
 
-        <Stack.Screen name="CreacionBienPaso1" component={CreacionBienPaso1} />
-        <Stack.Screen name="CreacionBienPaso2" component={CreacionBienPaso2} />
-        <Stack.Screen name="CreacionBienExito" component={CreacionBienExito} />
+          <Stack.Screen name="CreacionBienPaso1" component={CreacionBienPaso1} />
+          <Stack.Screen name="CreacionBienPaso2" component={CreacionBienPaso2} />
+          <Stack.Screen name="CreacionBienExito" component={CreacionBienExito} />
 
-        <Stack.Screen name="DetallePropuesta" component={DetallePropuesta} />
-        <Stack.Screen name="MisArticulos" component={MisArticulos} />
-        <Stack.Screen name="DetalleRechazo" component={DetalleRechazo} />
-        <Stack.Screen name="DetalleDeposito" component={DetalleDeposito} />
-        <Stack.Screen name="SeguimientoArticulo" component={SeguimientoArticulo} />
+          <Stack.Screen name="DetallePropuesta" component={DetallePropuesta} />
+          <Stack.Screen name="MisArticulos" component={MisArticulos} />
+          <Stack.Screen name="DetalleRechazo" component={DetalleRechazo} />
+          <Stack.Screen name="DetalleDeposito" component={DetalleDeposito} />
+          <Stack.Screen name="SeguimientoArticulo" component={SeguimientoArticulo} />
 
-        <Stack.Screen name='SeguimientoWalkman' component={SeguimientoWalkman} />
-        <Stack.Screen name='SeguimientoAirfryer' component={SeguimientoAirfryer} />
-        <Stack.Screen name='SeguimientoCassette' component={SeguimientoCassette} /> 
-        <Stack.Screen name='SeguimientoTamagotchi' component={SeguimientoTamagotchi} />
-        <Stack.Screen name='SeguimientoMedialunas' component={SeguimientoMedialunas} />
 
-        <Stack.Screen name="MensajeExitoPuja" component={MensajeExitoPuja} />
-        <Stack.Screen name="SeguimientoPuja" component={SeguimientoPuja} />
+          <Stack.Screen name='SeguimientoWalkman' component={SeguimientoWalkman} />
+          <Stack.Screen name='SeguimientoAirfryer' component={SeguimientoAirfryer} />
+          <Stack.Screen name='SeguimientoCassette' component={SeguimientoCassette} />
+          <Stack.Screen name='SeguimientoTamagotchi' component={SeguimientoTamagotchi} />
+          <Stack.Screen name='SeguimientoMedialunas' component={SeguimientoMedialunas} />
 
-        <Stack.Screen name="ListadeSubastas" component={ListadeSubastas} />
-        <Stack.Screen name="SubastaDetalles" component={SubastaDetalles} />
+          <Stack.Screen name="MensajeExitoPuja" component={MensajeExitoPuja} />
+          <Stack.Screen name="SeguimientoPuja" component={SeguimientoPuja} />
 
-        <Stack.Screen name="ErrorConexion" component={ErrorConexion} />
-        <Stack.Screen name="ErrorSaldo" component={ErrorSaldo} />
+          <Stack.Screen name="ListadeSubastas" component={ListadeSubastas} />
+          <Stack.Screen name="SubastaDetalles" component={SubastaDetalles} />
 
-        <Stack.Screen name="LoadingCatalogo" component={LoadingCatalogo} />
-        <Stack.Screen name="LoadingPuja" component={LoadingPuja} />
-        <Stack.Screen name="LoadingSubirArticulo" component={LoadingSubirArticulo} />
-        <Stack.Screen name="LoadingCredenciales" component={LoadingCredenciales} />
-        <Stack.Screen name="Pujar" component={PujaScreen} />
-        <Stack.Screen name="MisPujas" component={MisPujas} />
-      </Stack.Navigator>
-    </NavigationContainer>
+          <Stack.Screen name="ErrorConexion" component={ErrorConexion} />
+          <Stack.Screen name="ErrorSaldo" component={ErrorSaldo} />
+
+          <Stack.Screen name="LoadingCatalogo" component={LoadingCatalogo} />
+          <Stack.Screen name="LoadingPuja" component={LoadingPuja} />
+          <Stack.Screen name="LoadingSubirArticulo" component={LoadingSubirArticulo} />
+          <Stack.Screen name="LoadingCredenciales" component={LoadingCredenciales} />
+          <Stack.Screen name="Pujar" component={PujaScreen} />
+          <Stack.Screen name="MisPujas" component={MisPujas} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </NotificationProvider>
   );
 }
