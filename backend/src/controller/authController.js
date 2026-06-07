@@ -14,18 +14,18 @@ export const registroInicial = async (req, res) => {
 
     // Validar campos requeridos
     if (!nombre || !apellido || !email || !documentoFrente || !documentoDorso) {
-      return res.status(400).json({ 
-        codigo: "CAMPOS_REQUERIDOS", 
-        mensaje: "Faltan campos requeridos" 
+      return res.status(400).json({
+        codigo: "CAMPOS_REQUERIDOS",
+        mensaje: "Faltan campos requeridos"
       });
     }
 
     // Verificar si email existe
     const usuarioExistente = await Usuario.findOne({ email });
     if (usuarioExistente) {
-      return res.status(400).json({ 
-        codigo: "EMAIL_EXISTENTE", 
-        mensaje: "El email ya está registrado" 
+      return res.status(400).json({
+        codigo: "EMAIL_EXISTENTE",
+        mensaje: "El email ya está registrado"
       });
     }
 
@@ -57,14 +57,14 @@ export const registroInicial = async (req, res) => {
       });
     }
 
-    res.status(201).json({ 
+    res.status(201).json({
       mensaje: "Usuario registrado. Revisa tu email para completar el registro.",
-      usuarioId: usuarioGuardado._id 
+      usuarioId: usuarioGuardado._id
     });
   } catch (error) {
-    res.status(500).json({ 
-      codigo: "ERROR_SERVIDOR", 
-      mensaje: error.message 
+    res.status(500).json({
+      codigo: "ERROR_SERVIDOR",
+      mensaje: error.message
     });
   }
 };
@@ -74,9 +74,9 @@ export const activarCuenta = async (req, res) => {
     const { codigo, password } = req.body;
 
     if (!codigo || !password) {
-      return res.status(400).json({ 
-        codigo: "CAMPOS_REQUERIDOS", 
-        mensaje: "Codigo y password requeridos" 
+      return res.status(400).json({
+        codigo: "CAMPOS_REQUERIDOS",
+        mensaje: "Codigo y password requeridos"
       });
     }
 
@@ -96,11 +96,24 @@ export const activarCuenta = async (req, res) => {
     usuario.codigoActivacionExpira = undefined;
     await usuario.save();
 
-    res.json({ mensaje: "Usuario activado correctamente" });
+    const token = generateToken(usuario);
+
+    res.json({
+      mensaje: "Usuario activado correctamente",
+      token,
+      usuario: {
+        id: usuario._id,
+        nombre: usuario.nombre,
+        apellido: usuario.apellido,
+        email: usuario.email,
+        categoria: usuario.categoria,
+        rol: usuario.rol,
+      }
+    });
   } catch (error) {
-    res.status(500).json({ 
-      codigo: "ERROR_SERVIDOR", 
-      mensaje: error.message 
+    res.status(500).json({
+      codigo: "ERROR_SERVIDOR",
+      mensaje: error.message
     });
   }
 };
@@ -110,33 +123,33 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(401).json({ 
-        codigo: "CREDENCIALES_INVALIDAS", 
-        mensaje: "Email y password requeridos" 
+      return res.status(401).json({
+        codigo: "CREDENCIALES_INVALIDAS",
+        mensaje: "Email y password requeridos"
       });
     }
 
     const usuario = await Usuario.findOne({ email });
     if (!usuario) {
-      return res.status(401).json({ 
-        codigo: "CREDENCIALES_INVALIDAS", 
-        mensaje: "Credenciales inválidas" 
+      return res.status(401).json({
+        codigo: "CREDENCIALES_INVALIDAS",
+        mensaje: "Credenciales inválidas"
       });
     }
 
     // Verificar password
     const passwordValida = await bcrypt.compare(password, usuario.password);
     if (!passwordValida) {
-      return res.status(401).json({ 
-        codigo: "CREDENCIALES_INVALIDAS", 
-        mensaje: "Credenciales inválidas" 
+      return res.status(401).json({
+        codigo: "CREDENCIALES_INVALIDAS",
+        mensaje: "Credenciales inválidas"
       });
     }
 
     // Generar JWT token
     const token = generateToken(usuario);
 
-    res.json({ 
+    res.json({
       mensaje: "Login exitoso",
       token,
       usuario: {
@@ -149,9 +162,9 @@ export const login = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ 
-      codigo: "ERROR_SERVIDOR", 
-      mensaje: error.message 
+    res.status(500).json({
+      codigo: "ERROR_SERVIDOR",
+      mensaje: error.message
     });
   }
 };
@@ -173,9 +186,9 @@ export const logout = async (req, res) => {
 
     res.status(204).send();
   } catch (error) {
-    res.status(500).json({ 
-      codigo: "ERROR_SERVIDOR", 
-      mensaje: error.message 
+    res.status(500).json({
+      codigo: "ERROR_SERVIDOR",
+      mensaje: error.message
     });
   }
 };

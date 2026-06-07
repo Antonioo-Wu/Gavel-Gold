@@ -120,7 +120,11 @@ paths:
                 password: { type: string, format: password }
       responses:
         "200":
-          description: Usuario activado correctamente
+          description: Usuario activado correctamente y sesión iniciada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
         "400":
           description: Codigo invalido o expirado
 
