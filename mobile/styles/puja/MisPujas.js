@@ -62,37 +62,20 @@ export const misPujasStyles = StyleSheet.create({
   },
 
   // --- Buscador y Filtro ---
-  searchSection: {
-    flexDirection: 'row',
-    paddingHorizontal: 20,
-    marginBottom: 20,
-    alignItems: 'center',
-  },
   searchContainer: {
-    flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'row', backgroundColor: '#1E1B16',
+    padding: 12, borderRadius: 10, alignItems: 'center', marginBottom: 20
+  },
+  searchInput: { flex: 1, color: '#FFF', marginLeft: 10 },
+  noResultsContainer: {
+    marginTop: 50,
     alignItems: 'center',
-    backgroundColor: '#F6F1E7', // Color crema
-    borderRadius: 25,
-    paddingHorizontal: 15,
-    height: 45,
-    marginRight: 10,
+    paddingHorizontal: 20,
   },
-  searchIcon: {
-    marginRight: 8,
-  },
-  searchInput: {
-    flex: 1,
-    fontSize: 15,
-    color: '#090909',
-  },
-  filterButton: {
-    backgroundColor: '#F6F1E7',
-    width: 45,
-    height: 45,
-    borderRadius: 22.5,
-    alignItems: 'center',
-    justifyContent: 'center',
+  noResultsText: {
+    color: '#888',
+    fontSize: 16,
+    textAlign: 'center',
   },
 
   // --- Lista y Tarjetas ---
