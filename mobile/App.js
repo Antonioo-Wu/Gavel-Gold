@@ -130,12 +130,7 @@ export default function App() {
           <Stack.Screen name="SeguimientoArticulo" component={SeguimientoArticulo} />
 
 
-          <Stack.Screen name='SeguimientoWalkman' component={SeguimientoWalkman} />
-          <Stack.Screen name='SeguimientoAirfryer' component={SeguimientoAirfryer} />
-          <Stack.Screen name='SeguimientoCassette' component={SeguimientoCassette} />
-          <Stack.Screen name='SeguimientoTamagotchi' component={SeguimientoTamagotchi} />
-          <Stack.Screen name='SeguimientoMedialunas' component={SeguimientoMedialunas} />
-
+    
           <Stack.Screen name="MensajeExitoPuja" component={MensajeExitoPuja} />
           <Stack.Screen name="SeguimientoPuja" component={SeguimientoPuja} />
 
@@ -151,6 +146,7 @@ export default function App() {
           <Stack.Screen name="LoadingCredenciales" component={LoadingCredenciales} />
           <Stack.Screen name="Pujar" component={PujaScreen} />
           <Stack.Screen name="MisPujas" component={MisPujas} />
+          
         </Stack.Navigator>
       </NavigationContainer>
     </NotificationProvider>
