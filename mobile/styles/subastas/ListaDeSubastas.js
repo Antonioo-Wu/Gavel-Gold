@@ -23,6 +23,17 @@ const styles = StyleSheet.create({
   brandText: { color: '#D4AF37', fontSize: 14, letterSpacing: 1 },
   screenTitle: { color: '#FFF', fontSize: 28, fontWeight: 'bold' },
 
+  // Buscador y filtro
+  noResultsContainer: {
+    marginTop: 50,
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  noResultsText: {
+    color: '#888',
+    fontSize: 16,
+    textAlign: 'center',
+  },
   searchContainer: {
     flexDirection: 'row', backgroundColor: '#1E1B16',
     padding: 12, borderRadius: 10, alignItems: 'center', marginBottom: 20
