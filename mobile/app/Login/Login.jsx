@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Image, ImageBackground, TouchableOpacity, Alert, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import FormCard from '../../components/FormCard';
 import CustomInput from '../../components/CustomInput';
 import ActionButton from '../../components/ActionButton';
@@ -12,6 +12,8 @@ import { loginStyles as styles } from '../../styles/login/Login';
 
 export default function Login() {
   const navigation = useNavigation();
+  const route = useRoute();
+  const { destinoRegistro } = route.params || {};
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +41,11 @@ export default function Login() {
         await AsyncStorage.setItem('userToken', data.token);
         await AsyncStorage.setItem('userData', JSON.stringify(data.usuario));
 
-        navigation.navigate('ListadeSubastas');
+        if (destinoRegistro) {
+          navigation.navigate(destinoRegistro);
+        } else {
+          navigation.navigate('ListadeSubastas');
+        }
       } else {
         Alert.alert("Error de login", data.mensaje || "Credenciales incorrectas");
       }
@@ -53,28 +59,28 @@ export default function Login() {
 
   return (
     <ImageBackground source={require('../../assets/fondo_dorado.jpg')} style={styles.background}>
-      
+
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <View style={styles.containerCenter}>
-        <Image source={require('../../assets/logos/logotipo.png')} style={styles.logo} />
-        <Text style={styles.title}>Inicio de Sesión</Text>
+        <View style={styles.containerCenter}>
+          <Image source={require('../../assets/logos/logotipo.png')} style={styles.logo} />
+          <Text style={styles.title}>Inicio de Sesión</Text>
 
-        <FormCard>
-          <CustomInput label="Email" placeholder="ejemplo@correo.com" value={email} onChangeText={setEmail} />
-          <CustomInput label="Password" placeholder="tu contraseña" value={password} onChangeText={setPassword} secureTextEntry />
+          <FormCard>
+            <CustomInput label="Email" placeholder="ejemplo@correo.com" value={email} onChangeText={setEmail} />
+            <CustomInput label="Password" placeholder="tu contraseña" value={password} onChangeText={setPassword} secureTextEntry />
 
-          <ActionButton text={isLoading ? "Conectando..." : "Ingresar"} variant="solid" onPress={handleLogin}  />
+            <ActionButton text={isLoading ? "Conectando..." : "Ingresar"} variant="solid" onPress={handleLogin} />
 
-          <View style={styles.footer}>
-            <TouchableOpacity onPress={() => navigation.navigate('Recupero')}>
-              <Text style={styles.link}>¿Olvidó su contraseña? Recuperar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
-              <Text style={styles.link}>¿No eres miembro? Cree su cuenta</Text>
-            </TouchableOpacity>
-          </View>
-        </FormCard>
-      </View>
+            <View style={styles.footer}>
+              <TouchableOpacity onPress={() => navigation.navigate('Recupero')}>
+                <Text style={styles.link}>¿Olvidó su contraseña? Recuperar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
+                <Text style={styles.link}>¿No eres miembro? Cree su cuenta</Text>
+              </TouchableOpacity>
+            </View>
+          </FormCard>
+        </View>
 
       </ScrollView>
     </ImageBackground>

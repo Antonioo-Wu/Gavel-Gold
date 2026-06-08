@@ -114,6 +114,41 @@ export default function UsuarioMediosPago() {
     }
   };
 
+  const eliminarMedioPago = async (medioPagoId) => {
+    Alert.alert(
+      "Eliminar método",
+      "¿Estás seguro de que quieres eliminar este método de pago?",
+      [
+        { text: "Cancelar", style: "cancel" },
+        { 
+          text: "Eliminar", 
+          style: "destructive",
+          onPress: async () => {
+            try {
+              const token = await AsyncStorage.getItem('userToken');
+              const userDataString = await AsyncStorage.getItem('userData');
+              const usuario = JSON.parse(userDataString);
+
+              const response = await fetch(`${API_URL}/usuarios/${usuario.id}/medios-pago/${medioPagoId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+              });
+
+              if (response.ok) {
+                Alert.alert("Éxito", "Método de pago eliminado.");
+                cargarMediosDePago(); // Recargamos la lista
+              } else {
+                Alert.alert("Error", "No se pudo eliminar el método.");
+              }
+            } catch (error) {
+              Alert.alert("Error", "Problema de conexión.");
+            }
+          }
+        }
+      ]
+    );
+  };
+
   return (
     <ImageBackground source={require('../../assets/fondo_dorado.jpg')} style={styles.backgroundImage}>
       <View style={styles.mainContainer}>
@@ -145,6 +180,10 @@ export default function UsuarioMediosPago() {
 
                           <View style={styles.paymentHeaderRow}>
                             <Text style={styles.paymentTypeTitle}>{getTipoLabel(metodo.tipo)}</Text>
+                            {/* Botón de borrar */}
+                              <TouchableOpacity onPress={() => eliminarMedioPago(metodo._id)}>
+                                <Text style={{ color: 'red', fontWeight: 'bold' }}>Eliminar</Text>
+                              </TouchableOpacity>
                             <View style={[styles.badge, metodo.validado ? styles.badgeValidated : styles.badgePending]}>
                               <Text style={metodo.validado ? styles.badgeTextValidated : styles.badgeTextPending}>
                                 {metodo.validado ? 'Validado' : 'Pendiente'}

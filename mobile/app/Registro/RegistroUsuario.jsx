@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SafeAreaView, ScrollView, Text, Image, Alert, View } from 'react-native';
-import { Picker } from '@react-native-picker/picker'; // 👈 dropdown nativo
+import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 
 import FormCard from '../../components/FormCard';
@@ -16,8 +16,8 @@ export default function RegistroUsuario() {
   const [domicilio, setDomicilio] = useState('');
   const [pais, setPais] = useState('');
   const [email, setEmail] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [dni, setDni] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleRegistroInicial = async () => {
     if (!nombre || !apellido || !email || !domicilio || !pais || !dni) {
@@ -31,7 +31,12 @@ export default function RegistroUsuario() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          nombre, apellido, email, pais, domicilio,
+          nombre,
+          apellido,
+          email,
+          pais,
+          domicilio,
+          dni,
           documentoFrente: "url_frente_dni.jpg",
           documentoDorso: "url_dorso_dni.jpg"
         })
@@ -40,12 +45,12 @@ export default function RegistroUsuario() {
       const data = await response.json();
 
       if (response.ok) {
-        navigation.navigate('MensajeEspera');
+        navigation.navigate('ValidacionCategoria');
       } else {
         Alert.alert("Error de registro", data.mensaje || "Ocurrió un error");
       }
     } catch (error) {
-      Alert.alert("Error de red. No se pudo conectar con el servidor");
+      Alert.alert("Error", "Error de red. No se pudo conectar con el servidor");
     } finally {
       setIsLoading(false);
     }
@@ -57,7 +62,7 @@ export default function RegistroUsuario() {
         <View style={styles.containerCenter}>
           <Image source={require('../../assets/logos/logotipo.png')} style={styles.logo} />
         </View>
-      
+
         <Text style={styles.title}>Cree su Cuenta</Text>
 
         <FormCard>
@@ -66,16 +71,14 @@ export default function RegistroUsuario() {
 
           <CustomInput label="Nombre" placeholder="Ingrese su nombre" value={nombre} onChangeText={setNombre} />
           <CustomInput label="Apellido" placeholder="Ingrese su apellido" value={apellido} onChangeText={setApellido} />
-          <CustomInput label="DNI" placeholder="Ingrese su DNI" value={dni} onChangeText={setDni} />
+
+          <CustomInput label="DNI" placeholder="Ingrese su DNI" keyboardType="numeric" value={dni} onChangeText={setDni} />
+
           <CustomInput label="Domicilio" placeholder="Ingrese su domicilio" value={domicilio} onChangeText={setDomicilio} />
 
-          {/* Dropdown de países */}
           <Text style={styles.label}>País</Text>
           <View style={styles.pickerContainer}>
-            <Picker
-              selectedValue={pais}
-              onValueChange={(itemValue) => setPais(itemValue)}
-            >
+            <Picker selectedValue={pais} onValueChange={(itemValue) => setPais(itemValue)}>
               <Picker.Item label="Seleccione un país" value="" />
               <Picker.Item label="Argentina" value="Argentina" />
               <Picker.Item label="Brasil" value="Brasil" />
@@ -84,7 +87,6 @@ export default function RegistroUsuario() {
               <Picker.Item label="Paraguay" value="Paraguay" />
               <Picker.Item label="Bolivia" value="Bolivia" />
               <Picker.Item label="Perú" value="Perú" />
-              
             </Picker>
           </View>
 
@@ -92,7 +94,6 @@ export default function RegistroUsuario() {
 
           <ActionButton text={isLoading ? "Enviando..." : "Continuar"} variant="solid" onPress={handleRegistroInicial} />
         </FormCard>
-        
       </ScrollView>
     </SafeAreaView>
   );

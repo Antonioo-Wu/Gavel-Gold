@@ -3,23 +3,24 @@ import MedioPago from "../model/MedioPago.js";
 import Puja from "../model/Puja.js";
 import Subasta from "../model/Subasta.js";
 
+
 export const obtenerUsuario = async (req, res) => {
   try {
     const { id } = req.params;
 
     const usuario = await Usuario.findById(id).select("-password");
     if (!usuario) {
-      return res.status(404).json({ 
-        codigo: "USUARIO_NO_ENCONTRADO", 
-        mensaje: "Usuario no existe" 
+      return res.status(404).json({
+        codigo: "USUARIO_NO_ENCONTRADO",
+        mensaje: "Usuario no existe"
       });
     }
 
     res.json(usuario);
   } catch (error) {
-    res.status(500).json({ 
-      codigo: "ERROR_SERVIDOR", 
-      mensaje: error.message 
+    res.status(500).json({
+      codigo: "ERROR_SERVIDOR",
+      mensaje: error.message
     });
   }
 };
@@ -50,9 +51,9 @@ export const obtenerMediosPago = async (req, res) => {
 
     res.json(mediosPago);
   } catch (error) {
-    res.status(500).json({ 
-      codigo: "ERROR_SERVIDOR", 
-      mensaje: error.message 
+    res.status(500).json({
+      codigo: "ERROR_SERVIDOR",
+      mensaje: error.message
     });
   }
 };
@@ -69,27 +70,27 @@ export const agregarMedioPago = async (req, res) => {
     }
 
     if (!tipo || !detalle) {
-      return res.status(400).json({ 
-        codigo: "CAMPOS_REQUERIDOS", 
-        mensaje: "Tipo y detalle requeridos" 
+      return res.status(400).json({
+        codigo: "CAMPOS_REQUERIDOS",
+        mensaje: "Tipo y detalle requeridos"
       });
     }
 
     // Validar tipo
     const tiposValidos = ["CUENTA_BANCARIA", "TARJETA", "CHEQUE"];
     if (!tiposValidos.includes(tipo)) {
-      return res.status(400).json({ 
-        codigo: "TIPO_INVALIDO", 
-        mensaje: "Tipo de medio de pago inválido" 
+      return res.status(400).json({
+        codigo: "TIPO_INVALIDO",
+        mensaje: "Tipo de medio de pago inválido"
       });
     }
 
     // Verificar usuario existe
     const usuario = await Usuario.findById(id);
     if (!usuario) {
-      return res.status(404).json({ 
-        codigo: "USUARIO_NO_ENCONTRADO", 
-        mensaje: "Usuario no existe" 
+      return res.status(404).json({
+        codigo: "USUARIO_NO_ENCONTRADO",
+        mensaje: "Usuario no existe"
       });
     }
 
@@ -108,14 +109,14 @@ export const agregarMedioPago = async (req, res) => {
     usuario.mediosPago.push(nuevoMedio._id);
     await usuario.save();
 
-    res.status(201).json({ 
+    res.status(201).json({
       mensaje: "Medio de pago agregado",
-      medioPago: nuevoMedio 
+      medioPago: nuevoMedio
     });
   } catch (error) {
-    res.status(500).json({ 
-      codigo: "ERROR_SERVIDOR", 
-      mensaje: error.message 
+    res.status(500).json({
+      codigo: "ERROR_SERVIDOR",
+      mensaje: error.message
     });
   }
 };
@@ -128,16 +129,16 @@ export const obtenerSubastasActivas = async (req, res) => {
     const pujas = await Puja.find({ usuarioId: id });
     const subastaIds = [...new Set(pujas.map(p => p.subastaId))];
 
-    const subastas = await Subasta.find({ 
+    const subastas = await Subasta.find({
       _id: { $in: subastaIds },
       estado: "abierta"
     });
 
     res.json(subastas);
   } catch (error) {
-    res.status(500).json({ 
-      codigo: "ERROR_SERVIDOR", 
-      mensaje: error.message 
+    res.status(500).json({
+      codigo: "ERROR_SERVIDOR",
+      mensaje: error.message
     });
   }
 };
@@ -172,9 +173,9 @@ export const obtenerEstadisticas = async (req, res) => {
       importePagadoAcumulado,
     });
   } catch (error) {
-    res.status(500).json({ 
-      codigo: "ERROR_SERVIDOR", 
-      mensaje: error.message 
+    res.status(500).json({
+      codigo: "ERROR_SERVIDOR",
+      mensaje: error.message
     });
   }
 };
@@ -183,36 +184,92 @@ export const obtenerHistorialParticipacion = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Obtener todas las subastas donde participó
-    const pujas = await Puja.find({ usuarioId: id }).populate("subastaId");
-    
-    // Agrupar por subasta y obtener datos
-    const historial = [];
-    const subastaIds = new Set();
+    const pujasUsuario = await Puja.find({ usuarioId: id })
+      .populate('subastaId', 'titulo fechaFin estado')
+      .populate('articuloId', 'nombre estado');
 
-    for (const puja of pujas) {
-      if (!subastaIds.has(puja.subastaId._id.toString())) {
-        subastaIds.add(puja.subastaId._id.toString());
-        
-        const mejorPuja = await Puja.findOne({ subastaId: puja.subastaId._id })
-          .sort({ monto: -1 });
+    const participacionesMap = {};
 
-        historial.push({
+    for (const puja of pujasUsuario) {
+      if (!puja.articuloId || !puja.subastaId) continue;
+
+      const artId = puja.articuloId._id.toString();
+
+      if (!participacionesMap[artId] || participacionesMap[artId].miOfertaMax < puja.monto) {
+
+        const mejorPujaArticulo = await Puja.findOne({ articuloId: artId }).sort({ monto: -1 });
+        const esGanador = (
+          puja.articuloId.estado === 'vendido' &&
+          mejorPujaArticulo &&
+          mejorPujaArticulo.usuarioId.toString() === id
+        );
+
+        participacionesMap[artId] = {
           subastaId: puja.subastaId._id,
           titulo: puja.subastaId.titulo,
+          articuloId: artId,
+          nombreArticulo: puja.articuloId.nombre,
           fechaCierre: puja.subastaId.fechaFin,
-          miOfertaMax: mejorPuja.monto,
-          ganador: mejorPuja.usuarioId.toString() === id,
-          estado: puja.subastaId.estado,
-        });
+          miOfertaMax: puja.monto,
+          ganador: esGanador,
+          estado: puja.subastaId.estado
+        };
       }
     }
 
-    res.json(historial);
+    res.json(Object.values(participacionesMap));
   } catch (error) {
-    res.status(500).json({ 
-      codigo: "ERROR_SERVIDOR", 
-      mensaje: error.message 
+    res.status(500).json({ codigo: "ERROR_SERVIDOR", mensaje: error.message });
+  }
+};
+
+
+export const actualizarUsuario = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (req.user?.rol !== "admin" && req.user?.id?.toString() !== id.toString()) {
+      return res.status(403).json({
+        codigo: "PERMISO_DENEGADO",
+        mensaje: "No puedes editar el perfil de otro usuario",
+      });
+    }
+
+    const { nombre, apellido, domicilio, pais } = req.body;
+
+    const usuarioActualizado = await Usuario.findByIdAndUpdate(
+      id,
+      { nombre, apellido, domicilio, pais },
+      { returnDocument: "after", runValidators: true }
+    ).select("-password");
+
+    res.json(usuarioActualizado);
+  } catch (error) {
+    res.status(500).json({
+      codigo: "ERROR_SERVIDOR",
+      mensaje: error.message
     });
+  }
+};
+
+export const eliminarMedioPago = async (req, res) => {
+  try {
+    const { id, medioPagoId } = req.params;
+
+    if (req.user?.rol !== "admin" && req.user?.id?.toString() !== id.toString()) {
+      return res.status(403).json({ codigo: "PERMISO_DENEGADO", mensaje: "No autorizado" });
+    }
+
+    const resultado = await MedioPago.findByIdAndDelete(medioPagoId);
+
+    if (!resultado) {
+      return res.status(404).json({ mensaje: "Medio de pago no encontrado" });
+    }
+
+    await Usuario.findByIdAndUpdate(id, { $pull: { mediosPago: medioPagoId } });
+
+    res.json({ mensaje: "Medio de pago eliminado correctamente" });
+  } catch (error) {
+    res.status(500).json({ codigo: "ERROR_SERVIDOR", mensaje: error.message });
   }
 };

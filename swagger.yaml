@@ -120,7 +120,11 @@ paths:
                 password: { type: string, format: password }
       responses:
         "200":
-          description: Usuario activado correctamente
+          description: Usuario activado correctamente y sesión iniciada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
         "400":
           description: Codigo invalido o expirado
 
@@ -133,6 +137,33 @@ paths:
       responses:
         "200":
           description: Datos del usuario
+        "404":
+          $ref: '#/components/responses/NoEncontrado'
+    
+    patch:
+      tags: [Usuarios]
+      summary: Actualizar datos de perfil del usuario
+      description: Permite al usuario modificar su nombre, apellido, domicilio y país.
+      parameters:
+        - $ref: '#/components/parameters/idUsuario'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nombre: { type: string }
+                apellido: { type: string }
+                domicilio: { type: string }
+                pais: { type: string }
+      responses:
+        "200":
+          description: Perfil actualizado correctamente
+        "400":
+          $ref: '#/components/responses/ErrorValidacion'
+        "403":
+          description: No tienes permiso para editar este perfil
         "404":
           $ref: '#/components/responses/NoEncontrado'
 
@@ -161,7 +192,27 @@ paths:
           description: Medio agregado
         "400":
           $ref: '#/components/responses/ErrorValidacion'
-
+  
+  /usuarios/{id}/medios-pago/{medioPagoId}:
+    delete:
+      tags: [Usuarios]
+      summary: Eliminar un medio de pago del usuario
+      parameters:
+        - $ref: '#/components/parameters/idUsuario'
+        - name: medioPagoId
+          in: path
+          required: true
+          description: El ID del medio de pago a eliminar
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Medio de pago eliminado correctamente
+        "403":
+          $ref: '#/components/responses/Prohibido'
+        "404":
+          $ref: '#/components/responses/NoEncontrado'
+          
   /usuarios/{id}/subastas-activas:
     get:
       tags: [Usuarios]
@@ -487,6 +538,18 @@ paths:
         "201":
           description: Subasta creada
 
+  /admin/subastas/{id}/abrir:
+    post:
+      tags: [Administracion]
+      summary: Abrir una subasta para comenzar a recibir pujas
+      parameters:
+        - $ref: '#/components/parameters/idSubasta'
+      responses:
+        "200":
+          description: Subasta abierta exitosamente
+        "404":
+          description: Subasta no encontrada
+
   /admin/subastas/{id}/agregarArticulo:
     post:
       tags: [Administracion]
@@ -724,7 +787,9 @@ components:
         porcentajeIncrementoMinimo: { type: number, nullable: true }
         montoMaximoPuja: { type: number, nullable: true }
         requiereConfirmacion: { type: boolean }
-
+        motivoRechazo: { type: string, nullable: true }
+        subasta: { type: string, nullable: true, description: "ID de la subasta asignada" }
+        
     Subasta:
       type: object
       description: Representa los datos propios de la subasta. Los articulos asociados se consultan con /subastas/{id}/articulos.
@@ -873,6 +938,7 @@ components:
       properties:
         subastaId: { type: string }
         titulo: { type: string }
+        nombreArticulo: { type: string }
         fechaCierre: { type: string, format: date-time }
         miOfertaMax: { type: number }
         ganador: { type: boolean }

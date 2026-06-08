@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, SafeAreaView, Alert, ScrollView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// 1. IMPORTAMOS LAS LIBRERÍAS CORRECTAS PARA LOS ÍCONOS
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { API_URL } from '../../config/api';
 
@@ -17,7 +16,7 @@ import PopupPujaExitosa from './PopUps/PopupPujaExitosa';
 export default function PujaScreen() {
   const navigation = useNavigation();
   const route = useRoute();
-  const { subastaId = '1', articuloId = '1002' } = route.params || {};
+  const { subastaId, articuloId } = route.params || {};
 
   const [modalVisible, setModalVisible] = useState(false);
   const [bidAmount, setBidAmount] = useState('');
@@ -27,11 +26,16 @@ export default function PujaScreen() {
   const [showInsuficiente, setShowInsuficiente] = useState(false);
   const [showExito, setShowExito] = useState(false);
 
-  // 2. CORREGIMOS EL MOCKUP USANDO FontAwesome PARA LAS TARJETAS Y BANCOS
-  const [paymentMethods, setPaymentMethods] = useState([
-    { id: 1, name: 'Visa ****1234', icon: <FontAwesome name="credit-card" size={PujaTheme.iconSize} /> }
-  ]);
-  const [selectedPayment, setSelectedPayment] = useState(paymentMethods[0]);
+  const [articuloInfo, setArticuloInfo] = useState(null);
+  const [subastaInfo, setSubastaInfo] = useState(null);
+  const [pujaActual, setPujaActual] = useState(null);
+
+  const [limiteMin, setLimiteMin] = useState(0);
+  const [limiteMax, setLimiteMax] = useState(Infinity);
+  const [isPremium, setIsPremium] = useState(false);
+
+  const [paymentMethods, setPaymentMethods] = useState([]);
+  const [selectedPayment, setSelectedPayment] = useState(null);
 
   useEffect(() => {
     const cargarMediosPago = async () => {
@@ -53,16 +57,14 @@ export default function PujaScreen() {
               let name = m.tipo;
               let IconComponent = <FontAwesome name="credit-card" size={PujaTheme.iconSize} />;
 
-              if (m.tipo === 'TARJETA') {
-                name = `Tarjeta ****${detalle.numero ? detalle.numero.slice(-4) : 'XXXX'}`;
+              if (m.tipo === 'TARJETA') name = `Tarjeta ****${detalle.numero ? detalle.numero.slice(-4) : 'XXXX'}`;
+              if (m.tipo === 'CUENTA_BANCARIA') {
+                name = `Cuenta ${detalle.banco}`;
+                IconComponent = <FontAwesome name="bank" size={PujaTheme.iconSize} />;
               }
-              if (m.tipo === 'CUENTA_BANCARIA') { 
-                name = `Cuenta ${detalle.banco}`; 
-                IconComponent = <FontAwesome name="bank" size={PujaTheme.iconSize} />; 
-              }
-              if (m.tipo === 'CHEQUE') { 
-                name = `Cheque ${detalle.banco}`; 
-                IconComponent = <AntDesign name="filetext1" size={PujaTheme.iconSize} />; 
+              if (m.tipo === 'CHEQUE') {
+                name = `Cheque ${detalle.banco}`;
+                IconComponent = <AntDesign name="filetext1" size={PujaTheme.iconSize} />;
               }
 
               return { id: m._id || m.id, name, icon: IconComponent };
@@ -78,9 +80,73 @@ export default function PujaScreen() {
     cargarMediosPago();
   }, []);
 
+  useEffect(() => {
+    if (!subastaId || !articuloId) return;
+
+    let intervalId;
+
+    const fetchEstadoPuja = async () => {
+      try {
+        const res = await fetch(`${API_URL}/subastas/${subastaId}/articulos/${articuloId}/pujas/estado`);
+        if (res.ok) {
+          const data = await res.json();
+
+          setArticuloInfo(data.articulo);
+          setSubastaInfo(data.subasta);
+          setPujaActual(data.pujaActual);
+
+          const baseValue = data.articulo?.precioBase || 0;
+          const currentOffer = data.pujaActual ? data.pujaActual.monto : null;
+
+          const categoria = data.subasta?.categoriaRequerida?.toLowerCase() || 'comun';
+          const esPremium = categoria === 'oro' || categoria === 'platino';
+          setIsPremium(esPremium);
+
+          if (esPremium) {
+            setLimiteMin(currentOffer !== null ? currentOffer + 1 : baseValue);
+            setLimiteMax(Infinity);
+          } else {
+            setLimiteMin(currentOffer !== null ? currentOffer + (baseValue * 0.01) : baseValue);
+            setLimiteMax(currentOffer !== null ? currentOffer + (baseValue * 0.20) : baseValue + (baseValue * 0.20));
+          }
+        }
+      } catch (error) {
+        console.error("Error obteniendo estado de puja", error);
+      }
+    };
+
+    fetchEstadoPuja();
+    // Polling cada 3 segundos
+    intervalId = setInterval(fetchEstadoPuja, 3000);
+
+    return () => clearInterval(intervalId);
+  }, [subastaId, articuloId]);
+
+  // 👇 VARIABLE DE BLOQUEO DE SEGURIDAD
+  const pujaBloqueada = isLoading ||
+    subastaInfo?.estado !== 'abierta' ||
+    articuloInfo?.estado !== 'disponible';
+
   const handleRealizarPuja = async () => {
-    if (!bidAmount || isNaN(bidAmount)) {
+    const amount = parseFloat(bidAmount.replace(',', '.'));
+
+    if (!amount || isNaN(amount)) {
       Alert.alert("Atención", "Ingrese un monto numérico válido.");
+      return;
+    }
+
+    if (amount < limiteMin) {
+      setShowInsuficiente(true);
+      return;
+    }
+
+    if (!isPremium && amount > limiteMax) {
+      setShowLimite(true);
+      return;
+    }
+
+    if (!selectedPayment) {
+      Alert.alert("Atención", "Debe seleccionar un método de pago.");
       return;
     }
 
@@ -89,7 +155,7 @@ export default function PujaScreen() {
       const token = await AsyncStorage.getItem('userToken');
 
       const payload = {
-        monto: parseFloat(bidAmount),
+        monto: amount,
         medioPagoId: String(selectedPayment.id),
         confirmada: true
       };
@@ -105,19 +171,15 @@ export default function PujaScreen() {
 
       if (response.ok) {
         setShowExito(true);
-      } else if (response.status === 409 || response.status === 400) {
-        const data = await response.json();
-        const msg = data.mensaje ? data.mensaje.toLowerCase() : '';
+        setBidAmount('');
 
-        if (msg.includes('mínim') || msg.includes('superar')) {
-          setShowInsuficiente(true);
-        } else if (msg.includes('máxim') || msg.includes('límite') || msg.includes('20%')) {
-          setShowLimite(true);
-        } else {
-          Alert.alert("Puja Rechazada", data.mensaje || "Error al realizar la oferta.");
-        }
+        setTimeout(() => {
+          setShowExito(false);
+        }, 2000);
+
       } else {
-        Alert.alert("Error", "No se pudo procesar la puja.");
+        const data = await response.json();
+        Alert.alert("Puja Rechazada", data.mensaje || "Error al realizar la oferta.");
       }
     } catch (error) {
       console.error(error);
@@ -127,14 +189,8 @@ export default function PujaScreen() {
     }
   };
 
-  const cerrarExitoYRedirigir = () => {
-    setShowExito(false);
-    navigation.navigate('MensajeExitoPuja');
-  };
-
   return (
     <SafeAreaView style={styles.container}>
-      {/* 3. CAMBIAMOS EL VIEW DE LA TARJETA POR UN SCROLLVIEW */}
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollCardWrapper}>
         <View style={styles.card}>
 
@@ -142,10 +198,12 @@ export default function PujaScreen() {
             <Image source={require('../../assets/logos/logotipo.png')} style={styles.logo} />
             <View style={styles.headerTextContainer}>
               <View style={styles.tagOro}>
-                <Text style={styles.tagText}>Oro</Text>
+                <Text style={styles.tagText}>
+                  {subastaInfo?.categoriaRequerida ? subastaInfo.categoriaRequerida.charAt(0).toUpperCase() + subastaInfo.categoriaRequerida.slice(1) : '...'}
+                </Text>
               </View>
-              <Text style={styles.itemId}>1002</Text>
-              <Text style={styles.itemName}>Cámara digital</Text>
+              <Text style={styles.itemId}>{articuloInfo ? articuloInfo._id.slice(-6).toUpperCase() : '...'}</Text>
+              <Text style={styles.itemName}>{articuloInfo?.nombre || 'Cargando artículo...'}</Text>
             </View>
           </View>
 
@@ -153,7 +211,13 @@ export default function PujaScreen() {
             <TouchableOpacity style={styles.arrowButton}>
               <Text style={styles.arrowText}>←</Text>
             </TouchableOpacity>
-            <Image source={require('../../assets/images/camera.jpg')} style={styles.itemImage} />
+
+            {articuloInfo?.fotos && articuloInfo.fotos.length > 0 ? (
+              <Image source={{ uri: articuloInfo.fotos[0] }} style={styles.itemImage} />
+            ) : (
+              <Image source={require('../../assets/images/camera.jpg')} style={styles.itemImage} />
+            )}
+
             <TouchableOpacity style={styles.arrowButton}>
               <Text style={styles.arrowText}>→</Text>
             </TouchableOpacity>
@@ -161,48 +225,58 @@ export default function PujaScreen() {
 
           <View style={styles.statusRow}>
             <View style={styles.statusBadge}>
-              <Text style={styles.statusBadgeText}>Estado: Activa</Text>
+              <Text style={styles.statusBadgeText}>
+                {articuloInfo?.estado === 'disponible' ? 'Artículo: Disponible' : `Artículo: ${articuloInfo?.estado || '...'}`}
+              </Text>
             </View>
             <TouchableOpacity style={styles.detailsButton}>
               <Text style={styles.detailsButtonText}>Ver detalles</Text>
             </TouchableOpacity>
           </View>
 
-          <Text style={styles.offerText}>Oferta Actual: $100.000</Text>
+          <Text style={styles.offerText}>
+            Oferta Actual: ${pujaActual ? pujaActual.monto.toLocaleString('es-AR') : (articuloInfo?.precioBase?.toLocaleString('es-AR') || '0')}
+          </Text>
+
           <View style={styles.inputContainer}>
             <Text style={styles.currencySymbol}>$</Text>
             <TextInput
               style={styles.textInput}
-              placeholder="Ingrese el monto de su puja"
+              placeholder={pujaBloqueada ? "Las pujas han cerrado" : "Ingrese el monto de su puja"}
               placeholderTextColor={PujaTheme.placeholderColor}
               keyboardType="numeric"
               value={bidAmount}
               onChangeText={setBidAmount}
-              editable={!isLoading}
+              editable={!pujaBloqueada}
             />
           </View>
 
           <Text style={styles.limitsText}>
             Tu puja válida debe ser entre:{'\n'}
-            Mínimo:  $101.000 (1%){'\n'}
-            Máximo: $120.000 (20% sobre base)
+            Mínimo:  ${limiteMin.toLocaleString('es-AR')} {isPremium ? '' : '(+1% base)'}{'\n'}
+            {isPremium ? 'Máximo: Sin límite (Cat. Premium)' : `Máximo: $${limiteMax.toLocaleString('es-AR')} (+20% base)`}
           </Text>
 
           <Text style={styles.paymentLabel}>Método de Pago</Text>
-          <TouchableOpacity style={styles.paymentSelector} onPress={() => setModalVisible(true)} disabled={isLoading}>
+          <TouchableOpacity style={styles.paymentSelector} onPress={() => setModalVisible(true)} disabled={pujaBloqueada || !selectedPayment}>
             <View style={styles.paymentSelectorContent}>
-              <Text style={styles.paymentIcon}>{selectedPayment.icon}</Text>
-              <Text style={styles.paymentText}>{selectedPayment.name}</Text>
+              <Text style={styles.paymentIcon}>{selectedPayment?.icon}</Text>
+              <Text style={styles.paymentText}>{selectedPayment ? selectedPayment.name : 'Cargando métodos...'}</Text>
             </View>
             <Text style={styles.paymentIcon}>›</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.submitButton, isLoading ? styles.buttonDisabled : null]}
+            style={[styles.submitButton, pujaBloqueada ? styles.buttonDisabled : null]}
             onPress={handleRealizarPuja}
-            disabled={isLoading}
+            disabled={pujaBloqueada}
           >
-            <Text style={styles.submitButtonText}>{isLoading ? "Procesando..." : "Realizar Puja"}</Text>
+            <Text style={styles.submitButtonText}>
+              {/* 👇 Cambia el texto del botón si ganaste / perdiste */}
+              {isLoading ? "Procesando..." :
+                (articuloInfo?.estado !== 'disponible' ? "Artículo Cerrado" :
+                  (subastaInfo?.estado !== 'abierta' ? "Subasta Cerrada" : "Realizar Puja"))}
+            </Text>
           </TouchableOpacity>
 
         </View>
@@ -210,17 +284,19 @@ export default function PujaScreen() {
 
       <BottomNav />
 
-      <PaymentModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        onSelectPayment={setSelectedPayment}
-        currentSelectedId={selectedPayment.id}
-        methodsData={paymentMethods}
-      />
+      {selectedPayment && (
+        <PaymentModal
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          onSelectPayment={setSelectedPayment}
+          currentSelectedId={selectedPayment.id}
+          methodsData={paymentMethods}
+        />
+      )}
 
-      <PopupLimiteExcedido visible={showLimite} onClose={() => setShowLimite(false)} maxAmount="120.000" />
-      <PopupMontoInsuficiente visible={showInsuficiente} onClose={() => setShowInsuficiente(false)} minAmount="101.000" />
-      <PopupPujaExitosa visible={showExito} onClose={cerrarExitoYRedirigir} />
+      <PopupLimiteExcedido visible={showLimite} onClose={() => setShowLimite(false)} maxAmount={limiteMax.toLocaleString('es-AR')} />
+      <PopupMontoInsuficiente visible={showInsuficiente} onClose={() => setShowInsuficiente(false)} minAmount={limiteMin.toLocaleString('es-AR')} />
+      <PopupPujaExitosa visible={showExito} onClose={() => setShowExito(false)} />
 
     </SafeAreaView>
   );

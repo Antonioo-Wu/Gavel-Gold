@@ -1,105 +1,66 @@
 import { StyleSheet } from 'react-native';
 
-export const ListaDeSubastasTheme = {
-  colors: {
-    clearSearch: '#E0BF66',
-    activeDot: '#4CD964',
-    upcomingDot: '#FFCC00',
-  }
-};
-
-export const listaSubastasStyles = StyleSheet.create({
-  mainWrapper: {
-    flex: 1,
-    backgroundColor: '#fff',
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
   },
-  container: {
-    flex: 1,
-    backgroundColor: '#1E1B16',
-    padding: 20,
+  logo: {
+    width: 40,
+    height: 50,
+    resizeMode: 'contain',
+    marginRight: 10,
   },
-  headerContainer: {
-    marginBottom: 12,
-  },
-  brandText: {
-    color: '#E0BF66',
+  headerTitle: {
+    fontSize: 28,
     fontWeight: 'bold',
-    fontSize: 18,
+    color: '#F6F1E7',
   },
-  screenTitle: {
-    color: '#fff',
-    fontSize: 22,
-    fontWeight: '700',
-  },
+  mainWrapper: { flex: 1, backgroundColor: '#121212' },
+  container: { flex: 1, padding: 20 },
+  headerContainer: { marginBottom: 20 },
+  brandText: { color: '#D4AF37', fontSize: 14, letterSpacing: 1 },
+  screenTitle: { color: '#FFF', fontSize: 28, fontWeight: 'bold' },
+
   searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#111',
-    padding: 8,
-    borderRadius: 8,
-    marginVertical: 10,
+    flexDirection: 'row', backgroundColor: '#1E1B16',
+    padding: 12, borderRadius: 10, alignItems: 'center', marginBottom: 20
   },
-  searchIcon: {
-    marginRight: 8,
-    color: '#E0BF66'
-  },
-  searchInput: {
-    flex: 1,
-    color: '#fff'
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 8,
-    marginBottom: 6,
-  },
-  sectionIcon:
-  {
-    marginRight: 8
+  searchInput: { flex: 1, color: '#FFF', marginLeft: 10 },
 
-  },
-  clearSearchIcon: {
-    marginRight: 4
-  },
-  sectionTitle: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '700'
-
-  },
-  scrollListContent: {
-    paddingBottom: 100
-
-  },
-  emptyContainer: {
-    padding: 20
-
-  },
-  emptyText: {
-    color: '#666',
-    textAlign: 'center'
-
-  },
   auctionCard: {
-    backgroundColor: '#090909',
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 12,
+    backgroundColor: '#090909', borderRadius: 16, marginBottom: 20, overflow: 'hidden'
   },
-  cardHeader: { marginBottom: 8 },
-  auctionTitle: { color: '#fff', fontWeight: '700', fontSize: 16 },
-  statusBadgeRow: { flexDirection: 'row', alignItems: 'center', marginTop: 6 },
-  statusDot: { width: 10, height: 10, borderRadius: 10, marginRight: 8 },
-  statusText: { marginRight: 12, fontWeight: '600' },
-  timeRemainingText: { color: '#ccc' },
-  catalogPreviewTitle: { color: '#E0BF66', marginTop: 8, marginBottom: 6 },
-  previewImagesContainer: { flexDirection: 'row' },
-  previewItemBox: { width: 60, height: 60, backgroundColor: '#fff', borderRadius: 8, marginRight: 8, justifyContent: 'center', alignItems: 'center' },
-  previewIcon: { fontSize: 24 },
-  img: { width: 56, height: 56, resizeMode: 'contain' },
-  itemCountText: { color: '#ccc', marginTop: 8 },
-  viewCatalogButton: { marginTop: 10, backgroundColor: '#E0BF66', padding: 10, borderRadius: 8, alignItems: 'center' },
-  viewCatalogButtonText: { color: '#111', fontWeight: '700' },
+  mainImageContainer: { width: '100%', height: 180 },
+  mainImg: { width: '100%', height: '100%', resizeMode: 'cover' },
+  placeholderImg: { width: '100%', height: '100%', backgroundColor: '#222' },
+
+  cardContent: { padding: 16 },
+  badgeContainer: {
+    marginVertical: 12,
+  },
+  auctionTitle: { color: '#FFF', fontSize: 18, fontWeight: 'bold' },
+  badgeRow: { flexDirection: 'row', alignItems: 'center', marginVertical: 10, alignItems: 'center' },
+  statusDot: { width: 8, height: 8, borderRadius: 4, marginRight: 6 },
+  statusText: { color: '#FFF', 
+  fontSize: 14,
+  fontWeight: '600' },
+  statusRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8, // Espacio entre el estado y la categoría
+  },
+  categoryText: { color: '#888', fontSize: 13, marginLeft: 6 },
+categoryRow: {
+  // Aquí la categoría queda alineada a la izquierda automáticamente
+  alignSelf: 'flex-start',
+},
+  viewCatalogButton: {
+    backgroundColor: '#D4AF37', padding: 14, borderRadius: 8, alignItems: 'center'
+  },
+  viewCatalogButtonText: { color: '#090909', fontWeight: 'bold' },
+  scrollListContent: { paddingBottom: 100 }
 });
 
-export default listaSubastasStyles;
+export default styles;
