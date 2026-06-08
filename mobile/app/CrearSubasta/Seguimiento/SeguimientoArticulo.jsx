@@ -63,7 +63,7 @@ export default function SeguimientoArticulo() {
     switch(estadoBackend) {
       case 'pendiente': return 'inspeccion';
       case 'pendiente_aceptacion': return 'propuesta';
-      case 'aprobado': return 'deposito';
+      case 'aprobado': return 'listo';
       case 'subastado': return 'listo';
       case 'rechazado': return 'rechazado';
       default: return 'inspeccion';
@@ -98,6 +98,15 @@ export default function SeguimientoArticulo() {
               estadoActual={getTrackerState(articulo.estado)} 
               motivoRechazo={articulo.motivoRechazo} 
             />
+
+            {articulo.estado === 'pendiente_aceptacion' && (
+              <TouchableOpacity
+                style={styles.viewProposalButton}
+                onPress={() => navigation.navigate('DetallePropuesta', { articulo })}
+              >
+                <Text style={styles.viewProposalButtonText}>Ver Propuesta Comercial</Text>
+              </TouchableOpacity>
+            )}
           </>
         ) : (
           <Text style={{ color: '#fff', textAlign: 'center', marginTop: 50 }}>No se encontró el artículo.</Text>

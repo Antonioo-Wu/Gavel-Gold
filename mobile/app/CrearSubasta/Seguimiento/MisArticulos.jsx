@@ -11,6 +11,7 @@ import { API_URL } from '../../../config/api'; // IMPORTANTE: Para la URL del fe
 export default function MisArticulos() {
   const navigation = useNavigation();
   const [articulos, setArticulos] = useState([]);
+  const [articulosRaw, setArticulosRaw] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -39,6 +40,8 @@ export default function MisArticulos() {
         const data = await response.json();
 
         if (response.ok) {
+          // Guardamos datos crudos para pantallas que necesitan el objeto completo
+          setArticulosRaw(data);
           // Mapeamos los datos reales para que ItemCard los entienda igual que los mocks
           const articulosFormateados = data.map(item => ({
             id: item.id || item._id, // En MongoDB viene como _id
@@ -70,8 +73,12 @@ export default function MisArticulos() {
   }, [navigation]);
 
   const handlePressItem = (item) => {
-    // Mandamos el ID REAL hacia la pantalla única de seguimiento
-    navigation.navigate('SeguimientoArticulo', { itemId: item.id });
+    if (item.estado === 'pendiente_aceptacion') {
+      const articuloCompleto = articulosRaw.find(a => (a.id || a._id).toString() === item.id.toString());
+      navigation.navigate('DetallePropuesta', { articulo: articuloCompleto || item });
+    } else {
+      navigation.navigate('SeguimientoArticulo', { itemId: item.id });
+    }
   };
 
   return (

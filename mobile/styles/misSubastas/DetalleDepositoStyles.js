@@ -107,5 +107,19 @@ export const detalleDepositoStyles = StyleSheet.create({
     color: '#F6F1E7',
     fontSize: 16,
     fontWeight: 'bold'
+  },
+  cardListo: {
+    backgroundColor: '#1E1B16',
+    padding: 20,
+    borderRadius: 10,
+    marginTop: 20,
+    borderWidth: 1,
+    borderColor: '#27AE60'
+  },
+  cardListoTitle: {
+    color: '#27AE60',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center'
   }
 });

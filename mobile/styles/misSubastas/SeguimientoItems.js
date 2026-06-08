@@ -148,5 +148,20 @@ export const seguimientoStyles = StyleSheet.create({
     color: '#F6F1E7',
     fontWeight: 'bold',
     fontSize: 16,
-  }
+  },
+
+  // --- BOTÓN VER PROPUESTA COMERCIAL ---
+  viewProposalButton: {
+    backgroundColor: '#7B61FF',
+    paddingVertical: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  viewProposalButtonText: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
 });
