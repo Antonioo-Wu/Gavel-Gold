@@ -57,12 +57,6 @@ import DetalleRechazo from './app/CrearSubasta/Seguimiento/DetalleRechazo';
 import DetalleDeposito from './app/CrearSubasta/Seguimiento/DetalleDeposito'
 import SeguimientoArticulo from './app/CrearSubasta/Seguimiento/SeguimientoArticulo';
 
-// Ejemplos de Tipos de Seguimiento
-import SeguimientoWalkman from './app/CrearSubasta/Seguimiento/SeguimientoWalkman';
-import SeguimientoAirfryer from './app/CrearSubasta/Seguimiento/SeguimientoAirfryer';
-import SeguimientoCassette from './app/CrearSubasta/Seguimiento/SeguimientoCassette';
-import SeguimientoTamagotchi from './app/CrearSubasta/Seguimiento/SeguimientoTamagotchi';
-import SeguimientoMedialunas from './app/CrearSubasta/Seguimiento/SeguimientoMedialunas';
 
 // Puja
 import MensajeExitoPuja from './app/Puja/MensajeExitoPuja';
