@@ -84,13 +84,26 @@ export const realizarPuja = async (req, res) => {
       try {
         const art = await Articulo.findById(articuloId);
         if (art && art.estado === 'disponible') {
-          const mejorPujaFinal = await Puja.findOne({ articuloId }).sort({ monto: -1 });
+          const mejorPujaFinal = await Puja.findOne({ articuloId }).sort({ monto: -1 }).populate('usuarioId');
 
           if (mejorPujaFinal) {
             art.estado = 'vendido';
+
+            await Venta.findOneAndUpdate(
+              { articuloId: art._id },
+              {
+                articuloId: art._id,
+                subastaId: art.subasta,
+                ganadorId: mejorPujaFinal.usuarioId._id,
+                montoFinal: mejorPujaFinal.monto,
+                estadoPago: 'pendiente',
+              },
+              { upsert: true }
+            );
           } else {
             art.estado = 'cerrado';
           }
+
           await art.save();
           console.log(`[SUBASTA] Artículo ${articuloId} CERRADO automáticamente. Ganador: ${mejorPujaFinal?.usuarioId}`);
         }

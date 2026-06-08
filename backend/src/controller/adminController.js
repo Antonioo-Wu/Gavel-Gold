@@ -4,6 +4,7 @@ import Articulo from "../model/Articulo.js";
 import Subasta from "../model/Subasta.js";
 import Puja from "../model/Puja.js";
 import Multa from "../model/Multa.js";
+import Venta from "../model/Venta.js";
 
 // ARTICULOS 
 
@@ -381,11 +382,22 @@ export const cerrarArticulo = async (req, res) => {
     const articulo = await Articulo.findById(id);
     if (!articulo) return res.status(404).json({ codigo: "ARTICULO_NO_ENCONTRADO", mensaje: "Artículo no existe" });
 
-    // Buscar mejor puja para el articulo
     const mejorPuja = await Puja.findOne({ articuloId: id }).sort({ monto: -1 }).populate('usuarioId');
 
     if (mejorPuja) {
       articulo.estado = 'vendido';
+
+      await Venta.findOneAndUpdate(
+        { articuloId: articulo._id },
+        {
+          articuloId: articulo._id,
+          subastaId: articulo.subasta,
+          ganadorId: mejorPuja.usuarioId._id,
+          montoFinal: mejorPuja.monto,
+          estadoPago: 'pendiente',
+        },
+        { upsert: true }
+      );
     } else {
       articulo.estado = 'cerrado';
     }
@@ -412,7 +424,25 @@ export const cerrarSubasta = async (req, res) => {
       const articulo = await Articulo.findById(art._id);
       if (!articulo) continue;
       const mejorPuja = await Puja.findOne({ articuloId: articulo._id }).sort({ monto: -1 }).populate('usuarioId');
-      if (mejorPuja) articulo.estado = 'vendido'; else articulo.estado = 'cerrado';
+
+      if (mejorPuja) {
+        articulo.estado = 'vendido';
+
+        await Venta.findOneAndUpdate(
+          { articuloId: articulo._id },
+          {
+            articuloId: articulo._id,
+            subastaId: id,
+            ganadorId: mejorPuja.usuarioId._id,
+            montoFinal: mejorPuja.monto,
+            estadoPago: 'pendiente',
+          },
+          { upsert: true }
+        );
+      } else {
+        articulo.estado = 'cerrado';
+      }
+
       await articulo.save();
       resultados.push({ articulo: articulo._id, ganador: mejorPuja ? { usuarioId: mejorPuja.usuarioId._id, nombre: mejorPuja.usuarioId.nombre, monto: mejorPuja.monto } : null });
     }
