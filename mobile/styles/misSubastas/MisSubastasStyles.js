@@ -11,7 +11,6 @@ export const ItemCardTheme = {
   }
 };
 
-// NUEVO THEME PARA LIMPIAR EL JSX
 export const MisSubastasTheme = {
   colors: {
     spinner: '#E0BF66',
@@ -22,15 +21,14 @@ export const MisSubastasTheme = {
 };
 
 export const misSubastasStyles = StyleSheet.create({
-  // ELIMINAMOS 'container' Y CREAMOS ESTOS DOS:
   mainWrapper: {
     flex: 1,
-    backgroundColor: '#1A1814', // Fondo oscuro Gavel & Gold
+    backgroundColor: '#1A1814',
     paddingTop: 40,
   },
   contentWrapper: {
     flex: 1,
-    paddingHorizontal: 20, // Movemos el padding acá para que no afecte al BottomNav
+    paddingHorizontal: 20,
   },
 
   header: {
@@ -71,7 +69,23 @@ export const misSubastasStyles = StyleSheet.create({
   listContainer: {
     paddingBottom: 100,
   },
-  // --- Estilos de la Tarjeta ---
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 50,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 50,
+  },
+  emptyText: {
+    color: '#fff',
+    fontSize: 16,
+    textAlign: 'center',
+  },
   cardContainer: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
@@ -113,8 +127,6 @@ export const misSubastasStyles = StyleSheet.create({
     fontSize: 14,
     color: '#333333',
   },
-
-  // --- BOTONES AL FINAL DEL SCROLL ---
   footerButtonsContainer: {
     marginTop: 10,
     paddingBottom: 20,
