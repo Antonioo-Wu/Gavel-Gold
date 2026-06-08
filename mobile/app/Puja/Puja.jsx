@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, SafeAreaView, Alert, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, SafeAreaView, Alert, ScrollView, Linking } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
@@ -36,6 +36,7 @@ export default function PujaScreen() {
 
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [selectedPayment, setSelectedPayment] = useState(null);
+
 
   useEffect(() => {
     const cargarMediosPago = async () => {
@@ -189,6 +190,21 @@ export default function PujaScreen() {
     }
   };
 
+  const handleOpenStream = async () => {
+    const url = 'https://www.twitch.tv';
+
+    try {
+      const supported = await Linking.canOpenURL(url);
+      if (supported) {
+        await Linking.openURL(url);
+      } else {
+        Alert.alert("Error", "No se puede abrir el enlace en este dispositivo.");
+      }
+    } catch (error) {
+      console.error("Error al intentar abrir el link:", error);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollCardWrapper}>
@@ -229,8 +245,9 @@ export default function PujaScreen() {
                 {articuloInfo?.estado === 'disponible' ? 'Artículo: Disponible' : `Artículo: ${articuloInfo?.estado || '...'}`}
               </Text>
             </View>
-            <TouchableOpacity style={styles.detailsButton}>
-              <Text style={styles.detailsButtonText}>Ver detalles</Text>
+
+            <TouchableOpacity style={styles.detailsButton} onPress={handleOpenStream}>
+              <Text style={styles.detailsButtonText}>Link al Stream</Text>
             </TouchableOpacity>
           </View>
 
