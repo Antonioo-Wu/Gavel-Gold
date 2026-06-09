@@ -12,6 +12,7 @@ router.get("/articulos/pendientes", adminController.obtenerArticulosPendientes);
 router.post("/articulos/:id/aprobar", adminController.aprobarArticulo);
 router.post("/articulos/:id/rechazar", adminController.rechazarArticulo);
 router.post("/subastas", adminController.crearSubasta);
+router.post("/subastas/:id/abrir", adminController.abrirSubasta);
 router.post("/subastas/:id/agregarArticulo", adminController.agregarArticuloSubasta);
 
 router.put("/articulos/:id/precio-base", adminController.definirPrecioArticulo);

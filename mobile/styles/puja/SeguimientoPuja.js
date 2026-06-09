@@ -1,0 +1,110 @@
+import { StyleSheet } from 'react-native';
+
+export const seguimientoPujaStyles = StyleSheet.create({
+  background: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  header: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
+    color: '#1A1A1A',
+  },
+  congratsText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#D4AF37',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  detalle: {
+    padding: 15,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#eee',
+    width: '100%',
+    marginBottom: 20,
+  },
+  detalleRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  detalleText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  totalRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+    paddingTop: 10,
+  },
+  totalText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#1A1A1A',
+  },
+  trackingContainer: {
+    width: '100%',
+    paddingHorizontal: 10,
+    marginBottom: 30,
+  },
+  trackingStep: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  trackingIconActive: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#2e7d32',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 15,
+    zIndex: 2,
+  },
+  trackingIconPending: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#ccc',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 15,
+    zIndex: 2,
+  },
+  trackingIconText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  trackingTextActive: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#1A1A1A',
+  },
+  trackingTextPending: {
+    fontSize: 16,
+    color: '#888',
+  },
+  trackingLine: {
+    position: 'absolute',
+    left: 21,
+    top: 24,
+    width: 2,
+    height: 35,
+    backgroundColor: '#ccc',
+    zIndex: 1,
+  },
+  loadingIndicator: {
+    marginVertical: 30,
+  },
+});
