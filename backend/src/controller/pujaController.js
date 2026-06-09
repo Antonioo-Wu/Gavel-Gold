@@ -3,8 +3,7 @@ import Subasta from "../model/Subasta.js";
 import MedioPago from "../model/MedioPago.js";
 import Articulo from "../model/Articulo.js";
 import Venta from "../model/Venta.js";
-
-const temporizadoresArticulos = {};
+import Multa from "../model/Multa.js";
 
 export const realizarPuja = async (req, res) => {
   try {
@@ -13,49 +12,82 @@ export const realizarPuja = async (req, res) => {
     const usuarioId = req.user.id;
 
     if (!monto || !medioPagoId) {
-      return res.status(400).json({ codigo: "CAMPOS_REQUERIDOS", mensaje: "Monto y medioPagoId requeridos" });
+      return res.status(400).json({ 
+        codigo: "CAMPOS_REQUERIDOS", 
+        mensaje: "Monto y medioPagoId requeridos" 
+      });
     }
 
     if (monto < 0.01) {
-      return res.status(400).json({ codigo: "MONTO_INVALIDO", mensaje: "Monto debe ser mayor a 0" });
+      return res.status(400).json({ 
+        codigo: "MONTO_INVALIDO", 
+        mensaje: "Monto debe ser mayor a 0" 
+      });
     }
 
     const subasta = await Subasta.findById(subastaId);
     if (!subasta) {
-      return res.status(404).json({ codigo: "SUBASTA_NO_ENCONTRADA", mensaje: "Subasta no existe" });
+      return res.status(404).json({ 
+        codigo: "SUBASTA_NO_ENCONTRADA", 
+        mensaje: "Subasta no existe" 
+      });
     }
 
+    // verificar articulo
     const articulo = await Articulo.findById(articuloId);
     if (!articulo) {
       return res.status(404).json({ codigo: "ARTICULO_NO_ENCONTRADO", mensaje: "Artículo no existe" });
     }
 
+    // verificar que articulo pertenezca a la subasta
     if (!articulo.subasta || articulo.subasta.toString() !== subastaId) {
       return res.status(400).json({ codigo: "ARTICULO_NO_EN_SUBASTA", mensaje: "Artículo no pertenece a la subasta indicada" });
     }
 
-    if (articulo.estado !== "disponible") {
-      return res.status(409).json({ codigo: "ARTICULO_CERRADO", mensaje: "El artículo ya fue vendido o cerrado" });
-    }
-
+    // Verificar estado de subasta
     if (subasta.estado !== "abierta") {
-      return res.status(409).json({ codigo: "SUBASTA_CERRADA", mensaje: "Subasta no está abierta" });
+      return res.status(409).json({ 
+        codigo: "SUBASTA_CERRADA", 
+        mensaje: "Subasta no está abierta" 
+      });
     }
 
+    // Verificar fecha
     const ahora = new Date();
     if (ahora > subasta.fechaFin) {
-      return res.status(409).json({ codigo: "SUBASTA_CERRADA", mensaje: "Subasta ya finalizó" });
+      return res.status(409).json({ 
+        codigo: "SUBASTA_CERRADA", 
+        mensaje: "Subasta ya finalizó" 
+      });
     }
 
+    // Verificar medio de pago
     const medioPago = await MedioPago.findById(medioPagoId);
     if (!medioPago || !medioPago.validado) {
-      return res.status(409).json({ codigo: "MEDIO_PAGO_INVALIDO", mensaje: "Medio de pago no validado" });
+      return res.status(409).json({ 
+        codigo: "MEDIO_PAGO_INVALIDO", 
+        mensaje: "Medio de pago no validado" 
+      });
     }
 
-    const mejorPujaAnterior = await Puja.findOne({ subastaId: subastaId, articuloId }).sort({ monto: -1 });
+    // Verificar multas activas
+    const multasActivas = await Multa.find({ usuarioId, activa: true });
+    if (multasActivas.length > 0) {
+      return res.status(403).json({
+        codigo: "MULTA_ACTIVA",
+        mensaje: "No puedes pujar porque tienes multas activas"
+      });
+    }
+
+    // Obtener mejor puja anterior
+    const mejorPujaAnterior = await Puja.findOne({ subastaId: subastaId, articuloId })
+      .sort({ monto: -1 });
 
     if (mejorPujaAnterior && monto <= mejorPujaAnterior.monto) {
-      return res.status(409).json({ codigo: "MONTO_BAJO", mensaje: "Monto debe ser mayor a la puja anterior" });
+      return res.status(409).json({ 
+        codigo: "MONTO_BAJO", 
+        mensaje: "Monto debe ser mayor a la puja anterior" 
+      });
     }
 
     const nuevaPuja = new Puja({
@@ -68,59 +100,19 @@ export const realizarPuja = async (req, res) => {
     });
 
     const pujaGuardada = await nuevaPuja.save();
-
-    articulo.pujaActual = monto;
-    await articulo.save();
-
+    
     const pujaConDetalles = await Puja.findById(pujaGuardada._id)
       .populate("usuarioId", "nombre apellido")
       .lean();
 
-    if (temporizadoresArticulos[articuloId]) {
-      clearTimeout(temporizadoresArticulos[articuloId]);
-    }
-
-    temporizadoresArticulos[articuloId] = setTimeout(async () => {
-      try {
-        const art = await Articulo.findById(articuloId);
-        if (art && art.estado === 'disponible') {
-          const mejorPujaFinal = await Puja.findOne({ articuloId }).sort({ monto: -1 }).populate('usuarioId');
-
-          if (mejorPujaFinal) {
-            art.estado = 'vendido';
-
-            await Venta.findOneAndUpdate(
-              { articuloId: art._id },
-              {
-                articuloId: art._id,
-                subastaId: art.subasta,
-                ganadorId: mejorPujaFinal.usuarioId._id,
-                montoFinal: mejorPujaFinal.monto,
-                estadoPago: 'pendiente',
-              },
-              { upsert: true }
-            );
-          } else {
-            art.estado = 'cerrado';
-          }
-
-          await art.save();
-          console.log(`[SUBASTA] Artículo ${articuloId} CERRADO automáticamente. Ganador: ${mejorPujaFinal?.usuarioId}`);
-        }
-      } catch (err) {
-        console.error("Error cerrando artículo automáticamente:", err);
-      }
-    }, 10000);
-
     res.json({
-      mensaje: "Puja aceptada y cuenta regresiva de 10s iniciada",
+      mensaje: "Puja aceptada",
       puja: pujaConDetalles
     });
-
   } catch (error) {
-    res.status(500).json({
-      codigo: "ERROR_SERVIDOR",
-      mensaje: error.message
+    res.status(500).json({ 
+      codigo: "ERROR_SERVIDOR", 
+      mensaje: error.message 
     });
   }
 };
@@ -158,9 +150,9 @@ export const obtenerHistorialPujas = async (req, res) => {
 
     res.json(pujaFormateadas);
   } catch (error) {
-    res.status(500).json({
-      codigo: "ERROR_SERVIDOR",
-      mensaje: error.message
+    res.status(500).json({ 
+      codigo: "ERROR_SERVIDOR", 
+      mensaje: error.message 
     });
   }
 };
@@ -193,17 +185,17 @@ export const obtenerResultado = async (req, res) => {
       },
       ganador: mejorPuja
         ? {
-          usuarioId: mejorPuja.usuarioId._id,
-          nombre: mejorPuja.usuarioId.nombre,
-          apellido: mejorPuja.usuarioId.apellido,
-          montoCierre: mejorPuja.monto,
-        }
+            usuarioId: mejorPuja.usuarioId._id,
+            nombre: mejorPuja.usuarioId.nombre,
+            apellido: mejorPuja.usuarioId.apellido,
+            montoCierre: mejorPuja.monto,
+          }
         : null,
     });
   } catch (error) {
-    res.status(500).json({
-      codigo: "ERROR_SERVIDOR",
-      mensaje: error.message
+    res.status(500).json({ 
+      codigo: "ERROR_SERVIDOR", 
+      mensaje: error.message 
     });
   }
 };
