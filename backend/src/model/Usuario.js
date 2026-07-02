@@ -54,7 +54,7 @@ const usuarioSchema = new mongoose.Schema({
     
     estado: {
         type: String,
-        enum: ["pendiente", "aprobado", "activo", "bloqueado"],
+        enum: ["pendiente", "aprobado", "activo", "bloqueado", "rechazado"],
         default: "pendiente",
     },
 

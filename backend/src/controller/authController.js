@@ -10,22 +10,32 @@ const generarCodigo = () => crypto.randomInt(100000, 999999).toString();
 
 export const registroInicial = async (req, res) => {
   try {
-    const { nombre, apellido, email, pais, domicilio, documentoFrente, documentoDorso } = req.body;
+    const {
+      nombre,
+      apellido,
+      email,
+      pais,
+      domicilio,
+      documentoFrente,
+      documentoDorso,
+    } = req.body;
 
     // Validar campos requeridos
     if (!nombre || !apellido || !email || !documentoFrente || !documentoDorso) {
       return res.status(400).json({
         codigo: "CAMPOS_REQUERIDOS",
-        mensaje: "Faltan campos requeridos"
+        mensaje: "Faltan campos requeridos",
       });
     }
 
     // Verificar si email existe
-    const usuarioExistente = await Usuario.findOne({ email: email.toLowerCase() });
+    const usuarioExistente = await Usuario.findOne({
+      email: email.toLowerCase(),
+    });
     if (usuarioExistente) {
       return res.status(400).json({
         codigo: "EMAIL_EXISTENTE",
-        mensaje: "El email ya está registrado"
+        mensaje: "El email ya está registrado",
       });
     }
 
@@ -44,11 +54,17 @@ export const registroInicial = async (req, res) => {
 
     const codigo = generarCodigo();
     nuevoUsuario.codigoActivacion = codigo;
-    nuevoUsuario.codigoActivacionExpira = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    nuevoUsuario.codigoActivacionExpira = new Date(
+      Date.now() + 7 * 24 * 60 * 60 * 1000,
+    );
     const usuarioGuardado = await nuevoUsuario.save();
 
     try {
-      await sendCodeEmail({ to: usuarioGuardado.email, codigo, tipo: "activation" });
+      await sendCodeEmail({
+        to: usuarioGuardado.email,
+        codigo,
+        tipo: "activation",
+      });
     } catch (mailError) {
       return res.status(500).json({
         codigo: "ERROR_EMAIL",
@@ -58,13 +74,14 @@ export const registroInicial = async (req, res) => {
     }
 
     res.status(201).json({
-      mensaje: "Usuario registrado. Revisa tu email para completar el registro.",
-      usuarioId: usuarioGuardado._id
+      mensaje:
+        "Usuario registrado. Revisa tu email para completar el registro.",
+      usuarioId: usuarioGuardado._id,
     });
   } catch (error) {
     res.status(500).json({
       codigo: "ERROR_SERVIDOR",
-      mensaje: error.message
+      mensaje: error.message,
     });
   }
 };
@@ -76,7 +93,7 @@ export const activarCuenta = async (req, res) => {
     if (!codigo || !password) {
       return res.status(400).json({
         codigo: "CAMPOS_REQUERIDOS",
-        mensaje: "Codigo y password requeridos"
+        mensaje: "Codigo y password requeridos",
       });
     }
 
@@ -85,8 +102,11 @@ export const activarCuenta = async (req, res) => {
       codigoActivacionExpira: { $gt: new Date() },
     });
 
-    if (!usuario || (usuario.estado !== "pendiente" && usuario.estado !== "aprobado")) {
-      return res.status(400).json({ codigo: "CODIGO_INVALIDO", mensaje: "Código inválido o expirado" });
+    if (!usuario || usuario.estado !== "aprobado") {
+      return res.status(400).json({
+          codigo: "CODIGO_INVALIDO",
+          mensaje: "Código inválido, expirado, o la cuenta aún no ha sido aprobada",
+        });
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
@@ -108,12 +128,12 @@ export const activarCuenta = async (req, res) => {
         email: usuario.email,
         categoria: usuario.categoria,
         rol: usuario.rol,
-      }
+      },
     });
   } catch (error) {
     res.status(500).json({
       codigo: "ERROR_SERVIDOR",
-      mensaje: error.message
+      mensaje: error.message,
     });
   }
 };
@@ -125,7 +145,7 @@ export const login = async (req, res) => {
     if (!email || !password) {
       return res.status(401).json({
         codigo: "CREDENCIALES_INVALIDAS",
-        mensaje: "Email y password requeridos"
+        mensaje: "Email y password requeridos",
       });
     }
 
@@ -133,7 +153,7 @@ export const login = async (req, res) => {
     if (!usuario) {
       return res.status(401).json({
         codigo: "CREDENCIALES_INVALIDAS",
-        mensaje: "Credenciales inválidas"
+        mensaje: "Credenciales inválidas",
       });
     }
 
@@ -142,7 +162,7 @@ export const login = async (req, res) => {
     if (!passwordValida) {
       return res.status(401).json({
         codigo: "CREDENCIALES_INVALIDAS",
-        mensaje: "Credenciales inválidas"
+        mensaje: "Credenciales inválidas",
       });
     }
 
@@ -159,12 +179,12 @@ export const login = async (req, res) => {
         email: usuario.email,
         categoria: usuario.categoria,
         rol: usuario.rol,
-      }
+      },
     });
   } catch (error) {
     res.status(500).json({
       codigo: "ERROR_SERVIDOR",
-      mensaje: error.message
+      mensaje: error.message,
     });
   }
 };
@@ -179,7 +199,9 @@ export const logout = async (req, res) => {
     const token = authHeader.slice(7);
     const decoded = jwt.decode(token);
     const exp = decoded?.exp;
-    const expiresAt = exp ? new Date(exp * 1000) : new Date(Date.now() + 24 * 3600 * 1000);
+    const expiresAt = exp
+      ? new Date(exp * 1000)
+      : new Date(Date.now() + 24 * 3600 * 1000);
 
     const revoked = new RevokedToken({ token, expiresAt });
     await revoked.save();
@@ -188,7 +210,7 @@ export const logout = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       codigo: "ERROR_SERVIDOR",
-      mensaje: error.message
+      mensaje: error.message,
     });
   }
 };
@@ -207,7 +229,8 @@ export const solicitarRecuperacionPassword = async (req, res) => {
     // Respuesta neutra para no revelar si existe o no el usuario
     if (!usuario) {
       return res.json({
-        mensaje: "Si el email existe, se enviaron instrucciones de recuperación",
+        mensaje:
+          "Si el email existe, se enviaron instrucciones de recuperación",
       });
     }
 
@@ -217,7 +240,11 @@ export const solicitarRecuperacionPassword = async (req, res) => {
     await usuario.save();
 
     try {
-      await sendCodeEmail({ to: usuario.email, codigo, tipo: "password_reset" });
+      await sendCodeEmail({
+        to: usuario.email,
+        codigo,
+        tipo: "password_reset",
+      });
     } catch (mailError) {
       return res.status(500).json({
         codigo: "ERROR_EMAIL",

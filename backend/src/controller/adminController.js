@@ -6,7 +6,7 @@ import Puja from "../model/Puja.js";
 import Multa from "../model/Multa.js";
 import Venta from "../model/Venta.js";
 import MedioPago from "../model/MedioPago.js";
-
+import { sendCodeEmail } from "../service/mailService.js";
 
 export const obtenerArticulosPendientes = async (req, res) => {
   try {
@@ -337,7 +337,17 @@ export const aprobarUsuario = async (req, res) => {
     usuario.codigoActivacionExpira = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
     await usuario.save();
 
-    res.json({ mensaje: "Usuario aprobado", usuario, codigoActivacion: codigo });
+    try {
+      await sendCodeEmail({ to: usuario.email, codigo, tipo: "activation" });
+    } catch (mailError) {
+      return res.status(500).json({
+        codigo: "ERROR_EMAIL",
+        mensaje: "El usuario fue aprobado pero ocurrió un error al enviar el email de activación",
+        detalle: mailError.message,
+      });
+    }
+
+    res.json({ mensaje: "Usuario aprobado y código enviado por email", usuario });
   } catch (error) {
     res.status(500).json({ codigo: "ERROR_SERVIDOR", mensaje: error.message });
   }
