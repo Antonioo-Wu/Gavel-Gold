@@ -5,8 +5,8 @@ import Subasta from "../model/Subasta.js";
 import Puja from "../model/Puja.js";
 import Multa from "../model/Multa.js";
 import Venta from "../model/Venta.js";
+import MedioPago from "../model/MedioPago.js";
 
-// ARTICULOS 
 
 export const obtenerArticulosPendientes = async (req, res) => {
   try {
@@ -479,5 +479,40 @@ export const levantarMulta = async (req, res) => {
     res.json({ mensaje: 'Multa levantada', multa });
   } catch (error) {
     res.status(500).json({ codigo: 'ERROR_SERVIDOR', mensaje: error.message });
+  }
+};
+
+
+export const validarMedioPago = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const medioPago = await MedioPago.findById(id);
+
+    if (!medioPago) {
+      return res.status(404).json({
+        codigo: "MEDIO_PAGO_NO_ENCONTRADO",
+        mensaje: "El medio de pago no existe"
+      });
+    }
+
+    if (medioPago.validado) {
+      return res.status(400).json({
+        codigo: "MEDIO_PAGO_YA_VALIDADO",
+        mensaje: "Este medio de pago ya se encuentra validado"
+      });
+    }
+
+    medioPago.validado = true;
+    await medioPago.save();
+
+    res.json({
+      mensaje: "Medio de pago validado exitosamente",
+      medioPago
+    });
+  } catch (error) {
+    res.status(500).json({
+      codigo: "ERROR_SERVIDOR",
+      mensaje: error.message
+    });
   }
 };

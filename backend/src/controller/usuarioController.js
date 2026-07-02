@@ -43,7 +43,6 @@ export const obtenerMediosPago = async (req, res) => {
       });
     }
 
-    // Compatibilidad: si el array aún no está sincronizado, caer al filtro por usuarioId.
     let mediosPago = usuario.mediosPago || [];
     if (!mediosPago.length) {
       mediosPago = await MedioPago.find({ usuarioId: id });
@@ -76,7 +75,6 @@ export const agregarMedioPago = async (req, res) => {
       });
     }
 
-    // Validar tipo
     const tiposValidos = ["CUENTA_BANCARIA", "TARJETA", "CHEQUE"];
     if (!tiposValidos.includes(tipo)) {
       return res.status(400).json({
@@ -85,7 +83,6 @@ export const agregarMedioPago = async (req, res) => {
       });
     }
 
-    // Verificar usuario existe
     const usuario = await Usuario.findById(id);
     if (!usuario) {
       return res.status(404).json({
@@ -98,7 +95,7 @@ export const agregarMedioPago = async (req, res) => {
       usuarioId: id,
       tipo,
       detalle,
-      validado: true,
+      validado: false,
     });
 
     await nuevoMedio.save();
@@ -124,8 +121,6 @@ export const agregarMedioPago = async (req, res) => {
 export const obtenerSubastasActivas = async (req, res) => {
   try {
     const { id } = req.params;
-
-    // Subastas en estado abierta donde el usuario ha pujado
     const pujas = await Puja.find({ usuarioId: id });
     const subastaIds = [...new Set(pujas.map(p => p.subastaId))];
 
