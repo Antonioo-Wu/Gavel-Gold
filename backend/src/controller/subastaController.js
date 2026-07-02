@@ -114,10 +114,10 @@ export const validarAcceso = async (req, res) => {
 
     const tieneMedioValidado = mediosUsuario.some((medio) => medio.validado === true);
     if (!tieneMedioValidado) {
-      const ids = mediosUsuario.map((medio) => medio._id).filter(Boolean);
-      if (ids.length) {
-        await MedioPago.updateMany({ _id: { $in: ids } }, { $set: { validado: true } });
-      }
+      return res.status(403).json({ 
+        codigo: "MEDIO_PAGO_NO_VALIDADO", 
+        mensaje: "Debes tener al menos un medio de pago validado por la administración para participar." 
+      });
     }
 
     res.json({ 
