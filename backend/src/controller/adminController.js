@@ -325,6 +325,20 @@ export const definirComisionArticulo = async (req, res) => {
 
 // USUARIOS
 
+export const obtenerUsuariosPendientes = async (req, res) => {
+  try {
+    const usuarios = await Usuario.find({ estado: "pendiente" })
+    .select("-password")
+    .sort({ createdAt: -1 });
+    res.json(usuarios);
+  } catch (error) {
+    res.status(500).json({ 
+      codigo: "ERROR_SERVIDOR", 
+      mensaje: error.message 
+    });
+  }
+};
+
 export const aprobarUsuario = async (req, res) => {
   try {
     const { id } = req.params;

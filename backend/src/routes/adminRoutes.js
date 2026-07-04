@@ -25,6 +25,7 @@ router.post("/subastas/:id/cerrar", adminController.cerrarSubasta);
 router.post("/multas", adminController.crearMulta);
 router.post("/multas/:id/levantar", adminController.levantarMulta);
 
+router.get("/usuarios/pendientes", adminController.obtenerUsuariosPendientes);
 router.post("/usuarios/:id/aprobar", adminController.aprobarUsuario);
 router.post("/usuarios/:id/rechazar", adminController.rechazarUsuario);
 router.post("/usuarios/:id/categoria", adminController.asignarCategoria);
