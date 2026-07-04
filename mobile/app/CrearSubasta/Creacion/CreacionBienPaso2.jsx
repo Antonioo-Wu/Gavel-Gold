@@ -158,7 +158,7 @@ export default function CreacionBienPaso2() {
         <FormCard>
           <Text style={styles.title}>Ingrese los datos del bien a subastar</Text>
 
-          <Text style={styles.subtitle}>Agrega mínimo 6 fotos de tu producto a subastar ({fotos.length}/6)</Text>
+          <Text style={styles.subtitle}>Agrega mínimo 6 fotos de tu producto a subastar</Text>
 
           {/* GALERÍA DE FOTOS CAPTURADAS */}
           <View style={styles.photosGrid}>

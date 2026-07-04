@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, SafeAreaView, Alert, ScrollView, Linking } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { API_URL } from '../../config/api';
 
 import { pujaStyles as styles, PujaTheme } from '../../styles/puja/Puja';
@@ -12,6 +11,8 @@ import BottomNav from '../../components/BottomNav';
 import PopupLimiteExcedido from './PopUps/PopupLimiteExcedido';
 import PopupMontoInsuficiente from './PopUps/PopupMontoInsuficiente';
 import PopupPujaExitosa from './PopUps/PopupPujaExitosa';
+
+import { obtenerMediosPagoFormateados } from '../../services/paymentService';
 
 export default function PujaScreen() {
   const navigation = useNavigation();
@@ -45,37 +46,10 @@ export default function PujaScreen() {
   useEffect(() => {
     const cargarMediosPago = async () => {
       try {
-        const token = await AsyncStorage.getItem('userToken');
-        const userDataString = await AsyncStorage.getItem('userData');
-        if (!token || !userDataString) return;
-
-        const usuario = JSON.parse(userDataString);
-        const res = await fetch(`${API_URL}/usuarios/${usuario.id}/medios-pago`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          if (data.length > 0) {
-            const mappedMethods = data.map(m => {
-              const detalle = typeof m.detalle === 'string' ? JSON.parse(m.detalle) : m.detalle;
-              let name = m.tipo;
-              let IconComponent = <FontAwesome name="credit-card" size={PujaTheme.iconSize} />;
-
-              if (m.tipo === 'TARJETA') name = `Tarjeta ****${detalle.numero ? detalle.numero.slice(-4) : 'XXXX'}`;
-              if (m.tipo === 'CUENTA_BANCARIA') {
-                name = `Cuenta ${detalle.banco}`;
-                IconComponent = <FontAwesome name="bank" size={PujaTheme.iconSize} />;
-              }
-              if (m.tipo === 'CHEQUE') {
-                name = `Cheque ${detalle.banco}`;
-                IconComponent = <AntDesign name="filetext1" size={PujaTheme.iconSize} />;
-              }
-              return { id: m._id || m.id, name, icon: IconComponent };
-            });
-            setPaymentMethods(mappedMethods);
-            setSelectedPayment(mappedMethods[0]);
-          }
+        const metodos = await obtenerMediosPagoFormateados();
+        if (metodos.length > 0) {
+          setPaymentMethods(metodos);
+          setSelectedPayment(metodos[0]);
         }
       } catch (error) {
         console.error("Error cargando métodos de pago", error);
