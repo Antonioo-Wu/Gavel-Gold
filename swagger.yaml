@@ -727,15 +727,14 @@ components:
 
     UsuarioRegistroInicial:
       type: object
-      required: [nombre, apellido, email, documentoFrente, documentoDorso]
+      required: [nombre, apellido, email, dni]
       properties:
         nombre: { type: string }
         apellido: { type: string }
         email: { type: string, format: email }
         pais: { type: string }
         domicilio: { type: string }
-        documentoFrente: { type: string, format: uri }
-        documentoDorso: { type: string, format: uri }
+        dni: { type: number }
 
     Usuario:
       type: object

@@ -36,9 +36,7 @@ export default function RegistroUsuario() {
           email,
           pais,
           domicilio,
-          dni,
-          documentoFrente: "url_frente_dni.jpg",
-          documentoDorso: "url_dorso_dni.jpg"
+          dni
         })
       });
 

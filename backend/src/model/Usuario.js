@@ -38,12 +38,10 @@ const usuarioSchema = new mongoose.Schema({
         type: String,
     },
 
-    documentoFrente: {
-        type: String,
-    },
-
-    documentoDorso: {
-        type: String,
+    dni: {
+        type: Number,
+        required: true,
+        unique: true
     },
 
     categoria: {

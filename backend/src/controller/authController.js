@@ -10,9 +10,9 @@ const generarCodigo = () => crypto.randomInt(100000, 999999).toString();
 
 export const registroInicial = async (req, res) => {
   try {
-    const { nombre, apellido, email, pais, domicilio, documentoFrente, documentoDorso } = req.body;
+    const { nombre, apellido, email, pais, domicilio, dni } = req.body;
 
-    if (!nombre || !apellido || !email || !documentoFrente || !documentoDorso) {
+    if (!nombre || !apellido || !email || !dni) {
       return res.status(400).json({
         codigo: "CAMPOS_REQUERIDOS",
         mensaje: "Faltan campos requeridos"
@@ -27,14 +27,21 @@ export const registroInicial = async (req, res) => {
       });
     }
 
+    const dniExistente = await Usuario.findOne({ dni });
+    if (dniExistente) {
+      return res.status(400).json({
+        codigo: "DNI_EXISTENTE",
+        mensaje: "El DNI ya está registrado"
+      });
+    }
+
     const nuevoUsuario = new Usuario({
       nombre,
       apellido,
       email: email.toLowerCase(),
       pais,
       domicilio,
-      documentoFrente,
-      documentoDorso,
+      dni,
       estado: "pendiente",
       categoria: "comun",
     });
