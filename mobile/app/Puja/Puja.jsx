@@ -6,7 +6,7 @@ import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { API_URL } from '../../config/api';
 
 import { pujaStyles as styles, PujaTheme } from '../../styles/puja/Puja';
-import PaymentModal from './MetodoPagoModulo';
+import PaymentModal from '../../components/MetodoPagoModulo';
 import BottomNav from '../../components/BottomNav';
 
 import PopupLimiteExcedido from './PopUps/PopupLimiteExcedido';
