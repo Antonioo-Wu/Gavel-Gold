@@ -30,6 +30,7 @@ import RegistroExito from './app/Registro/RegistroExito';
 import Perfil from './app/CuentaUsuario/Perfil';
 import DatosUsuario from './app/CuentaUsuario/DatosUsuario';
 import Metricas from './app/CuentaUsuario/Metricas';
+import MultasUsuario from './app/CuentaUsuario/MultasUsuario';
 
 // Método de Pago
 import UsuarioMediosPago from './app/CuentaUsuario/UsuarioMediosPago';
@@ -94,6 +95,7 @@ export default function App() {
           <Stack.Screen name="Perfil" component={Perfil} />
           <Stack.Screen name="DatosUsuario" component={DatosUsuario} />
           <Stack.Screen name="Metricas" component={Metricas} />
+          <Stack.Screen name="MultasUsuario" component={MultasUsuario} />
 
           <Stack.Screen name="Registro" component={Registro} />
           <Stack.Screen name="MensajeEspera" component={MensajeEspera} />

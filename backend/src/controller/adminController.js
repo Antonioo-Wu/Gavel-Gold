@@ -540,3 +540,19 @@ export const validarMedioPago = async (req, res) => {
     });
   }
 };
+
+export const obtenerUsuarios = async (req, res) => {
+  try {
+    // find() sin filtros trae toda la colección de usuarios
+    const usuarios = await Usuario.find()
+      .select("-password") // Siempre excluimos la contraseña por seguridad
+      .sort({ createdAt: -1 }); // Los ordenamos para ver a los más nuevos arriba
+
+    res.json(usuarios);
+  } catch (error) {
+    res.status(500).json({
+      codigo: "ERROR_SERVIDOR",
+      mensaje: error.message
+    });
+  }
+};

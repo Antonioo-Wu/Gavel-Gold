@@ -73,7 +73,7 @@ export default function Perfil() {
       onPress: () => navigation.navigate('Metricas')
     }
   ]
-  
+
   const infoItems = [
     {
       icon: <Ionicons name="alert-circle-outline" size={PerfilTheme.iconInfo.size} color={PerfilTheme.iconInfo.color} />,
@@ -98,8 +98,8 @@ export default function Perfil() {
       <View style={styles.whiteCard}>
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContentContainer} >
           <View style={styles.header}>
-                  <Image source={require('../../assets/logos/logotipo.png')} style={styles.logo} />
-                  <Text style={styles.headerTitle}>Mi Perfil</Text>
+            <Image source={require('../../assets/logos/logotipo.png')} style={styles.logo} />
+            <Text style={styles.headerTitle}>Mi Perfil</Text>
           </View>
 
           <View style={styles.categoryContainer}>
@@ -126,6 +126,10 @@ export default function Perfil() {
 
           <TouchableOpacity style={styles.subastasButton} onPress={() => navigation.navigate('MisArticulos')}>
             <Text style={styles.subastasText}>Mis Articulos</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.multasButton} onPress={() => navigation.navigate('MultasUsuario')}>
+            <Text style={styles.multasText}>Mis Multas</Text>
           </TouchableOpacity>
 
           <View style={styles.infoCard}>
