@@ -10,36 +10,23 @@ const generarCodigo = () => crypto.randomInt(100000, 999999).toString();
 
 export const registroInicial = async (req, res) => {
   try {
-    const {
-      nombre,
-      apellido,
-      email,
-      pais,
-      domicilio,
-      documentoFrente,
-      documentoDorso,
-    } = req.body;
+    const { nombre, apellido, email, pais, domicilio, documentoFrente, documentoDorso } = req.body;
 
-    // Validar campos requeridos
     if (!nombre || !apellido || !email || !documentoFrente || !documentoDorso) {
       return res.status(400).json({
         codigo: "CAMPOS_REQUERIDOS",
-        mensaje: "Faltan campos requeridos",
+        mensaje: "Faltan campos requeridos"
       });
     }
 
-    // Verificar si email existe
-    const usuarioExistente = await Usuario.findOne({
-      email: email.toLowerCase(),
-    });
+    const usuarioExistente = await Usuario.findOne({ email: email.toLowerCase() });
     if (usuarioExistente) {
       return res.status(400).json({
         codigo: "EMAIL_EXISTENTE",
-        mensaje: "El email ya está registrado",
+        mensaje: "El email ya está registrado"
       });
     }
 
-    // Crear nuevo usuario en estado pendiente
     const nuevoUsuario = new Usuario({
       nombre,
       apellido,
@@ -52,36 +39,16 @@ export const registroInicial = async (req, res) => {
       categoria: "comun",
     });
 
-    const codigo = generarCodigo();
-    nuevoUsuario.codigoActivacion = codigo;
-    nuevoUsuario.codigoActivacionExpira = new Date(
-      Date.now() + 7 * 24 * 60 * 60 * 1000,
-    );
     const usuarioGuardado = await nuevoUsuario.save();
 
-    try {
-      await sendCodeEmail({
-        to: usuarioGuardado.email,
-        codigo,
-        tipo: "activation",
-      });
-    } catch (mailError) {
-      return res.status(500).json({
-        codigo: "ERROR_EMAIL",
-        mensaje: "No se pudo enviar el email de activación",
-        detalle: mailError.message,
-      });
-    }
-
     res.status(201).json({
-      mensaje:
-        "Usuario registrado. Revisa tu email para completar el registro.",
-      usuarioId: usuarioGuardado._id,
+      mensaje: "Usuario registrado con éxito. Queda a la espera de la validación de un administrador.",
+      usuarioId: usuarioGuardado._id
     });
   } catch (error) {
     res.status(500).json({
       codigo: "ERROR_SERVIDOR",
-      mensaje: error.message,
+      mensaje: error.message
     });
   }
 };
