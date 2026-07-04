@@ -7,7 +7,7 @@ export default function MensajeEspera() {
 
   return (
     <FeedbackScreen
-      text={"¡Tu cuenta está en revisión!\nPronto recibirás una notificación por correo."}
+      text={"¡Registro completado!\n\nTu cuenta está a la espera de la aprobación de un administrador.\n\nUna vez aprobada, recibirás un correo con tu código de activación."}
       onPress={() => navigation.navigate('Login')}
     />
   );

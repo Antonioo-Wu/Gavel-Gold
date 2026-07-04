@@ -41,12 +41,7 @@ export default function GenerarPassword() {
         await AsyncStorage.setItem('userToken', data.token);
         await AsyncStorage.setItem('userData', JSON.stringify(data.usuario));
 
-        Alert.alert("¡Éxito!", "Cuenta activada correctamente. A continuación, registre un medio de pago.", [
-          {
-            text: "Continuar",
-            onPress: () => navigation.navigate('SeleccionMetodoPago')
-          }
-        ]);
+        navigation.navigate('ValidacionCategoria');
 
       } else {
         Alert.alert("Error de activación", data.mensaje || "Código inválido o expirado.");

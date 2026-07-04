@@ -43,7 +43,7 @@ export default function RegistroUsuario() {
       const data = await response.json();
 
       if (response.ok) {
-        navigation.navigate('ValidacionCategoria');
+        navigation.navigate('MensajeEspera');
       } else {
         Alert.alert("Error de registro", data.mensaje || "Ocurrió un error");
       }

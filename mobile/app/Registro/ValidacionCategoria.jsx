@@ -28,8 +28,8 @@ export default function ValidacionCategoria() {
 
   return (
     <FeedbackScreen
-      text={`¡Se le ha asignado la categoría '${categoria}'!\n\nRevise su casilla de correo para obtener su código de activación.`}
-      onPress={() => navigation.navigate('GenerarPassword')}
+      text={`¡Cuenta activada con éxito!\n\nSe te ha asignado la categoría '${categoria}'.\n\nA continuación, debes registrar un medio de pago para poder ofertar.`}
+      onPress={() => navigation.navigate('SeleccionMetodoPago')}
     />
   );
 }
