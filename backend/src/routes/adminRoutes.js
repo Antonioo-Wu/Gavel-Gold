@@ -32,7 +32,4 @@ router.post("/usuarios/:id/categoria", adminController.asignarCategoria);
 
 router.post("/medios-pago/:id/validar", adminController.validarMedioPago);
 
-// Obtener listado de todos los usuarios (sin importar su estado)
-router.get("/usuarios", adminController.obtenerUsuarios);
-
 export default router;
