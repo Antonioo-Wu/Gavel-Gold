@@ -76,7 +76,11 @@ export default function PujaScreen() {
           const baseValue = data.articulo?.precioBase || 0;
           const currentOffer = data.pujaActual ? data.pujaActual.monto : null;
 
-          const categoria = data.subasta?.categoriaRequerida?.toLowerCase() || 'comun';
+          const userDataString = await AsyncStorage.getItem('userData');
+          if (!userDataString) return;
+          const usuario = JSON.parse(userDataString);
+
+          const categoria = usuario.categoria;
           const esPremium = categoria === 'oro' || categoria === 'platino';
           setIsPremium(esPremium);
 

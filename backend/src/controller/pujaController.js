@@ -65,7 +65,7 @@ export const realizarPuja = async (req, res) => {
     const usuario = await Usuario.findById(usuarioId);
     
     const excepcionLimites = 
-      subasta.categoria === "oro" || subasta.categoria === "platino" ||
+      subasta.categoriaRequerida === "oro" || subasta.categoriaRequerida === "platino" ||
       usuario?.categoria === "oro" || usuario?.categoria === "platino";
 
     const mejorPujaAnterior = await Puja.findOne({ subastaId: subastaId, articuloId }).sort({ monto: -1 });
