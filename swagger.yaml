@@ -314,6 +314,35 @@ paths:
         "200":
           description: Condiciones rechazadas
 
+/usuarios/{id}/multas:
+  get:
+    tags: [Usuarios]
+      summary: Listar multas e infracciones del usuario
+      parameters:
+        - $ref: '#/components/parameters/idUsuario'
+      responses:
+        "200":
+          description: Lista de multas del usuario
+
+/usuarios/{id}/multas/{multaId}/pagar:
+  post:
+    tags: [Usuarios]
+      summary: Pagar una multa
+      parameters:
+        - $ref: '#/components/parameters/idUsuario'
+        - name: multaId
+          in: path
+          required: true
+          description: ID de la multa a abonar
+          schema: { type: string }
+      responses:
+        "200":
+          description: Multa pagada y desactivada correctamente
+        "400":
+          description: La multa ya está pagada
+        "404":
+          $ref: '#/components/responses/NoEncontrado'
+
   /subastas:
     get:
       tags: [Subastas]
@@ -661,6 +690,32 @@ paths:
       responses:
         "200":
           description: Multa levantada
+
+/admin/usuarios/pendientes:
+  get:
+    tags: [Administracion]
+      summary: Obtener listado de usuarios pendientes de validacion
+      responses:
+        "200":
+          description: Lista de usuarios en estado pendiente
+
+/admin/medios-pago/{id}/validar:
+  post:
+    tags: [Administracion]
+      summary: Validar un medio de pago pendiente
+      description: Habilita el medio de pago para que el usuario pueda usarlo en las pujas.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Medio de pago validado exitosamente
+        "400":
+          description: Medio de pago ya se encuentra validado
+        "404":
+          $ref: '#/components/responses/NoEncontrado'
 
 components:
   securitySchemes:
