@@ -37,7 +37,17 @@ const articuloSchema = new mongoose.Schema(
 
     estado: {
       type: String,
-      enum: ["pendiente", "pendiente_aceptacion", "aprobado", "rechazado", "disponible", "subastado", "vendido", "cerrado", "retirado"],
+      enum: [
+        "pendiente",
+        "pendiente_aceptacion",
+        "aprobado",
+        "rechazado",
+        "disponible",
+        "subastado",
+        "vendido",
+        "cerrado",
+        "retirado",
+      ],
       default: "pendiente",
     },
 
@@ -54,7 +64,12 @@ const articuloSchema = new mongoose.Schema(
     fotos: {
       type: [String],
       required: true,
-      minlength: 1,
+      validate: {
+        validator: function (v) {
+          return v && v.length >= 6;
+        },
+        message: "Se requieren al menos 6 fotos"
+      }
     },
 
     declaracionPropiedad: {
@@ -77,14 +92,7 @@ const articuloSchema = new mongoose.Schema(
 
     categoria: {
       type: String,
-      enum: [
-        "arte",
-        "vehiculo",
-        "joya",
-        "tecnologia",
-        "coleccion",
-        "otro",
-      ],
+      enum: ["arte", "vehiculo", "joya", "tecnologia", "coleccion", "otro"],
       default: "otro",
     },
 
@@ -121,11 +129,11 @@ const articuloSchema = new mongoose.Schema(
   {
     timestamps: true,
     versionKey: false,
-  }
+  },
 );
 
 // Antes de guardar, si no tiene `id`, asignar string de `_id`
-articuloSchema.pre('save', function () {
+articuloSchema.pre("save", function () {
   if (!this.id) {
     this.id = this._id ? this._id.toString() : undefined;
   }

@@ -5,8 +5,8 @@ import Subasta from "../model/Subasta.js";
 import Puja from "../model/Puja.js";
 import Multa from "../model/Multa.js";
 import Venta from "../model/Venta.js";
-
-// ARTICULOS 
+import MedioPago from "../model/MedioPago.js";
+import { sendCodeEmail } from "../service/mailService.js";
 
 export const obtenerArticulosPendientes = async (req, res) => {
   try {
@@ -325,6 +325,20 @@ export const definirComisionArticulo = async (req, res) => {
 
 // USUARIOS
 
+export const obtenerUsuariosPendientes = async (req, res) => {
+  try {
+    const usuarios = await Usuario.find({ estado: "pendiente" })
+    .select("-password")
+    .sort({ createdAt: -1 });
+    res.json(usuarios);
+  } catch (error) {
+    res.status(500).json({ 
+      codigo: "ERROR_SERVIDOR", 
+      mensaje: error.message 
+    });
+  }
+};
+
 export const aprobarUsuario = async (req, res) => {
   try {
     const { id } = req.params;
@@ -337,7 +351,17 @@ export const aprobarUsuario = async (req, res) => {
     usuario.codigoActivacionExpira = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
     await usuario.save();
 
-    res.json({ mensaje: "Usuario aprobado", usuario, codigoActivacion: codigo });
+    try {
+      await sendCodeEmail({ to: usuario.email, codigo, tipo: "activation" });
+    } catch (mailError) {
+      return res.status(500).json({
+        codigo: "ERROR_EMAIL",
+        mensaje: "El usuario fue aprobado pero ocurrió un error al enviar el email de activación",
+        detalle: mailError.message,
+      });
+    }
+
+    res.json({ mensaje: "Usuario aprobado y código enviado por email", usuario });
   } catch (error) {
     res.status(500).json({ codigo: "ERROR_SERVIDOR", mensaje: error.message });
   }
@@ -479,5 +503,40 @@ export const levantarMulta = async (req, res) => {
     res.json({ mensaje: 'Multa levantada', multa });
   } catch (error) {
     res.status(500).json({ codigo: 'ERROR_SERVIDOR', mensaje: error.message });
+  }
+};
+
+
+export const validarMedioPago = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const medioPago = await MedioPago.findById(id);
+
+    if (!medioPago) {
+      return res.status(404).json({
+        codigo: "MEDIO_PAGO_NO_ENCONTRADO",
+        mensaje: "El medio de pago no existe"
+      });
+    }
+
+    if (medioPago.validado) {
+      return res.status(400).json({
+        codigo: "MEDIO_PAGO_YA_VALIDADO",
+        mensaje: "Este medio de pago ya se encuentra validado"
+      });
+    }
+
+    medioPago.validado = true;
+    await medioPago.save();
+
+    res.json({
+      mensaje: "Medio de pago validado exitosamente",
+      medioPago
+    });
+  } catch (error) {
+    res.status(500).json({
+      codigo: "ERROR_SERVIDOR",
+      mensaje: error.message
+    });
   }
 };

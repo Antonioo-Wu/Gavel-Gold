@@ -111,6 +111,20 @@ export const PerfilStyles = StyleSheet.create({
     fontSize: 15,
     fontWeight: 'bold',
   },
+  multasButton: {
+    backgroundColor: '#ff0000c9',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 14,
+    borderRadius: 12,
+    marginBottom: 24,
+  },
+  multasText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
   infoCard: {
     backgroundColor: '#FFFFFF', 
     borderRadius: 16,

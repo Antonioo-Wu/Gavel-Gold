@@ -2,6 +2,7 @@ import Usuario from "../model/Usuario.js";
 import MedioPago from "../model/MedioPago.js";
 import Puja from "../model/Puja.js";
 import Subasta from "../model/Subasta.js";
+import Multa from "../model/Multa.js";
 
 
 export const obtenerUsuario = async (req, res) => {
@@ -43,7 +44,6 @@ export const obtenerMediosPago = async (req, res) => {
       });
     }
 
-    // Compatibilidad: si el array aún no está sincronizado, caer al filtro por usuarioId.
     let mediosPago = usuario.mediosPago || [];
     if (!mediosPago.length) {
       mediosPago = await MedioPago.find({ usuarioId: id });
@@ -76,7 +76,6 @@ export const agregarMedioPago = async (req, res) => {
       });
     }
 
-    // Validar tipo
     const tiposValidos = ["CUENTA_BANCARIA", "TARJETA", "CHEQUE"];
     if (!tiposValidos.includes(tipo)) {
       return res.status(400).json({
@@ -85,7 +84,6 @@ export const agregarMedioPago = async (req, res) => {
       });
     }
 
-    // Verificar usuario existe
     const usuario = await Usuario.findById(id);
     if (!usuario) {
       return res.status(404).json({
@@ -98,7 +96,7 @@ export const agregarMedioPago = async (req, res) => {
       usuarioId: id,
       tipo,
       detalle,
-      validado: true,
+      validado: false,
     });
 
     await nuevoMedio.save();
@@ -124,8 +122,6 @@ export const agregarMedioPago = async (req, res) => {
 export const obtenerSubastasActivas = async (req, res) => {
   try {
     const { id } = req.params;
-
-    // Subastas en estado abierta donde el usuario ha pujado
     const pujas = await Puja.find({ usuarioId: id });
     const subastaIds = [...new Set(pujas.map(p => p.subastaId))];
 
@@ -269,6 +265,54 @@ export const eliminarMedioPago = async (req, res) => {
     await Usuario.findByIdAndUpdate(id, { $pull: { mediosPago: medioPagoId } });
 
     res.json({ mensaje: "Medio de pago eliminado correctamente" });
+  } catch (error) {
+    res.status(500).json({ codigo: "ERROR_SERVIDOR", mensaje: error.message });
+  }
+};
+
+export const obtenerMultas = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    if (req.user && req.user.id !== id) {
+      return res.status(403).json({ 
+        codigo: "ACCESO_DENEGADO", 
+        mensaje: "No puedes ver las multas de otro usuario" 
+      });
+    }
+
+    const multas = await Multa.find({ usuarioId: id }).sort({ createdAt: -1 });
+    res.json(multas);
+  } catch (error) {
+    res.status(500).json({ codigo: "ERROR_SERVIDOR", mensaje: error.message });
+  }
+};
+
+export const pagarMulta = async (req, res) => {
+  try {
+    const { id, multaId } = req.params;
+    
+    if (req.user && req.user.id !== id) {
+      return res.status(403).json({ 
+        codigo: "ACCESO_DENEGADO", 
+        mensaje: "No puedes pagar las multas de otro usuario" 
+      });
+    }
+
+    const multa = await Multa.findOne({ _id: multaId, usuarioId: id });
+    
+    if (!multa) {
+      return res.status(404).json({ codigo: "MULTA_NO_ENCONTRADA", mensaje: "La multa no existe." });
+    }
+
+    if (!multa.activa) {
+      return res.status(400).json({ codigo: "MULTA_YA_PAGADA", mensaje: "Esta multa ya ha sido pagada." });
+    }
+
+    multa.activa = false;
+    await multa.save();
+
+    res.json({ mensaje: "Multa pagada exitosamente. Ya puedes volver a pujar.", multa });
   } catch (error) {
     res.status(500).json({ codigo: "ERROR_SERVIDOR", mensaje: error.message });
   }

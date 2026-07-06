@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Modal } from 'react-native';
-import { modalStyles as styles } from '../../styles/puja/PaymentModalStyles'; 
+import { modalStyles as styles } from '../styles/puja/PaymentModalStyles'; 
 
 export default function MetodoPagoModulo({ 
   visible, 

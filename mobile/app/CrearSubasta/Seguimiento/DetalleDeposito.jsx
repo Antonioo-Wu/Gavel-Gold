@@ -73,7 +73,7 @@ export default function DetalleDeposito({ route }) {
         )}
 
         <TouchableOpacity style={styles.btnSecondary} onPress={() => navigation.navigate('MisArticulos')}>
-          <Text style={styles.btnSecondaryText}>Volver a Mis Subastas</Text>
+          <Text style={styles.btnSecondaryText}>Volver a Mis Articulos</Text>
         </TouchableOpacity>
 
       </ScrollView>

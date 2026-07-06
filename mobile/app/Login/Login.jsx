@@ -72,6 +72,9 @@ export default function Login() {
             <ActionButton text={isLoading ? "Conectando..." : "Ingresar"} variant="solid" onPress={handleLogin} />
 
             <View style={styles.footer}>
+              <TouchableOpacity onPress={() => navigation.navigate('GenerarPassword')}>
+                <Text style={styles.link}>¿Tiene un código? Active su cuenta</Text>
+              </TouchableOpacity>
               <TouchableOpacity onPress={() => navigation.navigate('Recupero')}>
                 <Text style={styles.link}>¿Olvidó su contraseña? Recuperar</Text>
               </TouchableOpacity>

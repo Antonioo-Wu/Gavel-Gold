@@ -19,4 +19,6 @@ router.post("/usuarios/:id/articulos/:articuloId/aceptar", authMiddleware, artic
 router.post("/usuarios/:id/articulos/:articuloId/rechazar", authMiddleware, articuloController.rechazarCondicionesArticulo);
 router.patch("/usuarios/:id", authMiddleware, usuarioController.actualizarUsuario);
 router.delete("/usuarios/:id/medios-pago/:medioPagoId", authMiddleware, usuarioController.eliminarMedioPago);
+router.get("/usuarios/:id/multas", authMiddleware, usuarioController.obtenerMultas);
+router.post("/usuarios/:id/multas/:multaId/pagar", authMiddleware, usuarioController.pagarMulta);
 export default router;

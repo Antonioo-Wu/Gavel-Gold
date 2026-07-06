@@ -38,12 +38,10 @@ const usuarioSchema = new mongoose.Schema({
         type: String,
     },
 
-    documentoFrente: {
-        type: String,
-    },
-
-    documentoDorso: {
-        type: String,
+    dni: {
+        type: Number,
+        required: true,
+        unique: true
     },
 
     categoria: {
@@ -54,7 +52,7 @@ const usuarioSchema = new mongoose.Schema({
     
     estado: {
         type: String,
-        enum: ["pendiente", "aprobado", "activo", "bloqueado"],
+        enum: ["pendiente", "aprobado", "activo", "bloqueado", "rechazado"],
         default: "pendiente",
     },
 

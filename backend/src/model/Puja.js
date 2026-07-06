@@ -47,7 +47,6 @@ const pujaSchema = new mongoose.Schema({
     versionKey: false,
 });
 
-// Antes de guardar, si no tiene `id`, asignar string de `_id`
 pujaSchema.pre('save', function () {
     if (!this.id) {
         this.id = this._id ? this._id.toString() : undefined;
